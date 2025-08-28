@@ -11,6 +11,15 @@
       50% { opacity: 0; }
     }
     .blink { animation: blink 1s infinite; }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
     /* Poster 16:9 */
     .poster {
       aspect-ratio: 16 / 9;
@@ -68,33 +77,33 @@
       const response = await fetch('volleyballworld.json');
       const data = await response.json();
 
-      // Zona waktu pengguna
+      const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+      // deteksi zona waktu user
       const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
       if (userOffset === 9) zone = 'WIT';
       else if (userOffset === 8) zone = 'WITA';
 
-      const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-      const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-
-      data.forEach(channel => {
+      data.forEach((channel, index) => {
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
 
-        const tanggalLengkap = `${hari[startTime.getDay()]}, ${startTime.getDate()} ${bulan[startTime.getMonth()]} ${startTime.getFullYear()} ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
+        const tanggalLengkap = `${hari[startTime.getDay()]}, ${startTime.getDate()} ${bulan[startTime.getMonth()]} ${startTime.getFullYear()} • ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
+
+        // fade-in delay tiap kartu
+        const delay = index * 0.1;
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ring-blue-500/50">
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
+            style="animation-delay: ${delay}s;">
             <img src="${channel.poster}" alt="${channel.title}" class="poster w-full">
             <div class="p-4">
-              <h3 class="text-lg font-bold text-white">${channel.title}</h3>
-              <div class="flex justify-between items-center mt-2">
-                <p class="text-sm text-gray-300">Main Draw</p>
-                <p class="text-xs text-gray-400">${tanggalLengkap}</p>
-              </div>
-              <p class="mt-2 text-xs font-semibold ${isLive ? 'text-green-400 blink' : 'text-blue-400'}">
+              <h3 class="text-sm font-semibold text-white">${channel.title}</h3>
+              <p class="mt-2 text-xs font-semibold ${isLive ? 'text-red-400 blink' : 'text-gray-400'}">
                 ${isLive ? 'LIVE' : tanggalLengkap}
               </p>
             </div>
