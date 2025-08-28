@@ -58,7 +58,7 @@
 
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('voli-korea.json');
+      const response = await fetch('volleyballworld.json');
       const data = await response.json();
 
       const userOffset = new Date().getTimezoneOffset() / -60;
