@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Micin Project - Voli Korea</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    .blink { animation: blink 1s infinite; }
+  </style>
 </head>
 <body class="bg-black text-gray-200">
 
@@ -12,81 +16,27 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-white">Micin Project</h1>
-      
       <nav class="hidden md:flex">
         <a href="index.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Home</a>
         <a href="voli-korea.html" class="mx-2 text-blue-400 font-semibold">Voli Korea</a>
         <a href="voli-jepang.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Voli Jepang</a>
         <a href="volleyballworld.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Volleyball World</a>
       </nav>
-      
-      <!-- Tombol Menu Mobile -->
       <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
-      
-      <!-- Menu Dropdown Mobile -->
       <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-black bg-opacity-90 shadow-lg md:hidden">
         <a href="index.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Home</a>
         <a href="voli-korea.html" class="block px-6 py-3 text-blue-400 font-semibold hover:bg-gray-800">Voli Korea</a>
         <a href="voli-jepang.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Voli Jepang</a>
         <a href="volleyballworld.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Volleyball World</a>
-     </div>
+      </div>
     </div>
   </header>
 
   <!-- MAIN -->
   <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
     <h2 class="text-2xl font-bold mb-6 text-white">Voli Korea - Jadwal & Live</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-
-  <!-- Kartu 1 -->
-  <a href="player.html?url=https://example.com/stream1.m3u8&title=Dal%20Corso%20vs%20Krattiger%20|%20Hamburg%202025" 
-     class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-    <img src="https://via.placeholder.com/300x180/ff0000/ffffff?text=Main+Draw" alt="Dal Corso" class="w-full h-40 object-cover">
-    <div class="p-4">
-      <h3 class="text-lg font-bold text-white">Dal Corso/Viscovich (ITA) vs Krattiger/Dillier (SUI)</h3>
-      <p class="text-sm text-gray-300 mt-2">Main Draw | Hamburg 2025</p>
-      <p class="text-xs mt-2 text-gray-400">Schedule: 13:27 WIB</p>
-      <p class="text-xs text-green-400 font-semibold">Status: Live</p>
-    </div>
-  </a>
-
-  <!-- Kartu 2 -->
-  <a href="player.html?url=https://example.com/stream2.m3u8&title=Dressler%20vs%20George%20|%20Hamburg%202025" 
-     class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-    <img src="https://via.placeholder.com/300x180/ff0000/ffffff?text=Main+Draw" alt="Dressler" class="w-full h-40 object-cover">
-    <div class="p-4">
-      <h3 class="text-lg font-bold text-white">Dressler/Waller (AUT) vs George/Saymon (BRA)</h3>
-      <p class="text-sm text-gray-300 mt-2">Main Draw | Hamburg 2025</p>
-      <p class="text-xs mt-2 text-gray-400">Schedule: 14:15 WIB</p>
-      <p class="text-xs text-green-400 font-semibold">Status: Live</p>
-    </div>
-  </a>
-
-  <!-- Kartu 3 -->
-  <a href="player.html?url=https://example.com/stream3.m3u8&title=Colombia%20vs%20Tunisia%20|%20U21%20World%20Champs%202025" 
-     class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-    <img src="https://via.placeholder.com/300x180/333333/ffffff?text=VBTV" alt="Colombia vs Tunisia" class="w-full h-40 object-cover">
-    <div class="p-4">
-      <h3 class="text-lg font-bold text-white">Colombia - Tunisia</h3>
-      <p class="text-sm text-gray-300 mt-2">Playoffs 21-24 | Men's U21 World Champs 2025</p>
-      <p class="text-xs mt-2 text-gray-400">Schedule: 09:52 WIB</p>
-      <p class="text-xs text-yellow-400 font-semibold">Status: Upcoming</p>
-    </div>
-  </a>
-
-  <!-- Kartu 4 -->
-  <a href="player.html?url=https://example.com/stream4.m3u8&title=France%20vs%20USA%20|%20Quarter%20Final%201" 
-     class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-    <img src="https://via.placeholder.com/300x180/333333/ffffff?text=VBTV" alt="France vs USA" class="w-full h-40 object-cover">
-    <div class="p-4">
-      <h3 class="text-lg font-bold text-white">France - USA | Quarter Final 1</h3>
-      <p class="text-sm text-gray-300 mt-2">Men's U21 World Champs 2025</p>
-      <p class="text-xs mt-2 text-gray-400">Schedule: 09:52 WIB</p>
-      <p class="text-xs text-yellow-400 font-semibold">Status: Upcoming</p>
-    </div>
-  </a>
-</div>
-
+    <div id="channel-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+      <!-- Kartu akan dimuat dari JSON -->
     </div>
   </main>
 
@@ -98,12 +48,45 @@
   </footer>
 
   <script>
-  const menuBtn = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
+    // Toggle Mobile Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
 
-  menuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
-</script>
+    // Load JSON & render cards
+    async function loadChannels() {
+      const container = document.getElementById('channel-container');
+      const res = await fetch('channels.json');
+      const data = await res.json();
+
+      const offset = new Date().getTimezoneOffset() / -60;
+      let zone = 'WIB';
+      if (offset === 9) zone = 'WIT';
+      else if (offset === 8) zone = 'WITA';
+
+      container.innerHTML = data.map(channel => {
+        const statusClass = channel.status === 'live'
+          ? 'text-green-400 font-semibold blink'
+          : 'text-yellow-400 font-semibold';
+
+        return `
+          <a href="player.html?url=${encodeURIComponent(channel.url)}&title=${encodeURIComponent(channel.title)}"
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="${channel.image}" alt="${channel.title}" class="w-full h-40 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-bold text-white">${channel.title}</h3>
+              <p class="text-sm text-gray-300 mt-2">${channel.subtitle}</p>
+              <p class="text-xs mt-2 text-gray-400">Schedule: ${channel.time} ${zone}</p>
+              <p class="text-xs ${statusClass}">Status: ${channel.status.toUpperCase()}</p>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    loadChannels();
+  </script>
 </body>
 </html>
