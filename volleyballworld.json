@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Dal Corso/Viscovich (ITA) vs Krattiger/Dillier (SUI)",
+    "subtitle": "Main Draw | Hamburg 2025",
+    "time": "13:27",
+    "status": "live",
+    "image": "https://via.placeholder.com/300x180/ff0000/ffffff?text=Main+Draw",
+    "url": "https://example.com/stream1.m3u8"
+  },
+  {
+    "title": "Dressler/Waller (AUT) vs George/Saymon (BRA)",
+    "subtitle": "Main Draw | Hamburg 2025",
+    "time": "14:15",
+    "status": "live",
+    "image": "https://via.placeholder.com/300x180/ff0000/ffffff?text=Main+Draw",
+    "url": "https://example.com/stream2.m3u8"
+  },
+  {
+    "title": "Colombia - Tunisia",
+    "subtitle": "Playoffs 21-24 | Men's U21 World Champs 2025",
+    "time": "09:52",
+    "status": "upcoming",
+    "image": "https://via.placeholder.com/300x180/333333/ffffff?text=VBTV",
+    "url": "https://example.com/stream3.m3u8"
+  },
+  {
+    "title": "France - USA | Quarter Final 1",
+    "subtitle": "Men's U21 World Champs 2025",
+    "time": "09:52",
+    "status": "upcoming",
+    "image": "https://via.placeholder.com/300x180/333333/ffffff?text=VBTV",
+    "url": "https://example.com/stream4.m3u8"
+  }
+]
