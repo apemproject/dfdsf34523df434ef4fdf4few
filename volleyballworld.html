@@ -6,7 +6,10 @@
   <title>Micin Project - Voli Korea</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
     .blink { animation: blink 1s infinite; }
   </style>
 </head>
@@ -35,8 +38,8 @@
   <!-- MAIN -->
   <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
     <h2 class="text-2xl font-bold mb-6 text-white">Voli Korea - Jadwal & Live</h2>
-    <div id="channel-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-      <!-- Kartu akan dimuat dari JSON -->
+    <div id="channel-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+      <!-- Konten dinamis di sini -->
     </div>
   </main>
 
@@ -47,43 +50,43 @@
     </div>
   </footer>
 
+  <!-- SCRIPT -->
   <script>
-    // Toggle Mobile Menu
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-    // Load JSON & render cards
     async function loadChannels() {
-      const container = document.getElementById('channel-container');
-      const res = await fetch('channels.json');
-      const data = await res.json();
+      const container = document.getElementById('channel-list');
+      const response = await fetch('voli-korea.json');
+      const data = await response.json();
 
-      const offset = new Date().getTimezoneOffset() / -60;
+      const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
-      if (offset === 9) zone = 'WIT';
-      else if (offset === 8) zone = 'WITA';
+      if (userOffset === 9) zone = 'WIT';
+      else if (userOffset === 8) zone = 'WITA';
 
-      container.innerHTML = data.map(channel => {
-        const statusClass = channel.status === 'live'
-          ? 'text-green-400 font-semibold blink'
-          : 'text-yellow-400 font-semibold';
+      data.forEach(channel => {
+        const startTime = new Date(channel.start);
+        const now = new Date();
+        const isLive = now >= startTime;
 
-        return `
-          <a href="player.html?url=${encodeURIComponent(channel.url)}&title=${encodeURIComponent(channel.title)}"
+        const timeString = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        container.innerHTML += `
+          <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
             class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
-            <img src="${channel.image}" alt="${channel.title}" class="w-full h-40 object-cover">
+            <img src="${channel.poster}" alt="${channel.title}" class="w-full h-40 object-cover">
             <div class="p-4">
               <h3 class="text-lg font-bold text-white">${channel.title}</h3>
-              <p class="text-sm text-gray-300 mt-2">${channel.subtitle}</p>
-              <p class="text-xs mt-2 text-gray-400">Schedule: ${channel.time} ${zone}</p>
-              <p class="text-xs ${statusClass}">Status: ${channel.status.toUpperCase()}</p>
+              <p class="text-sm text-gray-300 mt-2">Main Draw | Voli Korea</p>
+              <p class="text-xs mt-2 text-gray-400">Schedule: ${timeString} ${zone}</p>
+              <p class="text-xs font-semibold ${isLive ? 'text-green-400 blink' : 'text-yellow-400'}">
+                ${isLive ? 'LIVE' : 'Upcoming'}
+              </p>
             </div>
-          </a>
-        `;
-      }).join('');
+          </a>`;
+      });
     }
 
     loadChannels();
