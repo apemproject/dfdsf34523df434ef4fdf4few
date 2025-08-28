@@ -13,7 +13,6 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-white">GameOnX</h1>
-      
       <nav class="hidden md:flex">
         <a href="index.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Home</a>
         <a href="voli-korea.html" class="mx-2 text-blue-400 font-semibold">Donate</a>
@@ -29,9 +28,14 @@
   </header>
 
   <!-- MAIN -->
-  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20 text-center">
+  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
+    <!-- Judul pertandingan rata kiri -->
     <h2 id="match-title" class="text-2xl font-bold text-white mb-6"></h2>
-    <video id="video" controls autoplay class="w-full max-w-4xl rounded-lg shadow-lg border border-gray-700"></video>
+
+    <!-- Video player di tengah -->
+    <div class="flex justify-center">
+      <video id="video" controls autoplay class="w-full max-w-4xl rounded-lg shadow-lg border border-gray-700"></video>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -43,12 +47,15 @@
 
   <!-- SCRIPT -->
   <script>
+    // Ambil parameter dari URL
     const urlParams = new URLSearchParams(window.location.search);
     const streamUrl = urlParams.get('url');
     const title = urlParams.get('title');
 
+    // Tampilkan judul
     document.getElementById('match-title').textContent = decodeURIComponent(title);
 
+    // Inisialisasi HLS
     const video = document.getElementById('video');
     if (Hls.isSupported()) {
       const hls = new Hls();
@@ -58,14 +65,12 @@
       video.src = streamUrl;
     }
 
+    // Mobile menu toggle
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-
     menuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });
-
-    
   </script>
 </body>
 </html>
