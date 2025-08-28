@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micin Project - Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body class="bg-black text-gray-200">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-white">Micin Project</h1>
+      <nav>
+        <a href="index.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20 text-center">
+    <h2 id="match-title" class="text-2xl font-bold text-white mb-6"></h2>
+    <video id="video" controls autoplay class="w-full max-w-4xl rounded-lg shadow-lg border border-gray-700"></video>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
+    <div class="px-6 py-3 text-center text-sm text-gray-400">
+      © 2025 Micin Project - All Rights Reserved
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const streamUrl = urlParams.get('url');
+    const title = urlParams.get('title');
+
+    document.getElementById('match-title').textContent = decodeURIComponent(title);
+
+    const video = document.getElementById('video');
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = streamUrl;
+    }
+  </script>
+
+</body>
+</html>
