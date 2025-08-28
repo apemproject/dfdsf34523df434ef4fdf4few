@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Micin Project - Streaming</title>
+
+  <!-- Tailwind CDN (untuk demo cepat) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- hls.js dan dash.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+
+  <style>
+    /* Sedikit styling tambahan agar mirip screenshot */
+    body { background: #3b3b3b; }
+    .card { background: #262626; border: 1px solid #1f1f1f; }
+    .card h2 { text-decoration: underline; text-decoration-color: rgba(255,255,255,0.08); }
+    .player-wrap { background: #1e1e1e; border-bottom: 6px solid rgba(0,0,0,0.25); }
+    /* agar player tetap responsive tinggi */
+    .video-js { width: 100%; height: 100%; }
+  </style>
+</head>
+<body class="text-white antialiased">
+
+  <!-- Header -->
+  <header class="bg-gray-800 px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Micin Project</h1>
+    <nav class="text-sm space-x-6">
+      <a href="#" class="text-gray-300 hover:text-blue-400">Home</a>
+      <a href="#" class="text-gray-300 hover:text-blue-400">Video Player</a>
+      <a href="#" class="text-gray-300 hover:text-blue-400">Group Chat</a>
+      <span class="text-gray-300">Account ▾</span>
+    </nav>
+  </header>
+
+  <!-- Breadcrumb + Search -->
+  <div class="px-6 py-4">
+    <div class="flex items-center gap-4">
+      <div class="text-gray-400 text-sm">Home &nbsp; / &nbsp; <span class="text-white font-semibold">volleyballworld</span></div>
+
+      <div class="flex-1"></div>
+
+      <!-- search & manual URL input -->
+      <div class="w-96">
+        <form id="urlForm" class="flex">
+          <input id="manualUrl" type="text" placeholder="Masukkan URL stream (.m3u8 / .mpd) atau klik kartu" class="flex-1 px-4 py-2 rounded-l-lg bg-gray-800 text-white border border-gray-700" />
+          <button type="submit" class="bg-blue-600 px-4 py-2 rounded-r-lg hover:bg-blue-500">Load</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player area -->
+  <div class="px-6 pb-6">
+    <div class="player-wrap card rounded-md overflow-hidden shadow-lg p-3">
+      <div class="flex flex-col md:flex-row gap-4">
+        <!-- Player -->
+        <div class="flex-1 min-h-[320px]">
+          <video id="videoPlayer" controls playsinline webkit-playsinline class="w-full h-full bg-black rounded">
+            <!-- source akan di-set dinamis -->
+            Browser Anda mungkin tidak mendukung pemutaran video.
+          </video>
+        </div>
+
+        <!-- Info / Controls kecil -->
+        <div class="w-full md:w-80">
+          <div class="mb-4">
+            <h3 id="streamTitle" class="font-bold text-lg">Tidak ada stream</h3>
+            <p id="streamType" class="text-gray-400 text-sm">Tipe: -</p>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="bg-gray-800 p-3 rounded">
+              <p class="text-gray-300">Volume</p>
+              <input id="volRange" type="range" min="0" max="1" step="0.01" value="1" class="w-full" />
+            </div>
+            <div class="bg-gray-800 p-3 rounded">
+              <p class="text-gray-300">Quality / Stats</p>
+              <pre id="playerStats" class="text-xs text-gray-300 truncate max-h-24 overflow-auto">-</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards grid -->
+  <main class="px-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Sesuaikan judul dan url sesuai kebutuhan -->
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" data-title="Live And Upcoming">
+        <h2 class="font-bold text-lg">Live And Upcoming</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Live and Upcoming</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd" data-title="Live And Upcoming - Beach">
+        <h2 class="font-bold text-lg">Live And Upcoming - Beach</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Live and Upcoming - Beach</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://test-streams.mux.dev/test_001/stream.m3u8" data-title="Your Teams - Live And Upcoming">
+        <h2 class="font-bold text-lg">Your Teams - Live And Upcoming</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Your Teams - Live and Upcoming</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd" data-title="Your Teams - On Demand">
+        <h2 class="font-bold text-lg">Your Teams - On Demand</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Your Teams - On Demand</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" data-title="2025 Teams">
+        <h2 class="font-bold text-lg">2025 Teams</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch 2025 Teams</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd" data-title="All Competitions">
+        <h2 class="font-bold text-lg">All Competitions</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch All Competitions</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="https://test-streams.mux.dev/test_001/stream.m3u8" data-title="Latest Highlights">
+        <h2 class="font-bold text-lg">Latest Highlights</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Latest Highlights</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="" data-title="Latest Replays">
+        <h2 class="font-bold text-lg">Latest Replays</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Latest Replays</p>
+      </div>
+
+      <div class="card p-4 rounded-lg cursor-pointer hover:bg-gray-700" data-url="" data-title="Stream For Free">
+        <h2 class="font-bold text-lg">Stream For Free</h2>
+        <p class="text-gray-400 text-sm mt-2">Watch Stream for free</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 py-6 mt-12">
+    ©2025 MicinProject. Connect with me on <a class="text-blue-400" href="#">Twitter</a>
+  </footer>
+
+  <!-- Script: handling load / hls / dash -->
+  <script>
+    const video = document.getElementById('videoPlayer');
+    const streamTitle = document.getElementById('streamTitle');
+    const streamTypeEl = document.getElementById('streamType');
+    const playerStats = document.getElementById('playerStats');
+    const volRange = document.getElementById('volRange');
+
+    let hlsInstance = null;
+    let dashPlayer = null;
+
+    // helper untuk menentukan tipe URL
+    function detectStreamType(url) {
+      if (!url) return null;
+      const lower = url.split('?')[0].toLowerCase();
+      if (lower.endsWith('.m3u8')) return 'hls';
+      if (lower.endsWith('.mpd')) return 'dash';
+      return 'progressive';
+    }
+
+    // cleanup previous players
+    function cleanupPlayers() {
+      if (hlsInstance) {
+        try { hlsInstance.destroy(); } catch(e){/*ignore*/ }
+        hlsInstance = null;
+      }
+      if (dashPlayer) {
+        try { dashPlayer.reset(); } catch(e){/*ignore*/ }
+        dashPlayer = null;
+      }
+      // remove src
+      video.removeAttribute('src');
+      video.load();
+    }
+
+    // load stream
+    async function loadStream(url, title = '') {
+      cleanupPlayers();
+      if (!url) {
+        streamTitle.textContent = 'Tidak ada stream';
+        streamTypeEl.textContent = 'Tipe: -';
+        playerStats.textContent = '-';
+        return;
+      }
+
+      streamTitle.textContent = title || url;
+      const type = detectStreamType(url);
+      streamTypeEl.textContent = 'Tipe: ' + type;
+
+      if (type === 'hls') {
+        // native HLS?
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+          await video.play().catch(()=>{});
+          playerStats.textContent = 'Memutar via native HLS';
+        } else if (Hls.isSupported()) {
+          hlsInstance = new Hls();
+          hlsInstance.loadSource(url);
+          hlsInstance.attachMedia(video);
+          hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play().catch(()=>{});
+          });
+          hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+            playerStats.textContent = 'HLS error: ' + data.type + ' — ' + data.details;
+          });
+          playerStats.textContent = 'Memutar via hls.js';
+        } else {
+          playerStats.textContent = 'HLS not supported di browser ini.';
+        }
+      } else if (type === 'dash') {
+        dashPlayer = dashjs.MediaPlayer().create();
+        dashPlayer.initialize(video, url, true);
+        playerStats.textContent = 'Memutar via dash.js';
+      } else if (type === 'progressive') {
+        // progressive mp4 / webm
+        video.src = url;
+        await video.play().catch(()=>{});
+        playerStats.textContent = 'Memutar sebagai progressive';
+      } else {
+        playerStats.textContent = 'Tipe stream tidak dikenali';
+      }
+    }
+
+    // handle clicking card
+    document.querySelectorAll('.card[data-url]').forEach(card=>{
+      card.addEventListener('click', () => {
+        const url = card.getAttribute('data-url');
+        const title = card.getAttribute('data-title') || '';
+        if (!url) {
+          alert('URL pada kartu ini belum diset.');
+          return;
+        }
+        loadStream(url, title);
+        // scroll to player
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // manual URL form
+    document.getElementById('urlForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const url = document.getElementById('manualUrl').value.trim();
+      if(!url) return alert('Masukkan URL stream terlebih dahulu');
+      loadStream(url, 'Manual URL');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // volume control
+    volRange.addEventListener('input', (e)=> {
+      video.volume = parseFloat(e.target.value);
+    });
+
+    // optional: update some stats periodically (buffer info)
+    setInterval(()=>{
+      if (!video || video.readyState < 1) return;
+      const stats = [];
+      stats.push('readyState: ' + video.readyState);
+      stats.push('currentTime: ' + video.currentTime.toFixed(2));
+      stats.push('buffered_end: ' + (video.buffered.length ? video.buffered.end(video.buffered.length-1).toFixed(2) : '0'));
+      playerStats.textContent = stats.join(' | ');
+    }, 1500);
+
+    // auto-load first card if ada
+    (function autoLoadFirst(){
+      const first = document.querySelector('.card[data-url]:not([data-url=""])');
+      if (first) {
+        // small delay agar elemen sudah render
+        setTimeout(()=> first.click(), 200);
+      }
+    })();
+  </script>
+</body>
+</html>
