@@ -38,8 +38,10 @@
   <!-- MAIN -->
   <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
     <h2 class="text-2xl font-bold mb-6 text-white">Voli Korea - Jadwal & Live</h2>
-    <div id="channel-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-      <!-- Konten dinamis di sini -->
+    
+    <!-- GRID CARD CHANNEL -->
+    <div id="channel-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+      <!-- Kartu channel otomatis dimuat dari JSON -->
     </div>
   </main>
 
@@ -70,12 +72,11 @@
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
-
         const timeString = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-105 transition-transform">
             <img src="${channel.poster}" alt="${channel.title}" class="w-full h-40 object-cover">
             <div class="p-4">
               <h3 class="text-lg font-bold text-white">${channel.title}</h3>
