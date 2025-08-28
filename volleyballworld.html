@@ -112,7 +112,7 @@
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 p-4 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
+            class="bg-gray-800 p-2 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
             style="animation-delay: ${delay}s;">
             <div class="poster-container rounded-md">
               <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
