@@ -11,13 +11,10 @@
       50% { opacity: 0; }
     }
     .blink { animation: blink 1s infinite; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in {
-      animation: fadeIn 0.8s ease forwards;
+    /* Poster 16:9 */
+    .poster {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
     }
   </style>
 </head>
@@ -62,56 +59,51 @@
 
   <!-- SCRIPT -->
   <script>
-    // Menu Mobile Toggle
+    // Toggle menu mobile
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
+    // Load Channels
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('volleyballworld.json'); // Ganti sesuai file JSON
+      const response = await fetch('volleyballworld.json');
       const data = await response.json();
 
-      // Deteksi zona waktu
+      // Zona waktu pengguna
       const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
       if (userOffset === 9) zone = 'WIT';
       else if (userOffset === 8) zone = 'WITA';
 
-      // Urutkan berdasarkan waktu terdekat
-      data.sort((a, b) => new Date(a.start) - new Date(b.start));
+      // Hari Indonesia
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 
-      // Kosongkan container sebelum render
-      container.innerHTML = '';
-
-      data.forEach((channel, index) => {
+      // Generate cards
+      data.forEach(channel => {
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
-        const timeString = startTime.toLocaleTimeString('id-ID', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
 
-        // Tambahkan delay animasi agar masuk satu per satu
-        const delay = index * 0.1;
+        // Format hari, tanggal, dan jam
+        const dayName = days[startTime.getDay()];
+        const dateString = startTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        const timeString = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-[#1E1E2F] rounded-xl overflow-hidden border border-gray-700 shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300 flex flex-col opacity-0 fade-in"
-            style="animation-delay:${delay}s">
-            <img src="${channel.poster}" alt="${channel.title}" class="w-full h-48 object-cover">
-            <div class="flex-1 flex flex-col justify-between p-4">
-              <div>
-                <h3 class="text-base font-semibold text-white leading-tight">${channel.title}</h3>
-                <p class="text-xs text-gray-400 mt-1">Main Draw | Voli Korea</p>
+            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-105 transition-transform">
+            <img src="${channel.poster}" alt="${channel.title}" class="poster w-full">
+            <div class="p-4">
+              <h3 class="text-lg font-bold text-white">${channel.title}</h3>
+              <div class="flex justify-between items-center mt-2">
+                <p class="text-sm text-gray-300">Main Draw</p>
+                <p class="text-xs text-gray-400">${dayName}, ${dateString}</p>
               </div>
-              <div class="flex items-center mt-3 text-sm">
-                <span class="w-2 h-2 rounded-full mr-2 ${isLive ? 'bg-red-500 animate-pulse' : 'bg-gray-500'}"></span>
-                <span class="${isLive ? 'text-red-400 font-bold blink' : 'text-gray-300'}">
-                  ${isLive ? 'LIVE' : `${timeString} ${zone}`}
-                </span>
-              </div>
+              <p class="mt-1 text-xs text-gray-400">${timeString} ${zone}</p>
+              <p class="mt-2 text-xs font-semibold ${isLive ? 'text-green-400 blink' : 'text-yellow-400'}">
+                ${isLive ? 'LIVE' : 'Upcoming'}
+              </p>
             </div>
           </a>`;
       });
