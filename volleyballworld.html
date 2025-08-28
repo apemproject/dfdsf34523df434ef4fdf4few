@@ -112,14 +112,14 @@
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 p-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
+            class="bg-gray-800 p-4 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
             style="animation-delay: ${delay}s;">
-            <div class="poster-container">
-              <img src="${channel.poster}" alt="${channel.title}" class="poster">
+            <div class="poster-container rounded-md">
+              <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
             </div>
-            <div class="p-3">
-              <h3 class="text-sm font-semibold text-white">${channel.title}</h3>
-              <p class="mt-2 text-xs font-semibold ${isLive ? 'text-red-400 blink' : 'text-gray-400'}">
+            <div class="p-4">
+              <h3 class="text-base font-semibold text-white">${channel.title}</h3>
+              <p class="mt-2 text-sm font-semibold ${isLive ? 'text-red-400 blink' : 'text-gray-400'}">
                 ${isLive ? 'LIVE' : tanggalLengkap}
               </p>
             </div>
