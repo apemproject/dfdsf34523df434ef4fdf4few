@@ -21,9 +21,23 @@
     }
 
     /* Poster 16:9 */
+    .poster-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.75rem; /* rounded-xl */
+    }
+
     .poster {
       aspect-ratio: 16 / 9;
       object-fit: cover;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      width: 100%;
+      height: auto;
+    }
+
+    .poster-container:hover .poster {
+      transform: scale(1.05);
+      filter: brightness(80%);
     }
   </style>
 </head>
@@ -98,10 +112,12 @@
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
+            class="bg-gray-800 p-3 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in"
             style="animation-delay: ${delay}s;">
-            <img src="${channel.poster}" alt="${channel.title}" class="poster w-full">
-            <div class="p-4">
+            <div class="poster-container">
+              <img src="${channel.poster}" alt="${channel.title}" class="poster">
+            </div>
+            <div class="p-3">
               <h3 class="text-sm font-semibold text-white">${channel.title}</h3>
               <p class="mt-2 text-xs font-semibold ${isLive ? 'text-red-400 blink' : 'text-gray-400'}">
                 ${isLive ? 'LIVE' : tanggalLengkap}
