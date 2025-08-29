@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameOnX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .blink { animation: blink 1s infinite; }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+
+    /* Poster 16:9 */
+    .poster-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.4rem; /* Sedikit melengkung */
+    }
+
+    .poster {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      width: 100%;
+      height: auto;
+    }
+
+    .poster-container:hover .poster {
+      transform: scale(1.05);
+      filter: brightness(80%);
+    }
+  </style>
+</head>
+<body class="bg-black text-gray-200">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-white">GameOnX</h1>
+      <nav class="hidden md:flex">
+        <a href="index.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Home</a>
+        <a href="voli-korea.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Donate</a>
+        <a href="voli-jepang.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Grup Chat</a>
+      </nav>
+      <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
+      <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-black bg-opacity-90 shadow-lg md:hidden">
+        <a href="index.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Home</a>
+        <a href="voli-korea.html" class="block px-6 py-3 text-gray-300 font-semibold hover:text-blue-400">Donate</a>
+        <a href="voli-jepang.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Grup Chat</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
+    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Volleyball Korea - Jadwal & Live</h2>
+
+    <!-- GRID CARD CHANNEL -->
+    <div id="channel-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 p-2 sm:p-4">
+      <!-- Kartu channel otomatis dimuat dari JSON -->
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
+    <div class="px-6 py-3 text-center text-sm text-gray-400">
+      © 2025 GameOnX - All Rights Reserved
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+    async function loadChannels() {
+      const container = document.getElementById('channel-list');
+      const response = await fetch('VLeagueJepang.json');
+      let data = await response.json();
+
+      // Urutkan jadwal dari yang paling dekat ke yang paling jauh
+      data.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+      const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+      // deteksi zona waktu user
+      const userOffset = new Date().getTimezoneOffset() / -60;
+      let zone = 'WIB';
+      if (userOffset === 9) zone = 'WIT';
+      else if (userOffset === 8) zone = 'WITA';
+
+      // kosongkan grid
+      container.innerHTML = '';
+
+      data.forEach((channel, index) => {
+        const startTime = new Date(channel.start);
+        const now = new Date();
+        const isLive = now >= startTime;
+
+        const tanggalLengkap = `${hari[startTime.getDay()]}, ${startTime.getDate()} ${bulan[startTime.getMonth()]} ${startTime.getFullYear()} • ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
+
+        const delay = index * 0.1;
+
+        container.innerHTML += `
+          <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
+            class="bg-gray-800 p-2 sm:p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
+            style="animation-delay: ${delay}s;">
+            
+            <!-- Poster -->
+            <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
+              <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
+            </div>
+
+            <!-- Konten -->
+            <div class="mt-3 sm:mt-4 flex flex-col flex-grow justify-between">
+              <h3 class="text-xs sm:text-sm md:text-base font-semibold text-white leading-snug">${channel.title}</h3>
+              <p class="mt-2 sm:mt-3 text-[0.7rem] sm:text-sm md:text-base font-semibold ${isLive ? 'text-red-400 blink' : 'text-gray-400'}">
+                ${isLive ? 'LIVE' : tanggalLengkap}
+              </p>
+            </div>
+          </a>
+        `;
+      });
+    }
+
+    loadChannels();
+  </script>
+</body>
+</html>
