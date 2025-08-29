@@ -12,13 +12,15 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-white">GameOnX</h1>
-      <nav>
-        <a href="index.html" class="mx-2 text-blue-400 font-semibold">Home</a>
-        <a href="volleyballworld.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Live Event</a>
-        <a href="volleyballworld.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Volleyball World</a>
-        <a href="voli-korea.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Voli Korea</a>
-        <a href="voli-jepang.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Voli Jepang</a>
+      <nav class="hidden md:flex">
+        <a href="voli-korea.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Donate</a>
+        <a href="voli-jepang.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Grup Chat</a>
       </nav>
+      <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
+      <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-black bg-opacity-90 shadow-lg md:hidden">
+        <a href="voli-korea.html" class="block px-6 py-3 text-gray-300 font-semibold hover:text-blue-400">Donate</a>
+        <a href="voli-jepang.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Grup Chat</a>
+      </div>
     </div>
   </header>
 
