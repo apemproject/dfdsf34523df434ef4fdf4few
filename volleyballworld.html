@@ -22,9 +22,8 @@
     .poster-container {
       position: relative;
       overflow: hidden;
-      border-radius: 0.4rem; /* Sedikit melengkung */
+      border-radius: 0.4rem;
     }
-
     .poster {
       aspect-ratio: 16 / 9;
       object-fit: cover;
@@ -32,36 +31,84 @@
       width: 100%;
       height: auto;
     }
-
     .poster-container:hover .poster {
       transform: scale(1.05);
       filter: brightness(80%);
     }
+
+    /* === Cyberpunk Gradient Background (Merah–Ungu) === */
+    body {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a0000, #40001a, #800040, #2b0040);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+      transition: background 1s ease;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Neon Orbs Cyberpunk */
+    .neon-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float 12s ease-in-out infinite;
+      z-index: -1;
+    }
+    .orb1 { width: 320px; height: 320px; top: -60px; left: -100px; animation-delay: 0s; background: #ff0044; }
+    .orb2 { width: 260px; height: 260px; bottom: -80px; right: -60px; animation-delay: 4s; background: #cc00ff; }
+    .orb3 { width: 220px; height: 220px; top: 40%; left: 60%; animation-delay: 8s; background: #ff006e; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-60px) translateX(40px); }
+    }
+
+    /* === Cyberpunk Grid Overlay === */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background-image: 
+        linear-gradient(rgba(255, 0, 128, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 128, 0.08) 1px, transparent 1px);
+      background-size: 80px 80px;
+      animation: moveGrid 30s linear infinite;
+      z-index: -2;
+    }
+    @keyframes moveGrid {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-80px, -80px); }
+    }
   </style>
 </head>
-<body class="bg-black text-gray-200">
+<body class="text-gray-200">
+
+  <!-- Grid & Orbs -->
+  <div class="bg-grid"></div>
+  <div class="neon-orb orb1"></div>
+  <div class="neon-orb orb2"></div>
+  <div class="neon-orb orb3"></div>
 
   <!-- HEADER -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
+  <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/70 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-white">GameOnX</h1>
-      <nav class="hidden md:flex">
-        <a href="index.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Home</a>
-        <a href="voli-korea.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Donate</a>
-        <a href="voli-jepang.html" class="mx-2 text-gray-300 hover:text-blue-400 transition">Grup Chat</a>
-      </nav>
-      <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
-      <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-black bg-opacity-90 shadow-lg md:hidden">
-        <a href="index.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Home</a>
-        <a href="voli-korea.html" class="block px-6 py-3 text-gray-300 font-semibold hover:text-blue-400">Donate</a>
-        <a href="voli-jepang.html" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-blue-400">Grup Chat</a>
-      </div>
     </div>
   </header>
 
   <!-- MAIN -->
   <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
-    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Volleyball - Jadwal & Live</h2>
+    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">
+      Volleyball - Jadwal & Live
+    </h2>
 
     <!-- GRID CARD CHANNEL -->
     <div id="channel-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 p-2 sm:p-4">
@@ -70,7 +117,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
+  <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/70 backdrop-blur-md border-t border-gray-800 shadow-md">
     <div class="px-6 py-3 text-center text-sm text-gray-400">
       © 2025 GameOnX - All Rights Reserved
     </div>
@@ -78,44 +125,37 @@
 
   <!-- SCRIPT -->
   <script>
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
     async function loadChannels() {
       const container = document.getElementById('channel-list');
       const response = await fetch('volleyballworld.json');
       let data = await response.json();
 
-      // Urutkan jadwal dari yang paling dekat ke yang paling jauh
+      // Urutkan jadwal
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
 
       const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
       const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
-      // deteksi zona waktu user
+      // Zona waktu
       const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
       if (userOffset === 9) zone = 'WIT';
       else if (userOffset === 8) zone = 'WITA';
 
-      // kosongkan grid
       container.innerHTML = '';
 
       data.forEach((channel, index) => {
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
-
-        const tanggalLengkap = `${hari[startTime.getDay()]}, ${startTime.getDate()} ${bulan[startTime.getMonth()]} ${startTime.getFullYear()} • ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
-
+        const tanggalLengkap = `${hari[startTime.getDay()]}, ${startTime.getDate()} ${bulan[startTime.getMonth()]} ${startTime.getFullYear()} • ${startTime.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} ${zone}`;
         const delay = index * 0.1;
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 p-2 sm:p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
+            class="bg-gray-900/80 p-2 sm:p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-purple-500/50'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
             style="animation-delay: ${delay}s;">
-            
+
             <!-- Poster -->
             <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
               <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
