@@ -113,7 +113,7 @@
 
         container.innerHTML += `
           <a href="player.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-gray-800 p-2 sm:p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ... h-full flex flex-col justify-between text-xs sm:text-sm">
+            class="bg-gray-800 p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm""
             style="animation-delay: ${delay}s;">
             
             <!-- Poster -->
