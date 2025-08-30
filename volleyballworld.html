@@ -22,7 +22,7 @@
     .poster-container {
       position: relative;
       overflow: hidden;
-      border-radius: 0.4rem;
+      border-radius: 0.4rem; /* Sedikit melengkung */
     }
 
     .poster {
@@ -38,32 +38,25 @@
       filter: brightness(80%);
     }
 
-    /* Gradient Futuristik Merah–Ungu Gelap */
+    /* Background gambar + overlay */
     body {
       position: relative;
-      background: linear-gradient(135deg, #5a0f1d, #3a0ca3, #1a0026);
-      background-size: 400% 400%;
-      animation: gradientShift 12s ease infinite;
+      background: url('assets/bg-futuristik.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #e5e7eb;
       min-height: 100vh;
     }
-
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55); /* Overlay hitam transparan */
+      background: rgba(0, 0, 0, 0.55); /* overlay hitam transparan */
       z-index: -1;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
 <body class="text-gray-200">
+
   <!-- HEADER -->
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -83,7 +76,7 @@
   </header>
 
   <!-- MAIN -->
-  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20 relative z-10">
+  <main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Volleyball - Jadwal & Live</h2>
 
     <!-- GRID CARD CHANNEL -->
@@ -110,16 +103,19 @@
       const response = await fetch('volleyballworld.json');
       let data = await response.json();
 
+      // Urutkan jadwal dari yang paling dekat ke yang paling jauh
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
 
       const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
       const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
+      // deteksi zona waktu user
       const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
       if (userOffset === 9) zone = 'WIT';
       else if (userOffset === 8) zone = 'WITA';
 
+      // kosongkan grid
       container.innerHTML = '';
 
       data.forEach((channel, index) => {
@@ -136,10 +132,12 @@
             class="bg-gray-800/80 p-2 sm:p-3 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-2 ${isLive ? 'ring-red-500' : 'ring-blue-500/50'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
             style="animation-delay: ${delay}s;">
             
+            <!-- Poster -->
             <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
               <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
             </div>
 
+            <!-- Konten -->
             <div class="mt-3 sm:mt-4 flex flex-col flex-grow justify-between">
               <h3 class="text-xs sm:text-sm md:text-base font-semibold text-white leading-snug">${channel.title}</h3>
               <p class="mt-2 sm:mt-3 text-[0.6rem] sm:text-xs md:text-sm font-normal ${isLive ? 'text-red-400 blink' : 'text-green-400'}">
