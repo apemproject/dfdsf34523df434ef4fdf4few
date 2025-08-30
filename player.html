@@ -15,7 +15,23 @@
         border-radius: 0 !important;
       }
     }
-  </style>
+
+    /* Background gambar + overlay */
+    body {
+      position: relative;
+      background: url('assets/batik.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55); /* overlay hitam transparan */
+      z-index: -1;
+    }
+  </style
 </head>
 <body class="bg-black text-gray-200">
 
