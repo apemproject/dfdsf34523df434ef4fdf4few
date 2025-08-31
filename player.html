@@ -31,6 +31,12 @@
       background: rgba(0, 0, 0, 0.55); /* overlay hitam transparan */
       z-index: -1;
     }
+
+    /* Neon glow untuk judul */
+    #match-title {
+      border-bottom: 2px solid #3b82f6; /* garis biru neon */
+      text-shadow: 0 0 5px #3b82f6, 0 0 10px #60a5fa, 0 0 20px #93c5fd;
+    }
   </style>
 </head>
 <body class="bg-black text-gray-200">
@@ -59,12 +65,14 @@
 
   <!-- MAIN -->
   <main class="max-w-7xl mx-auto px-6 pt-20 pb-20">
-    <!-- Judul pertandingan rata kiri -->
-    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6"></h2>
+    <!-- Judul pertandingan lurus kiri -->
+    <div class="max-w-6xl mx-auto">
+      <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white pb-2 mb-6"></h2>
+    </div>
 
     <!-- Video player -->
-    <div class="flex justify-center">
-      <video id="video" controls autoplay class="w-full max-w-6xl rounded-lg shadow-lg"></video>
+    <div class="max-w-6xl mx-auto">
+      <video id="video" controls autoplay class="w-full rounded-lg shadow-lg"></video>
     </div>
   </main>
 
