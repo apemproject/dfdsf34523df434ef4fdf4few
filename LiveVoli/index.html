@@ -39,7 +39,7 @@
 
     body {
       position: relative;
-      background: url('assets/bg gameonx.jpg') no-repeat center center fixed;
+      background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #e5e7eb;
       min-height: 100vh;
@@ -58,7 +58,7 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
       <a href="https://gameonx.my.id">
-       <img src="assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
+       <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
       </a>
       <nav class="hidden md:flex">
         <a href="https://gameonx.my.id" class="mx-2 text-white hover:text-blue-400 transition">Home</a>
@@ -96,7 +96,7 @@
 
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('LiveVoli.json');
+      const response = await fetch('../LiveVoli.json');
       let data = await response.json();
 
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
