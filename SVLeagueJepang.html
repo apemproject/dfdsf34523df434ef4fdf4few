@@ -117,7 +117,7 @@
 
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('VLeagueJepang.json');
+      const response = await fetch('SVLeagueJepang.json');
       let data = await response.json();
 
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
