@@ -7,9 +7,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
-    /* Mobile full-width video */
+    /* Agar video pas layar penuh di mobile */
     @media (max-width: 768px) {
+      main {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
       .video-wrapper {
+        width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -42,7 +47,7 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
       <a href="https://gameonx.my.id">
-        <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
+       <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
       </a>
       <nav class="hidden md:flex">
         <a href="https://gameonx.my.id" class="mx-2 text-white hover:text-blue-400 transition">Home</a>
@@ -101,16 +106,19 @@
       video.src = streamUrl;
     }
 
+    // Deteksi perangkat mobile
     function isMobile() {
       return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth <= 768;
     }
 
+    // Fungsi fullscreen
     function enterFullscreen() {
       if (video.requestFullscreen) video.requestFullscreen();
       else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
       else if (video.msRequestFullscreen) video.msRequestFullscreen();
     }
 
+    // Auto fullscreen di mobile
     if (isMobile()) {
       video.addEventListener('canplay', () => {
         video.play().then(() => {
@@ -121,6 +129,7 @@
       });
     }
 
+    // Toggle menu mobile
     document.getElementById('menu-btn').addEventListener('click', () => {
       document.getElementById('mobile-menu').classList.toggle('hidden');
     });
