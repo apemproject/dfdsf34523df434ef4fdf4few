@@ -4,6 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameOnX - Live Voli Dunia</title>
+    
+  <meta name="description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:title" content="GameOnX - Live Streaming">
+  <meta property="og:description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:image" content="https://gameonx.my.id/assets/preview.jpg">
+  <meta property="og:url" content="https://gameonx.my.id">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GameOnX - Live Streaming">
+  <meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
+  <meta name="twitter:image" content="https://gameonx.my.id/assets/preview.jpg">
+  <meta name="twitter:url" content="https://gameonx.my.id">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <link rel="stylesheet" href="/assets/style.css">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes blink {
@@ -120,7 +141,7 @@
         const delay = index * 0.1;
 
         container.innerHTML += `
-          <a href="/Watch/?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
+          <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
             class="bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
             style="animation-delay: ${delay}s;">
             
