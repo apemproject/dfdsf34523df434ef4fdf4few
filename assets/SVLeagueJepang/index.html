@@ -141,7 +141,7 @@
         const delay = index * 0.1;
 
         container.innerHTML += `
-          <a href="Watch.html?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
+          <a href="/assets/Watch/?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
             class="bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
             style="animation-delay: ${delay}s;">
             
