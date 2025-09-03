@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameOnX - Player</title>
+</head>
+<body>
+  <h2>Media Player</h2>
+  <div id="player"></div>
+
+  <!-- Clappr Player -->
+  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const streamUrl = params.get("url");
+
+    if (streamUrl) {
+      new Clappr.Player({
+        source: "https://gameonx.vercel.app/api/proxy?url=" + encodeURIComponent(streamUrl),
+        parentId: "#player",
+        autoPlay: true,
+        width: "100%",
+        height: 480
+      });
+    } else {
+      document.getElementById("player").innerHTML = "<p>⚠️ Stream URL not found.</p>";
+    }
+  </script>
+
+  <p><a href="index.html">⬅️ Kembali ke Daftar Channel</a></p>
+</body>
+</html>
