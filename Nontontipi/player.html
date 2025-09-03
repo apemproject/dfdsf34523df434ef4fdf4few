@@ -26,7 +26,8 @@
   <link rel="stylesheet" href="/assets/style.css">
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.10.1/shaka-player.compiled.js"></script>
+
   <style>
     @media (max-width: 768px) {
       main {
@@ -62,10 +63,10 @@
 </head>
 <body class="bg-black text-gray-200">
 
-  <!-- 🔹 HEADER -->
+  <!-- Header -->
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
-      <a href="/nonton-tipi/index.html">
+      <a href="https://gameonx.my.id">
        <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
       </a>
       <nav class="hidden md:flex">
@@ -83,7 +84,7 @@
     </div>
   </header>
 
-  <!-- 🔹 MAIN -->
+  <!-- Main -->
   <main class="max-w-7xl mx-auto px-6 pt-20 pb-20">
     <div class="max-w-6xl mx-auto">
       
@@ -98,52 +99,52 @@
     </div>
   </main>
 
-  <!-- 🔹 FOOTER -->
+  <!-- Footer -->
   <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
     <div class="px-6 py-2 text-center text-sm text-white">
       © 2025 GameOnX - All Rights Reserved
     </div>
   </footer>
 
-  <!-- 🔹 SCRIPT -->
+  <!-- Script -->
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const streamUrl = urlParams.get('url');
-    const title = urlParams.get('title') || "Live Streaming";
-
-    document.getElementById('match-title').textContent = decodeURIComponent(title);
+    const title = urlParams.get('title');
+    document.getElementById('match-title').textContent = decodeURIComponent(title || "Live Stream");
 
     const video = document.getElementById('video');
-    const proxyUrl = "/api/proxy?url=" + encodeURIComponent(streamUrl);
 
-    if (streamUrl) {
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(proxyUrl);
-        hls.attachMedia(video);
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = proxyUrl;
+    async function initPlayer() {
+      const player = new shaka.Player(video);
+
+      player.addEventListener('error', (event) => {
+        console.error('Shaka Error Code', event.detail.code, 'Object', event.detail);
+      });
+
+      try {
+        await player.load(streamUrl);
+        console.log('Stream loaded');
+      } catch (e) {
+        console.error('Error loading stream', e);
       }
-    } else {
-      document.getElementById('match-title').textContent = "⚠️ Stream URL not found";
     }
 
+    // auto fullscreen di HP
     function isMobile() {
       return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth <= 768;
     }
-
     function enterFullscreen() {
       if (video.requestFullscreen) video.requestFullscreen();
       else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
       else if (video.msRequestFullscreen) video.msRequestFullscreen();
     }
-
     if (isMobile()) {
       video.addEventListener('canplay', () => {
         video.play().then(() => {
           enterFullscreen();
         }).catch(() => {
-          console.log("Autoplay fullscreen diblokir, butuh interaksi pengguna.");
+          console.log("Autoplay fullscreen diblokir, perlu klik manual.");
         });
       });
     }
@@ -151,6 +152,8 @@
     document.getElementById('menu-btn').addEventListener('click', () => {
       document.getElementById('mobile-menu').classList.toggle('hidden');
     });
+
+    document.addEventListener('DOMContentLoaded', initPlayer);
   </script>
 </body>
 </html>
