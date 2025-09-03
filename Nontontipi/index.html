@@ -6,12 +6,12 @@
   <title>Nonton Tipi - GameOnX</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
   <header class="p-4 bg-gray-800 text-center">
     <h1 class="text-2xl font-bold">📺 Daftar Channel</h1>
   </header>
 
-  <main class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="channel-list">
+  <main class="flex-1 p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="channel-list">
     <!-- kartu channel otomatis masuk sini -->
   </main>
 
@@ -29,12 +29,16 @@
         channels.forEach(ch => {
           const card = document.createElement("a");
           card.href = `player.html?url=${encodeURIComponent(ch.url)}`;
+          card.className = "block bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl hover:bg-gray-700 transition overflow-hidden";
+
           card.innerHTML = `
-            <div class="bg-gray-700 p-4 rounded-xl shadow hover:bg-gray-600 transition cursor-pointer">
-              <h2 class="text-lg font-semibold">${ch.name}</h2>
-              <p class="text-sm text-gray-300">Klik untuk menonton</p>
+            <img src="${ch.thumbnail}" alt="${ch.name}" class="w-full h-40 object-cover">
+            <div class="p-3">
+              <h2 class="text-lg font-semibold truncate">${ch.name}</h2>
+              <p class="text-sm text-gray-400">Klik untuk menonton</p>
             </div>
           `;
+
           container.appendChild(card);
         });
       } catch (err) {
