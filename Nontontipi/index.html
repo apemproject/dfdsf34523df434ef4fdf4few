@@ -4,23 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nonton Tipi - GameOnX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>📺 Daftar Channel</h1>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="p-4 bg-gray-800 text-center">
+    <h1 class="text-2xl font-bold">📺 Daftar Channel</h1>
+  </header>
 
-  <!-- Kartu channel -->
-  <a href="player.html?url=http://extra-terestrial-vision.net:80/kevindoran/ksX5oYT0V1/113896">
-    <div style="border:1px solid #ccc; padding:10px; margin:10px; cursor:pointer;">
-      🎥 Channel 1
-    </div>
-  </a>
+  <main class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="channel-list">
+    <!-- kartu channel otomatis masuk sini -->
+  </main>
 
-  <a href="player.html?url=http://extra-terestrial-vision.net:80/kevindoran/ksX5oYT0V1/77250.m3u8">
-    <div style="border:1px solid #ccc; padding:10px; margin:10px; cursor:pointer;">
-      🎥 Channel 2
-    </div>
-  </a>
+  <footer class="p-4 bg-gray-800 text-center">
+    <a href="../index.html" class="underline">⬅️ Kembali ke Home</a>
+  </footer>
 
-  <p><a href="../index.html">⬅️ Kembali ke Home</a></p>
+  <script>
+    async function loadChannels() {
+      try {
+        const res = await fetch("channels.json");
+        const channels = await res.json();
+        const container = document.getElementById("channel-list");
+
+        channels.forEach(ch => {
+          const card = document.createElement("a");
+          card.href = `player.html?url=${encodeURIComponent(ch.url)}`;
+          card.innerHTML = `
+            <div class="bg-gray-700 p-4 rounded-xl shadow hover:bg-gray-600 transition cursor-pointer">
+              <h2 class="text-lg font-semibold">${ch.name}</h2>
+              <p class="text-sm text-gray-300">Klik untuk menonton</p>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Gagal load channels.json", err);
+      }
+    }
+
+    loadChannels();
+  </script>
 </body>
 </html>
