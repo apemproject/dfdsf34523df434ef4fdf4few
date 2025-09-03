@@ -16,14 +16,14 @@
   </main>
 
   <script>
-    fetch("channels.json")
+    fetch("../channels.json") // naik satu folder
       .then(res => res.json())
       .then(channels => {
         const container = document.getElementById("channel-list");
         channels.forEach(ch => {
           const card = document.createElement("a");
-          // arahkan ke folder nonton-tipi/player.html
-          card.href = "nonton-tipi/player.html?url=" + encodeURIComponent(ch.url);
+          // karena index.html & player.html ada di folder yang sama
+          card.href = "player.html?url=" + encodeURIComponent(ch.url);
           card.className = "block bg-gray-800 rounded-xl shadow p-2 hover:bg-gray-700 transition";
           card.innerHTML = `
             <img src="${ch.thumbnail}" alt="${ch.name}" class="rounded-xl mb-2">
