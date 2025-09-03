@@ -80,7 +80,7 @@
   {
     "title": "Semifinal B1 vs A2",
     "start": "2025-09-27T14:00:00+07:00",
-    "src": "http://iptv.prosto.tv:7000/ch110/video.m3u8",
+    "src": "https://livecloud.akamaized.net/chzzk/lip2_kr/cflexnmss2u0177/qxsaygnb40jkrhkcorkyfhsnbmnx6i300htp/ieflr4c97kst7uztclyhgzumnx6i300e1y_hls_playlist.m3u8?hdnts=st=1756877457~exp=1756938667~acl=*/qxsaygnb40jkrhkcorkyfhsnbmnx6i300htp/*~hmac=446fa8117fa8f83e5e1863f4f33b67813f3c26421877482f13cfd0cc1ef7b884",
     "poster": "assets/kovo cup.png"
   },
   {
