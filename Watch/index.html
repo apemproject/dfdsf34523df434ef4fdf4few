@@ -33,13 +33,12 @@
         padding-left: 0 !important;
         padding-right: 0 !important;
       }
-      .video-wrapper {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
+      .player-container {
+        border: none !important;
+        box-shadow: none !important;
         padding: 0 !important;
       }
-      .video-wrapper video {
+      .player-container video {
         border-radius: 0 !important;
       }
     }
@@ -57,6 +56,21 @@
       inset: 0;
       background: rgba(0, 0, 0, 0.55); 
       z-index: -1;
+    }
+
+    /* Container untuk desktop */
+    @media (min-width: 769px) {
+      .player-container {
+        border-radius: 16px;
+        padding: 10px;
+        background: rgba(15, 23, 42, 0.9); /* abu gelap transparan */
+        box-shadow: 0 0 25px rgba(30, 58, 138, 0.6); /* biru glow */
+      }
+      #watermark {
+        top: 8px;
+        right: 8px;
+        transition: all 0.8s ease-in-out;
+      }
     }
   </style>
 </head>
@@ -90,8 +104,13 @@
       </h2>
       <div class="border-b border-gray-600 mb-6"></div>
 
-      <div class="video-wrapper w-full max-w-6xl mx-auto aspect-video">
+      <div class="player-container relative w-full max-w-6xl mx-auto aspect-video">
         <video id="video" controls autoplay class="w-full h-full rounded-lg shadow-lg object-contain bg-black" poster="/assets/preview.jpg"></video>
+
+        <!-- Watermark -->
+        <div id="watermark" class="hidden md:block absolute bg-black/50 px-2 py-1 rounded-lg">
+          <img src="/assets/logo11.png" alt="GameOnX" class="h-6 sm:h-8 w-auto opacity-80">
+        </div>
       </div>
     </div>
   </main>
@@ -142,6 +161,25 @@
     document.getElementById('menu-btn').addEventListener('click', () => {
       document.getElementById('mobile-menu').classList.toggle('hidden');
     });
+
+    // Watermark moving every 60 seconds
+    const watermark = document.getElementById("watermark");
+    const positions = [
+      { top: "8px", right: "8px", bottom: "", left: "" },
+      { top: "8px", left: "8px", bottom: "", right: "" },
+      { bottom: "8px", left: "8px", top: "", right: "" },
+      { bottom: "8px", right: "8px", top: "", left: "" }
+    ];
+    let index = 0;
+
+    function moveWatermark() {
+      const pos = positions[index];
+      Object.assign(watermark.style, pos);
+      index = (index + 1) % positions.length;
+    }
+
+    moveWatermark();
+    setInterval(moveWatermark, 60000);
   </script>
 </body>
 </html>
