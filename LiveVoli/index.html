@@ -164,6 +164,7 @@
 
     loadChannels();
 
+    document.addEventListener("contextmenu", e => e.preventDefault());
     // --- Blok shortcut devtools ---
     document.addEventListener("keydown", function(e) {
       if (e.key === "F12") e.preventDefault();
