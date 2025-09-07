@@ -269,6 +269,10 @@
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED,function(event,data){
+        // autoplay + mute saat pertama buka
+        video.muted = true;
+        video.play().catch(()=>{});
+
         settingsMenu.innerHTML="";
         const levels=data.levels;
 
@@ -299,6 +303,9 @@
       });
     } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = streamUrl;
+      // autoplay + mute juga di sini
+      video.muted = true;
+      video.autoplay = true;
     }
 
     // Play
@@ -346,12 +353,9 @@
     });
 
     // Disable right click & inspect
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "F12") e.preventDefault();
-      if ((e.ctrlKey && e.shiftKey && 
-          (e.key === "I" || e.key === "J" || e.key === "C")) || 
-          (e.ctrlKey && e.key === "U")) e.preventDefault();
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if(e.ctrlKey && (e.key==='u' || e.key==='U' || e.key==='i' || e.key==='I')) e.preventDefault();
     });
   </script>
 </body>
