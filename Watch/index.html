@@ -37,23 +37,25 @@
   .player { position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
   .player video { width:100%; height:100%; object-fit:contain; }
 
-  /* === Progress bar hijau === */
+  /* === Progress bar hijau Naver style === */
   .progress-container {
     position: absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:4px;
+    bottom: 48px; /* di atas controls */
+    left: 0;
+    width: 100%;
+    height: 3px;
     background: rgba(255,255,255,0.2);
-    z-index:20;
-    cursor:pointer;
-    opacity:0;
-    transition:opacity .3s ease;
+    cursor: pointer;
+    z-index: 30;
+    border-radius: 2px;
+    transition: opacity .3s ease;
+    opacity: 0;
   }
   .progress-bar {
-    width:0%;
-    height:100%;
+    width: 0%;
+    height: 100%;
     background: limegreen;
+    border-radius: 2px;
     transition: width 0.1s linear;
   }
 
@@ -110,11 +112,11 @@
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-3 text-left"></h2>
     <div class="border-b border-white mb-6"></div>
     <div class="player">
-      <video id="video" playsinline poster="/assets/preview.jpg"></video>
+      <video id="video" playsinline poster="/assets/preview.jpg" muted></video>
 
-      <!-- Progress Bar Hijau -->
-      <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
+      <!-- Progress Bar Naver style -->
+      <div id="progressContainer" class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
       </div>
 
       <div class="controls">
@@ -154,7 +156,6 @@
 const urlParams=new URLSearchParams(window.location.search);
 const streamUrl=urlParams.get('url');const title=urlParams.get('title');
 document.getElementById('match-title').textContent=decodeURIComponent(title);
-
 const video=document.getElementById("video"),
       playBtn=document.getElementById("play"),
       volumeBtn=document.getElementById("volume"),
@@ -171,7 +172,6 @@ const video=document.getElementById("video"),
       progressBar=document.getElementById("progressBar"),
       progressContainer=document.getElementById("progressContainer");
 
-// === Volume Icon & Play State ===
 function updateVolumeIcon(){
   if(video.muted||video.volume===0){volumeIcon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';}
   else if(video.volume<0.5){volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>';}
@@ -179,71 +179,71 @@ function updateVolumeIcon(){
 }
 function initPlayerState(){playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';updateVolumeIcon();}
 
-// === HLS Setup ===
-let hls;if(Hls.isSupported()){hls=new Hls();hls.loadSource(streamUrl);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){video.play().catch(()=>{});video.muted=true;initPlayerState();settingsMenu.innerHTML="";let autoDiv=document.createElement("div");autoDiv.textContent="Auto";autoDiv.classList.add("active");autoDiv.onclick=()=>{hls.currentLevel=-1;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(autoDiv);data.levels.forEach((level,i)=>{let div=document.createElement("div");div.textContent=level.height+"p";if(level.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}div.onclick=()=>{hls.currentLevel=i;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(div);});hls.currentLevel=-1;});}else if(video.canPlayType('application/vnd.apple.mpegurl')){video.src=streamUrl;video.autoplay=true;video.muted=true;initPlayerState();}
+let hls;if(Hls.isSupported()){hls=new Hls();hls.loadSource(streamUrl);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){
+  video.muted=true; // auto mute saat autoplay
+  video.play().catch(()=>{});initPlayerState();
+  settingsMenu.innerHTML="";
+  let autoDiv=document.createElement("div");autoDiv.textContent="Auto";autoDiv.classList.add("active");
+  autoDiv.onclick=()=>{hls.currentLevel=-1;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};
+  settingsMenu.appendChild(autoDiv);
+  data.levels.forEach((level,i)=>{let div=document.createElement("div");div.textContent=level.height+"p";if(level.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}div.onclick=()=>{hls.currentLevel=i;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(div);});
+  hls.currentLevel=-1;
+});}else if(video.canPlayType('application/vnd.apple.mpegurl')){video.src=streamUrl;video.autoplay=true;video.muted=true;initPlayerState();}
 
+// === Klik sekali untuk unmute ===
+video.addEventListener('click', e => {
+  if(video.muted) { video.muted=false; updateVolumeIcon(); }
+});
+
+// === Kontrol dan volume tetap seperti sebelumnya ===
 playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
 volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
-
-// === Fullscreen & PiP ===
 fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
 pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
-video.addEventListener('leavepictureinpicture', () => { video.play().catch(() => {}); });
+video.addEventListener('leavepictureinpicture', () => { video.play().catch(() => { console.log('Autoplay diblokir oleh browser.'); }); });
 
-// === Settings Menu ===
 settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
 document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
 document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
 
-// === Skip Feedback ===
+// === Skip feedback ===
 function showSkipFeedback(side){const el=side==="left"?skipLeft:skipRight;el.style.opacity=1;let icon=el.querySelector("svg");icon.classList.add("spin");setTimeout(()=>icon.classList.remove("spin"),600);setTimeout(()=>el.style.opacity=0,600);}
-let lastTap=0;
-video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}}lastTap=t;});
+let lastTap=0;video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}}lastTap=t;});
 video.addEventListener("dblclick",e=>{const r=video.getBoundingClientRect();const x=e.clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}});
 
-// === Auto-hide Controls & Progress Bar ===
+// === Auto hide controls + progress bar ===
 let hideControlsTimeout;
 function showControls(){
   controls.style.opacity="1";
-  progressContainer.style.opacity="1";
+  progressContainer.style.opacity="1"; // tambahkan ini
   clearTimeout(hideControlsTimeout);
   const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500;
   hideControlsTimeout = setTimeout(()=>{
     controls.style.opacity="0";
-    progressContainer.style.opacity="0";
-  }, timeoutDuration);
+    progressContainer.style.opacity="0"; // sembunyikan progress bar juga
+  },timeoutDuration);
 }
-video.addEventListener("click",e=>{
-  if(e.detail===1){
-    setTimeout(()=>{
-      if(e.detail===1){
-        showControls();
-        if(video.muted){video.muted=false;updateVolumeIcon();}
-      }
-    },200);
-  }
-});
+video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
 player.addEventListener("mousemove",showControls);
 player.addEventListener("mouseleave",()=>{controls.style.opacity="0";progressContainer.style.opacity="0";});
 
-// === Progress Bar Update & Seek ===
+// === Progress bar ===
 video.addEventListener("timeupdate",()=>{if(video.duration) progressBar.style.width=(video.currentTime/video.duration*100)+"%";});
-progressContainer.addEventListener("click",e=>{
-  const rect=e.currentTarget.getBoundingClientRect();
-  const clickPos=e.clientX-rect.left;
-  video.currentTime=(clickPos/rect.width)*video.duration;
-});
-let touchStartX = 0;
-progressContainer.addEventListener("touchstart", e=>{touchStartX = e.touches[0].clientX;});
-progressContainer.addEventListener("touchmove", e=>{
-  const rect = progressContainer.getBoundingClientRect();
-  const x = e.touches[0].clientX - rect.left;
-  let pct = Math.min(Math.max(x/rect.width,0),1);
-  video.currentTime = video.duration * pct;
-});
+progressContainer.addEventListener("click",e=>{const rect=e.currentTarget.getBoundingClientRect();const clickPos=e.clientX-rect.left;video.currentTime=(clickPos/rect.width)*video.duration;});
+
+// Drag progress bar untuk desktop
+let isDragging=false;
+progressContainer.addEventListener("mousedown", e => {isDragging=true; video.pause();});
+progressContainer.addEventListener("mousemove", e => {if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
+document.addEventListener("mouseup", e => {if(isDragging){isDragging=false; video.play();}});
+
+// Swipe untuk mobile
+let touchStartX=0;
+progressContainer.addEventListener("touchstart", e=>{touchStartX=e.touches[0].clientX;});
+progressContainer.addEventListener("touchmove", e=>{const rect=e.currentTarget.getBoundingClientRect();const pos=(e.touches[0].clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;});
 </script>
 </body>
 </html>
