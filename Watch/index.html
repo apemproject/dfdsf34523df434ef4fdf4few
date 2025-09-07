@@ -159,10 +159,10 @@ if(Hls.isSupported()){
 playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
 volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
-fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}}};
-pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}}};
+fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
+pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
 settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
-document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}}});
+document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
 document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
@@ -170,18 +170,8 @@ document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'|
 function showSkipFeedback(side){const el=side==="left"?skipLeft:skipRight;el.style.opacity=1;let icon=el.querySelector("svg");icon.classList.add("spin");setTimeout(()=>icon.classList.remove("spin"),600);setTimeout(()=>el.style.opacity=0,600);}
 let lastTap=0;video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=10;showSkipFeedback("left");}else{video.currentTime+=10;showSkipFeedback("right");}}lastTap=t;});
 video.addEventListener("dblclick",e=>{const r=video.getBoundingClientRect();const x=e.clientX-r.left;if(x<r.width/2){video.currentTime-=10;showSkipFeedback("left");}else{video.currentTime+=10;showSkipFeedback("right");}});
-
 let hideControlsTimeout;
-function showControls(){
-  controls.style.opacity="1";
-  clearTimeout(hideControlsTimeout);
-  // Timeout 5 detik untuk mobile, 2.5 detik untuk desktop
-  const timeoutDuration = window.innerWidth <= 768 ? 5000 : 2500;
-  hideControlsTimeout = setTimeout(()=>{
-    controls.style.opacity="0";
-  }, timeoutDuration);
-}
-
+function showControls(){controls.style.opacity="1";clearTimeout(hideControlsTimeout);hideControlsTimeout=setTimeout(()=>{controls.style.opacity="0";},2500);}
 video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){controls.style.opacity=controls.style.opacity==="1"?"0":"1";}},200);}});
 player.addEventListener("mousemove",showControls);
 player.addEventListener("mouseleave",()=>{controls.style.opacity="0";});
@@ -195,7 +185,8 @@ document.addEventListener("keydown",e=>{
     case "arrowright":video.currentTime+=10;showSkipFeedback("right");break;
     case "f":if(!document.fullscreenElement){video.parentElement.requestFullscreen();}else{document.exitFullscreen();}break;
     case "m":video.muted=!video.muted;updateVolumeIcon();break;
-    default:if(!isNaN(e.key)&&e.key>="0"&&e.key<="9"){let pct=parseInt(e.key);video.currentTime=video.duration*(pct/10);}});
+    default:if(!isNaN(e.key)&&e.key>="0"&&e.key<="9"){let pct=parseInt(e.key);video.currentTime=video.duration*(pct/10);}}
+});
 </script>
 </body>
 </html>
