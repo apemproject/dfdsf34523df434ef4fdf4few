@@ -34,18 +34,11 @@
   .settings-menu div.active::before { content:"✓ "; margin-right:4px; color:#fff; }
   .settings-menu.show { opacity:1; transform:translateY(0); pointer-events:auto; }
   .hd { font-size:11px; color:lime; margin-left:6px; }
-
-  /* skip feedback */
-  .skip-feedback {
-    position:absolute; top:50%; transform:translateY(-50%);
-    font-size:32px; color:white; opacity:0; transition:opacity .3s ease;
-    pointer-events:none;
-  }
+  .skip-feedback { position:absolute; top:50%; transform:translateY(-50%); font-size:32px; color:white; opacity:0; transition:opacity .3s ease; pointer-events:none; }
   .skip-left { left:20%; }
   .skip-right { right:20%; }
   .spin { animation: spin 0.6s linear; }
   @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
-
   @media (max-width:768px){
     .player video { border-radius:0; }
     .settings-menu { font-size:12px; min-width:120px; bottom:40px; right:5px; }
@@ -55,7 +48,6 @@
 </style>
 </head>
 <body>
-
 <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
   <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
     <a href="https://gameonx.my.id"><img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto"></a>
@@ -72,7 +64,6 @@
     </div>
   </div>
 </header>
-
 <main>
   <div class="max-w-6xl mx-auto">
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-3 text-left"></h2>
@@ -96,162 +87,48 @@
           </div>
         </div>
         <div class="right">
-          <button class="btn" id="settingsBtn" title="Settings">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          </button>
-          <button class="btn" id="pipBtn" title="PiP">
-            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" ry="2"/><rect x="12" y="12" width="9" height="7"/></svg>
-          </button>
-          <button class="btn" id="fullscreen" title="Fullscreen">
-            <svg viewBox="0 0 24 24"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/></svg>
-          </button>
+          <button class="btn" id="settingsBtn" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <button class="btn" id="pipBtn" title="PiP"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" ry="2"/><rect x="12" y="12" width="9" height="7"/></svg></button>
+          <button class="btn" id="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/></svg></button>
         </div>
       </div>
       <div class="settings-menu" id="settingsMenu"></div>
-      <!-- skip feedback -->
       <div id="skipLeft" class="skip-feedback skip-left"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 18l-6-6 6-6"/></svg></div>
       <div id="skipRight" class="skip-feedback skip-right"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M9 6l6 6-6 6"/></svg></div>
     </div>
   </div>
 </main>
-
 <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
   <div class="px-6 py-2 text-center text-sm text-white">© 2025 GameOnX - All Rights Reserved</div>
 </footer>
-
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const streamUrl = urlParams.get('url');
-const title = urlParams.get('title');
-document.getElementById('match-title').textContent = decodeURIComponent(title);
-
-const video = document.getElementById("video");
-const playBtn = document.getElementById("play");
-const volumeBtn = document.getElementById("volume");
-const volumeSlider = document.getElementById("volumeSlider");
-const volumeIcon = document.getElementById("volumeIcon");
-const fullscreenBtn = document.getElementById("fullscreen");
-const settingsBtn = document.getElementById("settingsBtn");
-const pipBtn = document.getElementById("pipBtn");
-const settingsMenu = document.getElementById("settingsMenu");
-const controls = document.querySelector(".controls");
-const skipLeft = document.getElementById("skipLeft");
-const skipRight = document.getElementById("skipRight");
-
-function updateVolumeIcon(){
-  if(video.muted || video.volume===0){
-    volumeIcon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-  } else if(video.volume<0.5){
-    volumeIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>';
-  } else {
-    volumeIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-  }
-}
-
-function initPlayerState(){
-  playBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
-  updateVolumeIcon();
-}
-
-let hls;
-if(Hls.isSupported()){
-  hls = new Hls();
-  hls.loadSource(streamUrl);
-  hls.attachMedia(video);
-
-  hls.on(Hls.Events.MANIFEST_PARSED, function(event, data){
-    video.muted = true;
-    video.play().catch(()=>{});
-    initPlayerState();
-
-    settingsMenu.innerHTML = "";
-    let autoDiv = document.createElement("div");
-    autoDiv.textContent = "Auto";
-    autoDiv.classList.add("active");
-    autoDiv.onclick = ()=>{ hls.currentLevel = -1; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); autoDiv.classList.add("active"); };
-    settingsMenu.appendChild(autoDiv);
-
-    data.levels.forEach((level,i)=>{
-        let div = document.createElement("div");
-        div.textContent = level.height+"p";
-        if(level.height>=720){ let span = document.createElement("span"); span.className="hd"; span.textContent="HD"; div.appendChild(span);}
-        div.onclick = ()=>{ hls.currentLevel=i; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); div.classList.add("active"); };
-        settingsMenu.appendChild(div);
-    });
-    hls.currentLevel = -1;
-  });
-} else if(video.canPlayType('application/vnd.apple.mpegurl')){
-  video.src = streamUrl;
-  video.muted = true;
-  video.autoplay = true;
-  initPlayerState();
-}
-
-playBtn.onclick = ()=>{ if(video.paused){ video.play(); initPlayerState(); } else{ video.pause(); playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>'; } };
-volumeSlider.oninput = ()=>{ video.volume=volumeSlider.value; video.muted=video.volume===0; updateVolumeIcon(); };
-volumeBtn.onclick = ()=>{ video.muted=!video.muted; updateVolumeIcon(); };
-fullscreenBtn.onclick = async ()=>{ 
-  if(!document.fullscreenElement){ 
-    await video.parentElement.requestFullscreen(); 
-    if (screen.orientation && screen.orientation.lock) { try { await screen.orientation.lock("landscape"); } catch(e){} }
-  } else{ document.exitFullscreen(); } 
-};
-pipBtn.onclick = ()=>{ if(video!==document.pictureInPictureElement){ video.requestPictureInPicture(); } else{ document.exitPictureInPicture(); } };
-settingsBtn.onclick = ()=>{ settingsMenu.classList.toggle("show"); };
-document.getElementById('menu-btn').addEventListener('click', ()=>{ document.getElementById('mobile-menu').classList.toggle('hidden'); });
-document.addEventListener('contextmenu', e=>e.preventDefault());
-document.addEventListener('keydown', e=>{ if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I')) e.preventDefault(); });
-
-/* Skip feedback */
-function showSkipFeedback(side) {
-  const el = side === "left" ? skipLeft : skipRight;
-  el.style.opacity = 1;
-  let icon = el.querySelector("svg");
-  icon.classList.add("spin");
-  setTimeout(() => icon.classList.remove("spin"), 600);
-  setTimeout(() => el.style.opacity = 0, 600);
-}
-
-/* Mobile double tap */
-let lastTap = 0;
-video.addEventListener("touchend", (e) => {
-  const currentTime = new Date().getTime();
-  if (currentTime - lastTap < 300) {
-    const rect = video.getBoundingClientRect();
-    const x = e.changedTouches[0].clientX - rect.left;
-    if (x < rect.width / 2) { video.currentTime -= 10; showSkipFeedback("left"); }
-    else { video.currentTime += 10; showSkipFeedback("right"); }
-  }
-  lastTap = currentTime;
-});
-
-/* Desktop double click */
-video.addEventListener("dblclick", (e) => {
-  const rect = video.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  if (x < rect.width / 2) { video.currentTime -= 10; showSkipFeedback("left"); }
-  else { video.currentTime += 10; showSkipFeedback("right"); }
-});
-
-/* Klik sekali untuk toggle controls */
-let hideControlsTimeout;
-video.addEventListener("click", (e) => {
-  if (e.detail === 1) {
-    setTimeout(() => {
-      if (e.detail === 1) {
-        if (controls.style.opacity === "1") {
-          controls.style.opacity = "0";
-          clearTimeout(hideControlsTimeout);
-        } else {
-          controls.style.opacity = "1";
-          clearTimeout(hideControlsTimeout);
-          hideControlsTimeout = setTimeout(() => controls.style.opacity = "0", 2500);
-        }
-      }
-    }, 200);
-  }
-});
+/* === FINAL PLAYER SCRIPT === */
+const urlParams=new URLSearchParams(window.location.search);
+const streamUrl=urlParams.get('url');const title=urlParams.get('title');
+document.getElementById('match-title').textContent=decodeURIComponent(title);
+const video=document.getElementById("video"),playBtn=document.getElementById("play"),volumeBtn=document.getElementById("volume"),volumeSlider=document.getElementById("volumeSlider"),volumeIcon=document.getElementById("volumeIcon"),fullscreenBtn=document.getElementById("fullscreen"),settingsBtn=document.getElementById("settingsBtn"),pipBtn=document.getElementById("pipBtn"),settingsMenu=document.getElementById("settingsMenu"),controls=document.querySelector(".controls"),player=document.querySelector(".player"),skipLeft=document.getElementById("skipLeft"),skipRight=document.getElementById("skipRight");
+function updateVolumeIcon(){if(video.muted||video.volume===0){volumeIcon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>'}else if(video.volume<0.5){volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>'}else{volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>'}}
+function initPlayerState(){playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';updateVolumeIcon();}
+let hls;if(Hls.isSupported()){hls=new Hls();hls.loadSource(streamUrl);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){video.muted=true;video.play().catch(()=>{});initPlayerState();settingsMenu.innerHTML="";let autoDiv=document.createElement("div");autoDiv.textContent="Auto";autoDiv.classList.add("active");autoDiv.onclick=()=>{hls.currentLevel=-1;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(autoDiv);data.levels.forEach((level,i)=>{let div=document.createElement("div");div.textContent=level.height+"p";if(level.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}div.onclick=()=>{hls.currentLevel=i;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(div);});hls.currentLevel=-1;});}else if(video.canPlayType('application/vnd.apple.mpegurl')){video.src=streamUrl;video.muted=true;video.autoplay=true;initPlayerState();}
+playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};
+volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
+volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
+fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
+pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
+settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
+document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
+document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
+function showSkipFeedback(side){const el=side==="left"?skipLeft:skipRight;el.style.opacity=1;let icon=el.querySelector("svg");icon.classList.add("spin");setTimeout(()=>icon.classList.remove("spin"),600);setTimeout(()=>el.style.opacity=0,600);}
+let lastTap=0;video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=10;showSkipFeedback("left");}else{video.currentTime+=10;showSkipFeedback("right");}}lastTap=t;});
+video.addEventListener("dblclick",e=>{const r=video.getBoundingClientRect();const x=e.clientX-r.left;if(x<r.width/2){video.currentTime-=10;showSkipFeedback("left");}else{video.currentTime+=10;showSkipFeedback("right");}});
+let hideControlsTimeout;function showControls(){controls.style.opacity="1";document.body.style.cursor="default";clearTimeout(hideControlsTimeout);hideControlsTimeout=setTimeout(()=>{controls.style.opacity="0";document.body.style.cursor="none";},2500);}
+video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){controls.style.opacity=controls.style.opacity==="1"?"0":"1";}},200);}});
+player.addEventListener("mousemove",showControls);
+player.addEventListener("mouseleave",()=>{controls.style.opacity="0";document.body.style.cursor="none";});
+/* Keyboard shortcuts */
+document.addEventListener("keydown",e=>{if(e.target.tagName.toLowerCase()==="input"||e.target.tagName.toLowerCase()==="textarea")return;switch(e.key.toLowerCase()){case " ":e.preventDefault();if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';};break;case "arrowleft":video.currentTime-=10;showSkipFeedback("left");break;case "arrowright":video.currentTime+=10;showSkipFeedback("right");break;case "f":if(!document.fullscreenElement){video.parentElement.requestFullscreen();}else{document.exitFullscreen();}break;case "m":video.muted=!video.muted;updateVolumeIcon();break;default:if(!isNaN(e.key)&&e.key>="0"&&e.key<="9"){let pct=parseInt(e.key);video.currentTime=video.duration*(pct/10);}}});
 </script>
-
 </body>
 </html>
