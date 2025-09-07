@@ -103,7 +103,7 @@
 </footer>
 
 <script>
-/* === FINAL PLAYER SCRIPT (cursor always normal + auto-hide 5s mobile) === */
+/* === FINAL PLAYER SCRIPT (cursor always normal + auto-hide mobile 3s) === */
 const urlParams=new URLSearchParams(window.location.search);
 const streamUrl=urlParams.get('url');const title=urlParams.get('title');
 document.getElementById('match-title').textContent=decodeURIComponent(title);
@@ -147,7 +147,7 @@ let hideControlsTimeout;
 function showControls(){
   controls.style.opacity="1";
   clearTimeout(hideControlsTimeout);
-  const timeoutDuration = window.innerWidth <= 768 ? 5000 : 2500;
+  const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500; // <== hanya ini diubah menjadi 3 detik mobile
   hideControlsTimeout = setTimeout(()=>{controls.style.opacity="0";},timeoutDuration);
 }
 video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){controls.style.opacity=controls.style.opacity==="1"?"0":"1";}},200);}});
@@ -162,7 +162,7 @@ document.addEventListener("keydown",e=>{
     case "arrowright":video.currentTime+=10;showSkipFeedback("right");break;
     case "f":if(!document.fullscreenElement){video.parentElement.requestFullscreen();}else{document.exitFullscreen();}break;
     case "m":video.muted=!video.muted;updateVolumeIcon();break;
-    default:if(!isNaN(e.key)&&e.key>="0"&&e.key<="9"){let pct=parseInt(e.key);video.currentTime=video.duration*(pct/10);}}
+    default:if(!isNaN(e.key)&&e.key>="0"&&e.key<="9"){let pct=parseInt(e.key);video.currentTime=video.duration*(pct/10);} }
 });
 </script>
 </body>
