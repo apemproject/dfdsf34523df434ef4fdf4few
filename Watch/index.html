@@ -103,6 +103,7 @@
 </footer>
 
 <script>
+/* === FINAL PLAYER SCRIPT === */
 const urlParams=new URLSearchParams(window.location.search);
 const streamUrl=urlParams.get('url');const title=urlParams.get('title');
 document.getElementById('match-title').textContent=decodeURIComponent(title);
@@ -126,7 +127,53 @@ function updateVolumeIcon(){
   else{volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';}
 }
 function initPlayerState(){playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';updateVolumeIcon();}
-let hls;if(Hls.isSupported()){hls=new Hls();hls.loadSource(streamUrl);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){video.muted=true;video.play().catch(()=>{});initPlayerState();settingsMenu.innerHTML="";let autoDiv=document.createElement("div");autoDiv.textContent="Auto";autoDiv.classList.add("active");autoDiv.onclick=()=>{hls.currentLevel=-1;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(autoDiv);data.levels.forEach((level,i)=>{let div=document.createElement("div");div.textContent=level.height+"p";if(level.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}div.onclick=()=>{hls.currentLevel=i;[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};settingsMenu.appendChild(div);});hls.currentLevel=-1;});}else if(video.canPlayType('application/vnd.apple.mpegurl')){video.src=streamUrl;video.muted=true;video.autoplay=true;initPlayerState();}
+
+let hls;
+if(Hls.isSupported()){
+    hls=new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){
+        // auto-mute dihapus
+        video.play().catch(()=>{});
+        initPlayerState();
+        settingsMenu.innerHTML="";
+        let autoDiv=document.createElement("div");
+        autoDiv.textContent="Auto";
+        autoDiv.classList.add("active");
+        autoDiv.onclick=()=>{
+            hls.currentLevel=-1;
+            [...settingsMenu.children].forEach(c=>c.classList.remove("active"));
+            autoDiv.classList.add("active");
+            settingsMenu.classList.remove("show");
+        };
+        settingsMenu.appendChild(autoDiv);
+        data.levels.forEach((level,i)=>{
+            let div=document.createElement("div");
+            div.textContent=level.height+"p";
+            if(level.height>=720){
+                let span=document.createElement("span");
+                span.className="hd";
+                span.textContent="HD";
+                div.appendChild(span);
+            }
+            div.onclick=()=>{
+                hls.currentLevel=i;
+                [...settingsMenu.children].forEach(c=>c.classList.remove("active"));
+                div.classList.add("active");
+                settingsMenu.classList.remove("show");
+            };
+            settingsMenu.appendChild(div);
+        });
+        hls.currentLevel=-1;
+    });
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+    video.src=streamUrl;
+    // auto-mute dihapus
+    video.autoplay=true;
+    initPlayerState();
+}
+
 playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
 volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
@@ -135,34 +182,36 @@ pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPi
 settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
 document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
 document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e => {if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I')) e.preventDefault();});
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
 
 function showSkipFeedback(side){const el=side==="left"?skipLeft:skipRight;el.style.opacity=1;let icon=el.querySelector("svg");icon.classList.add("spin");setTimeout(()=>icon.classList.remove("spin"),600);setTimeout(()=>el.style.opacity=0,600);}
-let lastTap=0;video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}}lastTap=t;});
-video.addEventListener("dblclick",e=>{const r=video.getBoundingClientRect();const x=e.clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}});
+let lastTap=0;
+video.addEventListener("touchend",e=>{
+    const t=new Date().getTime();
+    if(t-lastTap<300){
+        const r=video.getBoundingClientRect();
+        const x=e.changedTouches[0].clientX-r.left;
+        if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}
+    }
+    lastTap=t;
+});
+video.addEventListener("dblclick",e=>{
+    const r=video.getBoundingClientRect();
+    const x=e.clientX-r.left;
+    if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}
+});
 
 let hideControlsTimeout;
 function showControls(){
   controls.style.opacity="1";
   clearTimeout(hideControlsTimeout);
-  const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500; // mobile 3 detik
+  const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500; // auto-hide 3s mobile, 2.5s desktop
   hideControlsTimeout = setTimeout(()=>{controls.style.opacity="0";},timeoutDuration);
 }
-
-// Mobile click toggle
-video.addEventListener("click", e => {
-  if(e.detail === 1){
-    setTimeout(() => {
-      if(e.detail === 1){
-        showControls();
-      }
-    }, 200);
-  }
-});
-
-player.addEventListener("mousemove", showControls);
-player.addEventListener("mouseleave", () => { controls.style.opacity = "0"; });
+video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
+player.addEventListener("mousemove",showControls);
+player.addEventListener("mouseleave",()=>{controls.style.opacity="0";});
 
 document.addEventListener("keydown",e=>{
   if(e.target.tagName.toLowerCase()==="input"||e.target.tagName.toLowerCase()==="textarea")return;
