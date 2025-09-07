@@ -11,9 +11,7 @@
     background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
     background-size: cover; color: #e5e7eb; min-height: 100vh; position: relative;
   }
-  body::before {
-    content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: -1;
-  }
+  body::before { content: ""; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: -1; }
   main { max-width: 7xl; margin: auto; padding-top:5rem; padding-bottom:5rem; }
   .player { position: relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
   .player video { width:100%; height:100%; object-fit:contain; }
@@ -36,11 +34,7 @@
   .hd { font-size:11px; color:lime; margin-left:6px; }
 
   /* skip feedback */
-  .skip-feedback {
-    position:absolute; top:50%; transform:translateY(-50%);
-    font-size:32px; color:white; opacity:0; transition:opacity .3s ease;
-    pointer-events:none;
-  }
+  .skip-feedback { position:absolute; top:50%; transform:translateY(-50%); font-size:32px; color:white; opacity:0; transition:opacity .3s ease; pointer-events:none; }
   .skip-left { left:20%; }
   .skip-right { right:20%; }
   .spin { animation: spin 0.6s linear; }
@@ -77,7 +71,7 @@
   <div class="max-w-6xl mx-auto">
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-3 text-left"></h2>
     <div class="border-b border-white mb-6"></div>
-    <div class="player">
+    <div class="player" id="player">
       <video id="video" playsinline poster="/assets/preview.jpg"></video>
       <div class="controls">
         <div class="left">
@@ -137,6 +131,7 @@ const settingsMenu = document.getElementById("settingsMenu");
 const controls = document.querySelector(".controls");
 const skipLeft = document.getElementById("skipLeft");
 const skipRight = document.getElementById("skipRight");
+const player = document.getElementById("player");
 
 function updateVolumeIcon(){
   if(video.muted || video.volume===0){
@@ -168,14 +163,14 @@ if(Hls.isSupported()){
     let autoDiv = document.createElement("div");
     autoDiv.textContent = "Auto";
     autoDiv.classList.add("active");
-    autoDiv.onclick = ()=>{ hls.currentLevel = -1; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); autoDiv.classList.add("active"); };
+    autoDiv.onclick = ()=>{ hls.currentLevel = -1; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); autoDiv.classList.add("active"); settingsMenu.classList.remove("show"); };
     settingsMenu.appendChild(autoDiv);
 
     data.levels.forEach((level,i)=>{
         let div = document.createElement("div");
         div.textContent = level.height+"p";
         if(level.height>=720){ let span = document.createElement("span"); span.className="hd"; span.textContent="HD"; div.appendChild(span);}
-        div.onclick = ()=>{ hls.currentLevel=i; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); div.classList.add("active"); };
+        div.onclick = ()=>{ hls.currentLevel=i; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); div.classList.add("active"); settingsMenu.classList.remove("show"); };
         settingsMenu.appendChild(div);
     });
     hls.currentLevel = -1;
@@ -219,36 +214,37 @@ video.addEventListener("touchend", (e) => {
   if (currentTime - lastTap < 300) {
     const rect = video.getBoundingClientRect();
     const x = e.changedTouches[0].clientX - rect.left;
-    if (x < rect.width / 2) { video.currentTime -= 10; showSkipFeedback("left"); }
-    else { video.currentTime += 10; showSkipFeedback("right"); }
+    if (x < rect.width / 2) {
+      video.currentTime = Math.max(0, video.currentTime - 10);
+      showSkipFeedback("left");
+    } else {
+      video.currentTime = Math.min(video.duration, video.currentTime + 10);
+      showSkipFeedback("right");
+    }
   }
   lastTap = currentTime;
 });
 
-/* Desktop double click */
-video.addEventListener("dblclick", (e) => {
-  const rect = video.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  if (x < rect.width / 2) { video.currentTime -= 10; showSkipFeedback("left"); }
-  else { video.currentTime += 10; showSkipFeedback("right"); }
-});
+/* Auto hide controls + click hide */
+let hideTimeout;
+function showControls(){
+  controls.style.opacity = 1;
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(()=>controls.style.opacity=0,3000);
+}
+player.addEventListener("mousemove", ()=>{ showControls(); });
+player.addEventListener("mouseleave", ()=>{ controls.style.opacity=0; });
+player.addEventListener("click", ()=>{ controls.style.opacity=0; settingsMenu.classList.remove("show"); });
 
-/* Klik sekali untuk toggle controls */
-let hideControlsTimeout;
-video.addEventListener("click", (e) => {
-  if (e.detail === 1) {
-    setTimeout(() => {
-      if (e.detail === 1) {
-        if (controls.style.opacity === "1") {
-          controls.style.opacity = "0";
-          clearTimeout(hideControlsTimeout);
-        } else {
-          controls.style.opacity = "1";
-          clearTimeout(hideControlsTimeout);
-          hideControlsTimeout = setTimeout(() => controls.style.opacity = "0", 2500);
-        }
-      }
-    }, 200);
+/* Keyboard shortcuts */
+document.addEventListener("keydown", (e)=>{
+  if(e.target.tagName.toLowerCase()==="input" || e.target.tagName.toLowerCase()==="textarea") return;
+  switch(e.key.toLowerCase()){
+    case " ": e.preventDefault(); playBtn.click(); break;
+    case "arrowleft": video.currentTime = Math.max(0, video.currentTime-10); showSkipFeedback("left"); break;
+    case "arrowright": video.currentTime = Math.min(video.duration, video.currentTime+10); showSkipFeedback("right"); break;
+    case "f": fullscreenBtn.click(); break;
+    case "m": volumeBtn.click(); break;
   }
 });
 </script>
