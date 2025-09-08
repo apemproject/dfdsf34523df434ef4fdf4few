@@ -6,32 +6,27 @@
   <title>GameOnX - Live Voli Dunia</title>
   <meta name="description" content="Tonton live streaming voli di GameOnX">
 
-  <!-- Open Graph -->
   <meta property="og:title" content="GameOnX - Live Streaming">
   <meta property="og:description" content="Tonton live streaming voli di GameOnX">
   <meta property="og:image" content="https://gameonx.my.id/assets/preview.jpg">
   <meta property="og:url" content="https://gameonx.my.id">
   <meta property="og:type" content="website">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="GameOnX - Live Streaming">
   <meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
   <meta name="twitter:image" content="https://gameonx.my.id/assets/preview.jpg">
   <meta name="twitter:url" content="https://gameonx.my.id">
 
-  <!-- Icons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/site.webmanifest">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/assets/style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Animasi */
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
@@ -44,7 +39,6 @@
     }
     .fade-in { animation: fadeIn 0.8s ease-out forwards; }
 
-    /* Poster */
     .poster-container {
       position: relative;
       overflow: hidden;
@@ -62,7 +56,18 @@
       filter: none;
     }
 
-    /* Body */
+    .channel-card {
+      background-image: url('/assets/bg kartu.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .channel-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
     body {
       position: relative;
       background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
@@ -77,20 +82,10 @@
       background: rgba(0, 0, 0, 0.55);
       z-index: -1;
     }
-
-    /* Hover Kartu Channel */
-    .channel-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .channel-card:hover {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-    }
   </style>
 </head>
 <body class="bg-black text-gray-200">
 
-  <!-- Header -->
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
       <a href="https://gameonx.my.id">
@@ -102,6 +97,7 @@
         <a href="https://chat.whatsapp.com/FtSOKILls4HBAlnjEE5Del" class="mx-2 text-white hover:text-blue-400 transition">Grup Chat</a>
       </nav>
       <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
+
       <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-black bg-opacity-90 shadow-lg md:hidden">
         <a href="https://gameonx.my.id" class="block px-6 py-3 text-white hover:bg-gray-800 hover:text-blue-400">Home</a>
         <a href="https://sociabuzz.com/fiqaz/donate" class="block px-6 py-3 text-white hover:bg-gray-800 hover:text-blue-400">Donate</a>
@@ -110,20 +106,17 @@
     </div>
   </header>
 
-  <!-- Main -->
   <main class="max-w-7xl mx-auto px-6 pt-20 pb-20">
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Volleyball Live</h2>
     <div id="channel-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 p-2 sm:p-4">
-      <!-- Channel cards akan di-load di sini -->
+
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
     <div class="px-6 py-2 text-center text-sm text-white">© 2025 GameOnX - All Rights Reserved</div>
   </footer>
 
-  <!-- Scripts -->
   <script>
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -134,7 +127,6 @@
       const response = await fetch('../LiveVoli.json');
       let data = await response.json();
 
-      // Urutkan berdasarkan waktu mulai
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
 
       const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
@@ -149,13 +141,13 @@
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
-        const tanggalLengkap = `${hari[startTime.getDay()]}, ${String(startTime.getDate()).padStart(2,'0')}-${String(startTime.getMonth()+1).padStart(2,'0')}-${startTime.getFullYear()} | ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
+        const tanggalLengkap = `${hari[startTime.getDay()]}, ${String(startTime.getDate()).padStart(2,'0')}-${String(startTime.getMonth()+1).padStart(2,'0')}-${startTime.getFullYear()} | ${startTime.toLocaleTimeString('id-ID',{ hour:'2-digit', minute:'2-digit' })} ${zone}`;
         const delay = index * 0.1;
 
         container.innerHTML += `
           <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}" 
-            class="channel-card bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg hover:shadow-xl ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
-            style="animation-delay: ${delay}s;">
+             class="channel-card bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
+             style="animation-delay: ${delay}s;">
             <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
               <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
             </div>
@@ -172,7 +164,6 @@
 
     loadChannels();
 
-    // Nonaktifkan klik kanan dan beberapa shortcut
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function(e) {
       if (e.key === "F12") e.preventDefault();
