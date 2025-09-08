@@ -88,5 +88,94 @@
     "start": "2025-09-28T11:30:00+07:00",
     "src": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     "poster": "assets/kovo cup.png"
+  },
+
+
+
+
+  {
+    "title": "Incheon Heungkuk Life Pink Spiders vs Daejeon Jungkwanjang Red Sparks",
+    "start": "2025-10-18T15:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Incheon Korean Air Jumbos",
+    "start": "2025-10-18T13:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "GS Caltex Seoul KIXX vs Hwaseong IBK Altos",
+    "start": "2025-10-19T15:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Busan OK Savings Bank OKman",
+    "start": "2025-10-19T13:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Gwangju Pepper Savings Bank AI PEPPERS vs Gimcheon Korea Expressway Hi-Pass",
+    "start": "2025-10-21T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Suwon KEPCO Vixtorm vs Seoul Woori Card WooriWON",
+    "start": "2025-10-20T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Incheon Heungkuk Life Pink Spiders vs Suwon Hyundai E&C Hillstate",
+    "start": "2025-10-22T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Uijeongbu KB Insurance Stars",
+    "start": "2025-10-22T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Daejeon Jungkwanjang Red Sparks vs GS Caltex Seoul KIXX",
+    "start": "2025-10-23T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Incheon Korean Air Jumbos vs Suwon KEPCO Vixtorm",
+    "start": "2025-10-23T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Hwaseong IBK Altos vs Gwangju Pepper Savings Bank AI PEPPERS",
+    "start": "2025-10-24T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Seoul Woori Card WooriWON vs Busan OK Savings Bank OKman",
+    "start": "2025-10-24T18:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Gimcheon Korea Expressway Hi-Pass vs Incheon Heungkuk Life Pink Spiders",
+    "start": "2025-10-25T15:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Cheonan Hyundai Capital Skywalkers",
+    "start": "2025-10-25T13:00:00+09:00",
+    "src": "",
+    "poster": "https://i.namu.wiki/i/Dwgc5di4-UVHXS2UoVaooXRuhD1fr1yMrHrLsEdxWvdEb-CIHHRnLsDBO7aj9DoWP2nmrjjeKjcE1PQSWJaQXg.svg"
   }
 ]
+
