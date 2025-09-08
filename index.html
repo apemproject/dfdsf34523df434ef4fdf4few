@@ -47,6 +47,19 @@
     .fade-in:nth-child(3) { animation-delay: 0.6s; }
     .fade-in:nth-child(4) { animation-delay: 0.8s; }
     
+    /* === Efek Hover Kartu Sama Seperti channel-card === */
+    .competition-card {
+      background-image: url('assets/bg kartu.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .competition-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
     body {
       position: relative;
       background: url('assets/bg gameonx.jpg') no-repeat center top fixed;
@@ -87,15 +100,15 @@
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6 fade-in" style="animation-delay: 0s;">Pilih Kompetisi</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       
-      <a href="/LiveVoli" class="rounded-lg p-4 border border-gray-500 shadow-md hover:shadow-xl hover:border-blue-500 transition fade-in bg-cover bg-center transform hover:-translate-y-1 hover:scale-105 duration-300 ease-in-out" style="background-image: url('assets/bg kartu.jpg');">
+      <a href="/LiveVoli" class="competition-card rounded-lg p-4 border border-gray-500 shadow-md hover:border-blue-500 fade-in">
         <h3 class="text-base font-semibold text-white">Live Event Volleyball<span class="blink text-red-500">●</span></h3>
         <p class="text-gray-200 mt-1 text-xs">Event internasional dan live streaming.</p>
       </a>
-      <a href="/VLeagueKorea" class="rounded-lg p-4 border border-gray-500 shadow-md hover:shadow-xl hover:border-blue-500 transition fade-in bg-cover bg-center transform hover:-translate-y-1 hover:scale-105 duration-300 ease-in-out" style="background-image: url('assets/bg kartu.jpg');">
+      <a href="/VLeagueKorea" class="competition-card rounded-lg p-4 border border-gray-500 shadow-md hover:border-blue-500 fade-in">
         <h3 class="text-base font-semibold text-white">Voli Korea</h3>
         <p class="text-gray-200 mt-1 text-xs">Jadwal dan live streaming pertandingan voli Korea.</p>
       </a>
-      <a href="/SVLeagueJepang" class="rounded-lg p-4 border border-gray-500 shadow-md hover:shadow-xl hover:border-blue-500 transition fade-in bg-cover bg-center transform hover:-translate-y-1 hover:scale-105 duration-300 ease-in-out" style="background-image: url('assets/bg kartu.jpg');">
+      <a href="/SVLeagueJepang" class="competition-card rounded-lg p-4 border border-gray-500 shadow-md hover:border-blue-500 fade-in">
         <h3 class="text-base font-semibold text-white">Voli Jepang</h3>
         <p class="text-gray-200 mt-1 text-xs">Nonton pertandingan voli Jepang secara langsung.</p>
       </a>
