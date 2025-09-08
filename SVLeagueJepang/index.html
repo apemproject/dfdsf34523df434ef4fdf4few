@@ -23,8 +23,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/site.webmanifest">
+
   <link rel="stylesheet" href="/assets/style.css">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes blink {
@@ -42,9 +42,8 @@
     .poster-container {
       position: relative;
       overflow: hidden;
-      border-radius: 0.4rem; 
+      border-radius: 0.4rem;
     }
-
     .poster {
       aspect-ratio: 16 / 9;
       object-fit: cover;
@@ -52,10 +51,21 @@
       width: 100%;
       height: auto;
     }
-
     .poster-container:hover .poster {
-      transform: scale(1.05);
-      filter: brightness(80%);
+      transform: none;
+      filter: none;
+    }
+
+    .channel-card {
+      background-image: url('/assets/bg kartu.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .channel-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
 
     body {
@@ -69,7 +79,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55); 
+      background: rgba(0, 0, 0, 0.55);
       z-index: -1;
     }
   </style>
@@ -79,7 +89,7 @@
   <header class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-1 flex justify-between items-center">
       <a href="https://gameonx.my.id">
-       <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
+        <img src="/assets/logo11.png" alt="GameOnX" class="h-10 w-auto">
       </a>
       <nav class="hidden md:flex">
         <a href="https://gameonx.my.id" class="mx-2 text-white hover:text-blue-400 transition">Home</a>
@@ -98,16 +108,13 @@
 
   <main class="max-w-7xl mx-auto px-6 pt-20 pb-20">
     <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Volleyball Jepang - Jadwal & Live</h2>
-
     <div id="channel-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 p-2 sm:p-4">
 
     </div>
   </main>
 
   <footer class="fixed bottom-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-t border-gray-800 shadow-md">
-    <div class="px-6 py-2 text-center text-sm text-white">
-      © 2025 GameOnX - All Rights Reserved
-    </div>
+    <div class="px-6 py-2 text-center text-sm text-white">© 2025 GameOnX - All Rights Reserved</div>
   </footer>
 
   <script>
@@ -123,7 +130,6 @@
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
 
       const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-
       const userOffset = new Date().getTimezoneOffset() / -60;
       let zone = 'WIB';
       if (userOffset === 9) zone = 'WIT';
@@ -135,22 +141,16 @@
         const startTime = new Date(channel.start);
         const now = new Date();
         const isLive = now >= startTime;
-
-        const tanggalLengkap = `${hari[startTime.getDay()]}, ${String(startTime.getDate()).padStart(2, '0')}-${String(startTime.getMonth()+1).padStart(2, '0')}-${startTime.getFullYear()} | ${startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ${zone}`;
-
+        const tanggalLengkap = `${hari[startTime.getDay()]}, ${String(startTime.getDate()).padStart(2,'0')}-${String(startTime.getMonth()+1).padStart(2,'0')}-${startTime.getFullYear()} | ${startTime.toLocaleTimeString('id-ID',{ hour:'2-digit', minute:'2-digit' })} ${zone}`;
         const delay = index * 0.1;
 
         container.innerHTML += `
-          <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
-            style="animation-delay: ${delay}s;">
-            
-            <!-- Poster -->
+          <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}" 
+             class="channel-card bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
+             style="animation-delay: ${delay}s;">
             <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
               <img src="${channel.poster}" alt="${channel.title}" class="poster rounded-md">
             </div>
-
-            <!-- Konten -->
             <div class="mt-3 sm:mt-4 flex flex-col flex-grow justify-between">
               <h3 class="text-xs sm:text-sm md:text-base font-semibold text-white leading-snug">${channel.title}</h3>
               <p class="mt-2 sm:mt-3 text-[0.6rem] sm:text-xs md:text-sm font-normal ${isLive ? 'text-red-400 blink' : 'text-green-400'}">
@@ -163,15 +163,15 @@
     }
 
     loadChannels();
+
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function(e) {
       if (e.key === "F12") e.preventDefault();
-      if ((e.ctrlKey && e.shiftKey && 
-          (e.key === "I" || e.key === "J" || e.key === "C")) || 
-          (e.ctrlKey && e.key === "u")) {
+      if ((e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "u")) {
         e.preventDefault();
       }
     });
   </script>
+
 </body>
 </html>
