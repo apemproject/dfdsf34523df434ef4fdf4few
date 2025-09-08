@@ -56,11 +56,14 @@
       padding: 1rem;
       border: 1px solid #6b7280; 
       box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease-in-out, 
+                  box-shadow 0.3s ease-in-out, 
+                  border-color 0.3s ease-in-out;
     }
     .channel-card:hover {
       transform: translateY(-5px) scale(1.03);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      border-color: transparent;
     }
 
     body {
