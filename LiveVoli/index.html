@@ -48,9 +48,9 @@
     .poster {
       aspect-ratio: 16 / 9;
       object-fit: cover;
+      transition: transform 0.3s ease, filter 0.3s ease;
       width: 100%;
       height: auto;
-      transition: none; /* poster tetap diam */
     }
 
     .poster-container:hover .poster {
@@ -58,18 +58,12 @@
       filter: none;
     }
 
-    /* Efek hover kartu sesuai ring */
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-6px);
-    }
-    .ring-red-500\/100:hover {
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.8); /* glow merah */
-    }
-    .ring-gray-500\/100:hover {
-      box-shadow: 0 0 15px rgba(107, 114, 128, 0.8); /* glow abu */
+    /* ✅ Tambahan background untuk kartu channel */
+    .channel-card {
+      background-image: url('/assets/bg-card.jpg'); /* ganti dengan gambar kamu */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     body {
@@ -156,7 +150,7 @@
 
         container.innerHTML += `
           <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}"
-            class="card-hover bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
+            class="channel-card bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg hover:shadow-xl hover:scale-105 transition-transform ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
             style="animation-delay: ${delay}s;">
             
             <!-- Poster -->
