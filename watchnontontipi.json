@@ -1,5 +1,40 @@
 [
   {
+    "title": "RCTI",
+    "src": "https://rcti-cutv.rctiplus.id/rcti-sdi.m3u8",
+    "poster": "https://cdnjktbpid02.transvision.co.id/image/web/channel/4028c68574537fcd0174be51092e58f1/9eec8914d4f74ee5a5f4d988c2965902.png"
+  },
+  {
+    "title": "RTV",
+    "src": "https://rtvstream.rtv.co.id:4555/hls/rtv.m3u8",
+    "poster": "https://www.vidio.com/blog/wp-content/uploads/sites/2/2021/03/RTV-Landscape-1.jpg"
+  },
+  {
+    "title": "Kompas TV",
+    "src": "http://op-group1-swiftservehd-1.dens.tv/h/h234/02.m3u8",
+    "poster": "https://asset.kompas.com/crops/Qcw9RaJ5zp9PVrmTDn7TVZy8jyo=/0x0:0x0/780x390/filters:watermark(data/photo/2020/03/10/5e6775ae18c31.png,0,-0,1)/data/photo/2015/11/16/0707365kompast780x390.jpg"
+  },
+  {
+    "title": "",
+    "src": "",
+    "poster": ""
+  },
+  {
+    "title": "",
+    "src": "",
+    "poster": ""
+  },
+  {
+    "title": "",
+    "src": "",
+    "poster": ""
+  },
+  {
+    "title": "",
+    "src": "",
+    "poster": ""
+  },
+  {
     "title": "tvN Movies",
     "src": "https://op-group1-swiftservehd-1.dens.tv/h/h21/01.m3u8",
     "poster": "https://stmify.com/wp-content/uploads/2024/10/229-s.webp"
@@ -61,7 +96,7 @@
   },
   {
     "title": "TNT Sports 1 HD",
-    "src": "https://cr6rabe9r4sterowutru5o9o5hepiva2r.ruseneslt0xadlcrahithot2dlcum4j3f.jdx3.org/jump-starter/FrofUdRljoCLdruGUdR295IfisTlsW1w.m3u8?auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW1JZCI6IkZyb2ZVZFJsam9DTGRydUdVZFIyOTVJZmlzVGxzVzF3IiwidHlwZSI6InByb3h5X2FjY2VzcyIsImlhdCI6MTc1NzQzNjkyNSwiZXhwIjoxNzU3NDQ0MTI1fQ.ZXhhbXBsZS5jb20",
+    "src": "https://cr6rabe9r4sterowutru5o9o5hepiva2r.ruseneslt0xadlcrahithot2dlcum4j3f.jdx3.org/jump-starter/FrofUdRljoCLdruGUdR295IfisTlsW1w.m3u8?auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW1JZCI6IkZyb2ZVZFJsam9DTGRydUdVZFIyOTVJZmlzVGxzVzF3IiwidHlwZSI6InByb3h5X2FjY2VzcyIsImlhdCI6MTc1NzQzNzIwMSwiZXhwIjoxNzU3NDQ0NDAxfQ.ZXhhbXBsZS5jb20",
     "poster": "https://r2.thesportsdb.com/images/media/channel/fanart/9dy0ga1726868923.jpg"
   },
   {
