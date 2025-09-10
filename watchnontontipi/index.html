@@ -27,6 +27,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.9/shaka-player.compiled.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <style>
   body {
     background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
@@ -168,74 +170,84 @@ function updateVolumeIcon(){
 }
 function initPlayerState(){playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';updateVolumeIcon();}
 
-// Shaka init
-shaka.polyfill.installAll();
-if (shaka.Player.isBrowserSupported()) {
-  const shakaPlayer = new shaka.Player(video);
-  shakaPlayer.addEventListener('error', e => console.error('Shaka error:', e.detail));
+async function initPlayer(url) {
+  // 1. Shaka
+  if (shaka.Player.isBrowserSupported()) {
+    try {
+      const shakaPlayer = new shaka.Player(video);
+      await shakaPlayer.load(url);
+      console.log("Shaka Player digunakan");
+      video.muted=true; video.play().catch(()=>{}); initPlayerState();
 
-  shakaPlayer.load(streamUrl).then(() => {
-    video.muted=true;
-    video.play().catch(()=>{});
-    initPlayerState();
+      // isi settings kualitas dari Shaka
+      settingsMenu.innerHTML="";
+      const tracks=shakaPlayer.getVariantTracks();
+      const autoDiv=document.createElement("div");
+      autoDiv.textContent="Auto";
+      autoDiv.classList.add("active");
+      autoDiv.onclick=()=>{shakaPlayer.configure({abr:{enabled:true}});[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};
+      settingsMenu.appendChild(autoDiv);
+      tracks.forEach(track=>{
+        let div=document.createElement("div");
+        div.textContent=track.height+"p";
+        if(track.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}
+        div.onclick=()=>{shakaPlayer.configure({abr:{enabled:false}});shakaPlayer.selectVariantTrack(track,true);[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};
+        settingsMenu.appendChild(div);
+      });
+      return;
+    } catch(e) {
+      console.warn("Shaka gagal, fallback Hls.js", e);
+    }
+  }
 
-    // isi settings kualitas
-    settingsMenu.innerHTML="";
-    const tracks=shakaPlayer.getVariantTracks();
-    const autoDiv=document.createElement("div");
-    autoDiv.textContent="Auto";
-    autoDiv.classList.add("active");
-    autoDiv.onclick=()=>{shakaPlayer.configure({abr:{enabled:true}});[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};
-    settingsMenu.appendChild(autoDiv);
-
-    tracks.forEach(track=>{
-      let div=document.createElement("div");
-      div.textContent=track.height+"p";
-      if(track.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}
-      div.onclick=()=>{shakaPlayer.configure({abr:{enabled:false}});shakaPlayer.selectVariantTrack(track,true);[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};
-      settingsMenu.appendChild(div);
+  // 2. Hls.js
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    console.log("Hls.js digunakan");
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.muted=true; video.play().catch(()=>{}); initPlayerState();
     });
-  });
-} else {
-  console.error("Browser tidak mendukung Shaka Player");
+    return;
+  }
+
+  // 3. Native HLS
+  if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    video.src=url; video.muted=true; video.play().catch(()=>{}); initPlayerState();
+    console.log("Native HLS digunakan");
+  }
 }
 
+// === controls ===
 playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
-volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
+volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=false;updateVolumeIcon();};
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
-fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
-pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
-settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
-document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
+fullscreenBtn.onclick=()=>{if(!document.fullscreenElement){player.requestFullscreen().catch(console.error);}else{document.exitFullscreen();}};
+pipBtn.onclick=()=>{if(document.pictureInPictureElement){document.exitPictureInPicture().catch(console.error);}else if(video.requestPictureInPicture){video.requestPictureInPicture().catch(console.error);}};
+settingsBtn.onclick=()=>settingsMenu.classList.toggle("show");
+
 document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
 
 let hideControlsTimeout;
 function showControls(){
-  controls.style.opacity="1";
-  progressContainer.style.opacity="1";
-  clearTimeout(hideControlsTimeout);
-  const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500;
-  hideControlsTimeout = setTimeout(()=>{
-    controls.style.opacity="0";
-    progressContainer.style.opacity="0";
-  },timeoutDuration);
+  controls.style.opacity="1";progressContainer.style.opacity="1";clearTimeout(hideControlsTimeout);
+  hideControlsTimeout=setTimeout(()=>{controls.style.opacity="0";progressContainer.style.opacity="0";},window.innerWidth<=768?3000:2500);
 }
 video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
 player.addEventListener("mousemove",showControls);
 player.addEventListener("mouseleave",()=>{controls.style.opacity="0";progressContainer.style.opacity="0";});
-
-video.addEventListener("timeupdate",()=>{if(video.duration) progressBar.style.width=(video.currentTime/video.duration*100)+"%";});
+video.addEventListener("timeupdate",()=>{if(video.duration)progressBar.style.width=(video.currentTime/video.duration*100)+"%";});
 progressContainer.addEventListener("click",e=>{const rect=e.currentTarget.getBoundingClientRect();const clickPos=e.clientX-rect.left;video.currentTime=(clickPos/rect.width)*video.duration;});
-
 let isDragging=false;
-progressContainer.addEventListener("mousedown", e => {isDragging=true; video.pause();});
-progressContainer.addEventListener("mousemove", e => {if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
-document.addEventListener("mouseup", e => {if(isDragging){isDragging=false; video.play();}});
-
-progressContainer.addEventListener("touchstart", e=>{});
+progressContainer.addEventListener("mousedown", e=>{isDragging=true;video.pause();});
+progressContainer.addEventListener("mousemove", e=>{if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
+document.addEventListener("mouseup", e=>{if(isDragging){isDragging=false;video.play();}});
 progressContainer.addEventListener("touchmove", e=>{const rect=e.currentTarget.getBoundingClientRect();const pos=(e.touches[0].clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;});
+
+initPlayer(streamUrl);
 </script>
 </body>
 </html>
