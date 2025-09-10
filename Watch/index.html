@@ -36,29 +36,8 @@
   main { max-width:7xl; margin:auto; padding-top:5rem; padding-bottom:5rem; }
   .player { position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
   .player video { width:100%; height:100%; object-fit:contain; }
-
-
-  .progress-container {
-    position: absolute;
-    bottom: 48px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: rgba(255,255,255,0.2);
-    cursor: pointer;
-    z-index: 30;
-    border-radius: 2px;
-    transition: opacity .3s ease;
-    opacity: 0;
-  }
-  .progress-bar {
-    width: 0%;
-    height: 100%;
-    background: limegreen;
-    border-radius: 2px;
-    transition: width 0.1s linear;
-  }
-
+  .progress-container { position: absolute; bottom: 48px; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.2); cursor: pointer; z-index: 30; border-radius: 2px; transition: opacity .3s ease; opacity: 0; }
+  .progress-bar { width: 0%; height: 100%; background: limegreen; border-radius: 2px; transition: width 0.1s linear; }
   .controls { position:absolute; bottom:0; left:0; right:0; padding:8px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to top,rgba(0,0,0,.6),transparent); opacity:0; transition:opacity .3s ease; }
   .btn { background:none; border:none; cursor:pointer; color:white; padding:6px; }
   .btn svg { stroke:white; stroke-width:1.5; fill:none; width:22px; height:22px; }
@@ -198,7 +177,16 @@ volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volu
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
 fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
 pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
-video.addEventListener('leavepictureinpicture', () => { video.play().catch(() => { console.log('Autoplay diblokir oleh browser.'); }); });
+
+video.addEventListener('leavepictureinpicture', async () => {
+  try {
+    if(video.muted) video.muted = false;
+    await video.play();
+    console.log('Autoplay berhasil setelah keluar dari PiP.');
+  } catch (err) {
+    console.log('Autoplay diblokir oleh browser.', err);
+  }
+});
 
 settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
 document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
@@ -216,10 +204,7 @@ function showControls(){
   progressContainer.style.opacity="1"; 
   clearTimeout(hideControlsTimeout);
   const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500;
-  hideControlsTimeout = setTimeout(()=>{
-    controls.style.opacity="0";
-    progressContainer.style.opacity="0"; 
-  },timeoutDuration);
+  hideControlsTimeout = setTimeout(()=>{controls.style.opacity="0";progressContainer.style.opacity="0";},timeoutDuration);
 }
 video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
 player.addEventListener("mousemove",showControls);
@@ -231,13 +216,9 @@ progressContainer.addEventListener("click",e=>{const rect=e.currentTarget.getBou
 let isDragging=false;
 progressContainer.addEventListener("mousedown", e => {isDragging=true; video.pause();});
 progressContainer.addEventListener("mousemove", e => {if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
+
 document.addEventListener("mouseup", e => {if(isDragging){isDragging=false; video.play();}});
 
-video.addEventListener('leavepictureinpicture', () => { 
-  video.muted = true;
-  video.play().catch(() => { console.log('Autoplay diblokir oleh browser.'); });
-});
-  
 let touchStartX=0;
 progressContainer.addEventListener("touchstart", e=>{touchStartX=e.touches[0].clientX;});
 progressContainer.addEventListener("touchmove", e=>{const rect=e.currentTarget.getBoundingClientRect();const pos=(e.touches[0].clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;});
