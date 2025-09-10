@@ -28,7 +28,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.9/shaka-player.compiled.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 <style>
   body {
     background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
@@ -170,83 +169,74 @@ function updateVolumeIcon(){
 }
 function initPlayerState(){playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';updateVolumeIcon();}
 
-async function initPlayer(url) {
-  // 1. Shaka
-  if (shaka.Player.isBrowserSupported()) {
-    try {
-      const shakaPlayer = new shaka.Player(video);
-      await shakaPlayer.load(url);
-      console.log("Shaka Player digunakan");
-      video.muted=true; video.play().catch(()=>{}); initPlayerState();
+// Inisialisasi player sesuai ekstensi
+async function initPlayer(url){
+  if(!url) return;
 
-      // isi settings kualitas dari Shaka
-      settingsMenu.innerHTML="";
-      const tracks=shakaPlayer.getVariantTracks();
-      const autoDiv=document.createElement("div");
-      autoDiv.textContent="Auto";
-      autoDiv.classList.add("active");
-      autoDiv.onclick=()=>{shakaPlayer.configure({abr:{enabled:true}});[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};
-      settingsMenu.appendChild(autoDiv);
-      tracks.forEach(track=>{
-        let div=document.createElement("div");
-        div.textContent=track.height+"p";
-        if(track.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}
-        div.onclick=()=>{shakaPlayer.configure({abr:{enabled:false}});shakaPlayer.selectVariantTrack(track,true);[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};
-        settingsMenu.appendChild(div);
+  if(url.endsWith(".mpd")){
+    // DASH pakai Shaka
+    shaka.polyfill.installAll();
+    if(shaka.Player.isBrowserSupported()){
+      try{
+        const shakaPlayer=new shaka.Player(video);
+        await shakaPlayer.load(url);
+        console.log("Shaka Player digunakan untuk DASH");
+        video.muted=true;video.play().catch(()=>{});initPlayerState();
+
+        // isi settings kualitas (Shaka)
+        settingsMenu.innerHTML="";
+        const tracks=shakaPlayer.getVariantTracks();
+        const autoDiv=document.createElement("div");
+        autoDiv.textContent="Auto";autoDiv.classList.add("active");
+        autoDiv.onclick=()=>{shakaPlayer.configure({abr:{enabled:true}});[...settingsMenu.children].forEach(c=>c.classList.remove("active"));autoDiv.classList.add("active");settingsMenu.classList.remove("show");};
+        settingsMenu.appendChild(autoDiv);
+
+        tracks.forEach(track=>{
+          let div=document.createElement("div");
+          div.textContent=track.height+"p";
+          if(track.height>=720){let span=document.createElement("span");span.className="hd";span.textContent="HD";div.appendChild(span);}
+          div.onclick=()=>{shakaPlayer.configure({abr:{enabled:false}});shakaPlayer.selectVariantTrack(track,true);[...settingsMenu.children].forEach(c=>c.classList.remove("active"));div.classList.add("active");settingsMenu.classList.remove("show");};
+          settingsMenu.appendChild(div);
+        });
+        return;
+      }catch(e){console.warn("Shaka gagal load MPD",e);}
+    }
+  }else if(url.endsWith(".m3u8")){
+    // HLS pakai Hls.js
+    if(Hls.isSupported()){
+      const hls=new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      console.log("Hls.js digunakan untuk HLS");
+      hls.on(Hls.Events.MANIFEST_PARSED,function(){
+        video.muted=true;video.play().catch(()=>{});initPlayerState();
       });
       return;
-    } catch(e) {
-      console.warn("Shaka gagal, fallback Hls.js", e);
+    }else if(video.canPlayType("application/vnd.apple.mpegurl")){
+      video.src=url;
+      console.log("Native HLS digunakan di Safari");
+      video.muted=true;video.play().catch(()=>{});initPlayerState();
+      return;
     }
   }
-
-  // 2. Hls.js
-  if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    console.log("Hls.js digunakan");
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      video.muted=true; video.play().catch(()=>{}); initPlayerState();
-    });
-    return;
-  }
-
-  // 3. Native HLS
-  if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src=url; video.muted=true; video.play().catch(()=>{}); initPlayerState();
-    console.log("Native HLS digunakan");
-  }
+  console.error("Format stream tidak dikenali atau player tidak didukung");
 }
 
-// === controls ===
-playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
-volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=false;updateVolumeIcon();};
+playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}}; 
+video.onplay=()=>initPlayerState();
+video.onpause=()=>{playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';};
 volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
-fullscreenBtn.onclick=()=>{if(!document.fullscreenElement){player.requestFullscreen().catch(console.error);}else{document.exitFullscreen();}};
-pipBtn.onclick=()=>{if(document.pictureInPictureElement){document.exitPictureInPicture().catch(console.error);}else if(video.requestPictureInPicture){video.requestPictureInPicture().catch(console.error);}};
-settingsBtn.onclick=()=>settingsMenu.classList.toggle("show");
-
-document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
-
-let hideControlsTimeout;
-function showControls(){
-  controls.style.opacity="1";progressContainer.style.opacity="1";clearTimeout(hideControlsTimeout);
-  hideControlsTimeout=setTimeout(()=>{controls.style.opacity="0";progressContainer.style.opacity="0";},window.innerWidth<=768?3000:2500);
-}
-video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
-player.addEventListener("mousemove",showControls);
-player.addEventListener("mouseleave",()=>{controls.style.opacity="0";progressContainer.style.opacity="0";});
-video.addEventListener("timeupdate",()=>{if(video.duration)progressBar.style.width=(video.currentTime/video.duration*100)+"%";});
-progressContainer.addEventListener("click",e=>{const rect=e.currentTarget.getBoundingClientRect();const clickPos=e.clientX-rect.left;video.currentTime=(clickPos/rect.width)*video.duration;});
-let isDragging=false;
-progressContainer.addEventListener("mousedown", e=>{isDragging=true;video.pause();});
-progressContainer.addEventListener("mousemove", e=>{if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
-document.addEventListener("mouseup", e=>{if(isDragging){isDragging=false;video.play();}});
-progressContainer.addEventListener("touchmove", e=>{const rect=e.currentTarget.getBoundingClientRect();const pos=(e.touches[0].clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;});
-
+volumeSlider.oninput=e=>{video.volume=e.target.value;video.muted=false;updateVolumeIcon();};
+fullscreenBtn.onclick=()=>{if(!document.fullscreenElement){player.requestFullscreen();}else{document.exitFullscreen();}};
+pipBtn.onclick=()=>{if(document.pictureInPictureElement){document.exitPictureInPicture();}else if(document.pictureInPictureEnabled){video.requestPictureInPicture();}};
+settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
+document.addEventListener("click",e=>{if(!settingsBtn.contains(e.target)&&!settingsMenu.contains(e.target)){settingsMenu.classList.remove("show");}});
+video.addEventListener("timeupdate",()=>{if(video.duration){progressBar.style.width=`${(video.currentTime/video.duration)*100}%`;}}); 
+progressContainer.addEventListener("click",e=>{const rect=progressContainer.getBoundingClientRect();const percent=(e.clientX-rect.left)/rect.width;video.currentTime=percent*video.duration;});
+let controlsTimeout;
+function showControls(){controls.style.opacity=1;progressContainer.style.opacity=1;clearTimeout(controlsTimeout);controlsTimeout=setTimeout(()=>{controls.style.opacity=0;progressContainer.style.opacity=0;},3000);}
+player.addEventListener("mousemove",showControls);player.addEventListener("click",showControls);
+window.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();if(video.paused){video.play();}else{video.pause();}}else if(e.code==="ArrowRight"){video.currentTime+=10;}else if(e.code==="ArrowLeft"){video.currentTime-=10;}else if(e.code==="KeyM"){video.muted=!video.muted;updateVolumeIcon();}});
 initPlayer(streamUrl);
 </script>
 </body>
