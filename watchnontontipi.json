@@ -11,7 +11,7 @@
   },
   {
     "title": "Kompas TV",
-    "src": "http://op-group1-swiftservehd-1.dens.tv/h/h234/02.m3u8",
+    "src": "https://cdn10jtedge.indihometv.com/atm/DASH/KOMPAS_TV/manifest.mpd",
     "poster": "https://asset.kompas.com/crops/Qcw9RaJ5zp9PVrmTDn7TVZy8jyo=/0x0:0x0/780x390/filters:watermark(data/photo/2020/03/10/5e6775ae18c31.png,0,-0,1)/data/photo/2015/11/16/0707365kompast780x390.jpg"
   },
   {
