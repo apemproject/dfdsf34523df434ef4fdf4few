@@ -131,6 +131,7 @@
 </footer>
 
 <script>
+/* ================= PLAYER SCRIPT ================= */
 const urlParams=new URLSearchParams(window.location.search);
 const streamUrl=urlParams.get('url');const title=urlParams.get('title');
 document.getElementById('match-title').textContent=decodeURIComponent(title);
@@ -172,56 +173,46 @@ video.addEventListener('click', e => {
   if(video.muted) { video.muted=false; updateVolumeIcon(); }
 });
 
-playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}};  
-volumeSlider.oninput=()=>{video.volume=volumeSlider.value;video.muted=video.volume===0;updateVolumeIcon();};
-volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
-fullscreenBtn.onclick=async()=>{if(!document.fullscreenElement){await video.parentElement.requestFullscreen();if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock("landscape");}catch(e){}}}else{document.exitFullscreen();}};
-pipBtn.onclick=()=>{if(video!==document.pictureInPictureElement){video.requestPictureInPicture();}else{document.exitPictureInPicture();}};
+playBtn.onclick=()=>{if(video.paused){video.play();initPlayerState();}else{video.pause();playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';}}; 
+video.addEventListener("click",()=>{playBtn.click();});
 
-video.addEventListener('leavepictureinpicture', async () => {
-  try {
-    if(video.muted) video.muted = false;
-    await video.play();
-    console.log('Autoplay berhasil setelah keluar dari PiP.');
-  } catch (err) {
-    console.log('Autoplay diblokir oleh browser.', err);
+volumeBtn.onclick=()=>{video.muted=!video.muted;updateVolumeIcon();};
+volumeSlider.addEventListener("input",()=>{video.volume=volumeSlider.value;video.muted=video.volume==0;updateVolumeIcon();});
+
+fullscreenBtn.onclick=()=>{if(!document.fullscreenElement)player.requestFullscreen().catch(err=>alert(err.message));else document.exitFullscreen();};
+
+settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");settingsBtn.classList.toggle("spin");};
+document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");settingsBtn.classList.remove("spin");}});
+pipBtn.onclick=()=>{if(document.pictureInPictureElement){document.exitPictureInPicture();}else if(document.pictureInPictureEnabled){video.requestPictureInPicture();}};
+
+let controlsTimeout;function showControls(){controls.style.opacity=1;progressContainer.style.opacity=1;clearTimeout(controlsTimeout);controlsTimeout=setTimeout(()=>{controls.style.opacity=0;progressContainer.style.opacity=0;},3000);}
+player.addEventListener("mousemove",showControls);player.addEventListener("mouseleave",()=>{controls.style.opacity=0;progressContainer.style.opacity=0;});showControls();
+
+video.addEventListener("timeupdate",()=>{const percent=(video.currentTime/video.duration)*100;progressBar.style.width=percent+"%";});
+progressContainer.addEventListener("click",e=>{const pos=(e.offsetX/progressContainer.offsetWidth)*video.duration;video.currentTime=pos;});
+
+document.addEventListener("keydown",e=>{
+  switch(e.key){
+    case " ":e.preventDefault();playBtn.click();break;
+    case "ArrowLeft":video.currentTime=Math.max(0,video.currentTime-10);skipLeft.style.opacity=1;setTimeout(()=>skipLeft.style.opacity=0,500);break;
+    case "ArrowRight":video.currentTime=Math.min(video.duration,video.currentTime+10);skipRight.style.opacity=1;setTimeout(()=>skipRight.style.opacity=0,500);break;
+    case "f":fullscreenBtn.click();break;
+    case "m":volumeBtn.click();break;
   }
 });
+/* ================= BLOKIR KEY DAN KLIK KANAN ================= */
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("keydown", e => {
+  if (e.key === "F12") e.preventDefault();
+  if (e.ctrlKey && e.shiftKey && ["I","J","C","K","M","E"].includes(e.key.toUpperCase())) e.preventDefault();
+  if (e.ctrlKey && ["U","S","P"].includes(e.key.toUpperCase())) e.preventDefault();
+});
+</script>
 
-settingsBtn.onclick=()=>{settingsMenu.classList.toggle("show");};
-document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show");}});
-document.getElementById('menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden');});
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('keydown',e=>{if(e.ctrlKey&&(e.key==='u'||e.key==='U'||e.key==='i'||e.key==='I'))e.preventDefault();});
-
-function showSkipFeedback(side){const el=side==="left"?skipLeft:skipRight;el.style.opacity=1;let icon=el.querySelector("svg");icon.classList.add("spin");setTimeout(()=>icon.classList.remove("spin"),600);setTimeout(()=>el.style.opacity=0,600);}
-let lastTap=0;video.addEventListener("touchend",e=>{const t=new Date().getTime();if(t-lastTap<300){const r=video.getBoundingClientRect();const x=e.changedTouches[0].clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}}lastTap=t;});
-video.addEventListener("dblclick",e=>{const r=video.getBoundingClientRect();const x=e.clientX-r.left;if(x<r.width/2){video.currentTime-=3;showSkipFeedback("left");}else{video.currentTime+=3;showSkipFeedback("right");}});
-
-let hideControlsTimeout;
-function showControls(){
-  controls.style.opacity="1";
-  progressContainer.style.opacity="1"; 
-  clearTimeout(hideControlsTimeout);
-  const timeoutDuration = window.innerWidth <= 768 ? 3000 : 2500;
-  hideControlsTimeout = setTimeout(()=>{controls.style.opacity="0";progressContainer.style.opacity="0";},timeoutDuration);
-}
-video.addEventListener("click",e=>{if(e.detail===1){setTimeout(()=>{if(e.detail===1){showControls();}},200);}});
-player.addEventListener("mousemove",showControls);
-player.addEventListener("mouseleave",()=>{controls.style.opacity="0";progressContainer.style.opacity="0";});
-
-video.addEventListener("timeupdate",()=>{if(video.duration) progressBar.style.width=(video.currentTime/video.duration*100)+"%";});
-progressContainer.addEventListener("click",e=>{const rect=e.currentTarget.getBoundingClientRect();const clickPos=e.clientX-rect.left;video.currentTime=(clickPos/rect.width)*video.duration;});
-
-let isDragging=false;
-progressContainer.addEventListener("mousedown", e => {isDragging=true; video.pause();});
-progressContainer.addEventListener("mousemove", e => {if(isDragging){const rect=e.currentTarget.getBoundingClientRect();const pos=(e.clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;}});
-
-document.addEventListener("mouseup", e => {if(isDragging){isDragging=false; video.play();}});
-
-let touchStartX=0;
-progressContainer.addEventListener("touchstart", e=>{touchStartX=e.touches[0].clientX;});
-progressContainer.addEventListener("touchmove", e=>{const rect=e.currentTarget.getBoundingClientRect();const pos=(e.touches[0].clientX-rect.left)/rect.width;video.currentTime=pos*video.duration;});
+<script>
+document.getElementById("menu-btn").addEventListener("click",function(){
+  document.getElementById("mobile-menu").classList.toggle("hidden");
+});
 </script>
 </body>
 </html>
