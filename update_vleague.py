@@ -2,14 +2,23 @@ import requests
 import json
 from datetime import datetime, timezone, timedelta
 
+# Endpoint Naver API
 URL = "https://api-gw.sports.naver.com/schedule/v1/leagues/volleyball"
+
+# File output langsung di root
 output_file = "VLeagueKorea.json"
+
+# Zona waktu lokal (misal UTC+8)
 LOCAL_TZ = timezone(timedelta(hours=8))
 
 def fetch_and_save():
-    r = requests.get(URL, timeout=10)
-    r.raise_for_status()
-    data = r.json().get("matches", [])
+    try:
+        r = requests.get(URL, timeout=10)
+        r.raise_for_status()
+        data = r.json().get("matches", [])
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error fetching data: {e}")
+        return
 
     today = datetime.now(LOCAL_TZ).date()
     filtered = []
@@ -31,7 +40,7 @@ def fetch_and_save():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(filtered, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Saved {output_file} with {len(filtered)} matches today")
+    print(f"✅ Saved {output_file} with {len(filtered)} matches for today")
 
 if __name__ == "__main__":
     fetch_and_save()
