@@ -1,9 +1,8 @@
 import requests
 import json
 import re
-import time
 from datetime import datetime, timezone, timedelta
-from bs4 import BeautifulSoup
+import time
 
 URL = "https://sports.news.naver.com/volleyball/schedule/index.nhn"
 output_file = "VLeagueKorea.json"
@@ -33,42 +32,34 @@ def parse_schedule(html):
     if not html:
         return []
 
-    soup = BeautifulSoup(html, "html.parser")
-    scripts = soup.find_all("script")
-    data_json = None
-    
-    # Cari JSON jadwal di <script>
-    for script in scripts:
-        if "window.__INITIAL_STATE__" in script.text:
-            match = re.search(r'window\.__INITIAL_STATE__\s*=\s*(\{.*\});', script.text)
-            if match:
-                try:
-                    data_json = json.loads(match.group(1))
-                    print("✅ Found initial state JSON")
-                except json.JSONDecodeError:
-                    print("❌ Failed to parse JSON")
-                break
-    
-    if not data_json:
-        print("❌ Data schedule tidak ditemukan di halaman. Struktur Naver mungkin berubah.")
+    # Cari JSON di script window.__INITIAL_STATE__
+    match = re.search(r'window\.__INITIAL_STATE__\s*=\s*(\{.*\});', html)
+    if not match:
+        print("❌ Tidak menemukan JSON jadwal di halaman")
+        return []
+
+    try:
+        data_json = json.loads(match.group(1))
+        print("✅ Found initial state JSON")
+    except json.JSONDecodeError:
+        print("❌ Failed to parse JSON")
         return []
 
     # Fallback path: coba beberapa kemungkinan key
-    matches = []
     for key in ["schedule", "matchList", "matches"]:
         matches = data_json.get(key, [])
         if matches:
             print(f"✅ Using key '{key}' for matches")
-            break
-    if not matches:
-        print("⚠️ Tidak ada match ditemukan. Perlu cek struktur terbaru Naver.")
-    return matches
+            return matches
+
+    print("⚠️ Tidak ada match ditemukan. Perlu cek struktur terbaru Naver.")
+    return []
 
 def filter_today(matches):
     today = datetime.now(LOCAL_TZ).date()
     filtered = []
 
-    for i, match in enumerate(matches, 1):
+    for match in matches:
         start_time_str = match.get("startDate") or match.get("start_time")
         if not start_time_str:
             continue
@@ -86,13 +77,14 @@ def filter_today(matches):
                 "src": match.get("streamUrl", ""),
                 "poster": match.get("posterUrl", "")
             })
+
     print(f"📊 Total matches today: {len(filtered)}")
     return filtered
 
 def save_json(matches):
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(matches, f, ensure_ascii=False, indent=2)
-    print(f"✅ Saved {output_file} with {len(matches)} matches")
+    print(f"✅ Saved {output_file} dengan {len(matches)} match hari ini")
 
 def main():
     html = fetch_html()
