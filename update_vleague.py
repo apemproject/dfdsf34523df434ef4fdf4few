@@ -3,14 +3,16 @@ import re
 import json
 import time
 from datetime import datetime, timedelta, timezone
+from concurrent.futures import ThreadPoolExecutor
 
 # =================== CONFIG ===================
-MAIN_URL = "https://agratv.vercel.app/jadwal.php"  # Halaman jadwal pertandingan
-BASE_URL = "https://agratv.vercel.app/"            # Base URL untuk membentuk link lengkap
+MAIN_URL = "https://agratv.vercel.app/jadwal.php"
+BASE_URL = "https://agratv.vercel.app/"
 OUTPUT_FILE = "VLeagueKorea.json"
-INTERVAL = 120  # Cek tiap 2 menit
+INTERVAL = 120  # cek tiap 2 menit
 LOCAL_TZ = timezone(timedelta(hours=7))  # WIB
-CHECK_WINDOW = timedelta(minutes=60)      # ±60 menit untuk cek src HLS
+CHECK_WINDOW = timedelta(minutes=30)     # hanya cek src ±30 menit dari sekarang
+MAX_THREADS = 5                           # parallel fetch max 5
 # ==============================================
 
 def fetch_html(url):
@@ -19,7 +21,6 @@ def fetch_html(url):
     return r.text
 
 def parse_main(html):
-    """Parse semua <a href='?id=...'> di div.main"""
     main_div = re.search(r'<div class="main">(.*?)</div>', html, re.S)
     if not main_div:
         return []
@@ -53,26 +54,25 @@ def parse_main(html):
     return matches
 
 def fetch_hls_src(match):
-    """Cek halaman target untuk HLS .m3u8 atau iframe src"""
+    """Cek src HLS atau iframe hanya jika pertandingan ±CHECK_WINDOW atau src kosong"""
     try:
         start_dt = datetime.fromisoformat(match["start"])
         now = datetime.now(LOCAL_TZ)
         if abs(start_dt - now) <= CHECK_WINDOW or match.get("src") == "":
             url = BASE_URL + match["href"]
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()
             html = r.text
 
-            # Cek HLS .m3u8
             m3u8 = re.search(r"(https?://.*?\.m3u8)", html)
             if m3u8:
                 match["src"] = m3u8.group(1)
             else:
-                # fallback ke iframe src
                 iframe = re.search(r"<iframe.*?src=['\"](.*?)['\"]", html)
                 match["src"] = iframe.group(1) if iframe else ""
     except:
-        match["src"] = ""
+        pass
+    return match
 
 def load_json():
     try:
@@ -87,9 +87,14 @@ def save_json(matches):
 
 def merge_matches(old_matches, new_matches):
     updated = {m["id"]: m for m in old_matches}
-    for m in new_matches:
-        fetch_hls_src(m)  # realtime update src jika perlu
+
+    # Fetch src secara paralel
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        results = list(executor.map(fetch_hls_src, new_matches))
+
+    for m in results:
         updated[m["id"]] = m
+
     return list(updated.values())
 
 def main_loop():
