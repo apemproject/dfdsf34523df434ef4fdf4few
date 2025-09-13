@@ -1,28 +1,24 @@
 import requests, re, json
 from datetime import datetime
-import os
 
 URL = "https://halu.serv00.net/poli2.php"
 OUTPUT = "LiveVoli.json"
 
 print(f"🌐 Fetching data from {URL} ...")
-try:
-    r = requests.get(URL, timeout=15)
-    r.raise_for_status()
-    html = r.text
-    print("✅ Request success")
-    print(f"🔎 HTML length: {len(html)}")
-    print("🔎 HTML preview:\n", html[:500])  # tampilkan 500 karakter pertama
-except Exception as e:
-    print("❌ Gagal fetch data:", e)
-    exit(1)
+r = requests.get(URL, timeout=15)
+r.raise_for_status()
+html = r.text
+print("✅ Request success")
+print(f"🔎 HTML length: {len(html)}")
+print("🔎 HTML preview:\n", html[:500])
 
-# Regex sesuai pola HTML:
-# 14-09-2025 09:20 WIB <a href=LINK>Title Match</a>
-pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s*<a href=([^ ]+)>([^<]+)</a>'
+# Regex fleksibel: href=... sampai spasi sebelum target=
+pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s*<a href=([^\s]+)\s+target=_blank>([^<]+)</a>'
 matches = re.findall(pattern, html)
 
 print(f"📊 Jumlah match ditemukan: {len(matches)}")
+for m in matches:
+    print("➡️", m)  # debug biar kelihatan di log
 
 data = []
 for date_str, time_str, src, title in matches:
@@ -30,7 +26,7 @@ for date_str, time_str, src, title in matches:
         dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
         start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S") + "+07:00"
 
-        # Cari poster ID jika ada
+        # cari poster dari ID media
         m = re.search(r'/media/([^/]+)/', src)
         poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
