@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+import re
 import json
 import time
 from datetime import datetime, timedelta, timezone
@@ -16,14 +16,16 @@ def fetch_html(url):
     return r.text
 
 def parse_main(html):
-    soup = BeautifulSoup(html, "html.parser")
-    main_div = soup.find("div", class_="main")
-    links = main_div.find_all("a")
+    main_div = re.search(r'<div class="main">(.*?)</div>', html, re.S)
+    if not main_div:
+        return []
+
+    div_content = main_div.group(1)
+    links = re.findall(r"<a\s+href=['\"](.*?)['\"].*?>(.*?)</a>", div_content, re.S)
     matches = []
 
-    for a in links:
-        href = a.get("href")
-        text = a.get_text(strip=True)
+    for href, text in links:
+        text = text.strip()
         parts = text.split(" - ")
         if len(parts) >= 3:
             title = parts[0].replace("[UP]", "").strip() + " | " + parts[1].strip()
@@ -46,15 +48,25 @@ def parse_main(html):
             })
     return matches
 
-def update_src(match):
+def fetch_hls_src(match):
+    """Cari URL .m3u8 dari halaman target"""
     try:
         url = BASE_URL + match["href"]
         r = requests.get(url)
         r.raise_for_status()
-        soup = BeautifulSoup(r.text, "html.parser")
-        iframe = soup.find("iframe")
-        if iframe:
-            match["src"] = iframe.get("src", "")
+        html = r.text
+
+        # Cek video source HLS
+        m3u8 = re.search(r"(https?://.*?\.m3u8)", html)
+        if m3u8:
+            match["src"] = m3u8.group(1)
+        else:
+            # fallback: cek iframe src
+            iframe = re.search(r"<iframe.*?src=['\"](.*?)['\"]", html)
+            if iframe:
+                match["src"] = iframe.group(1)
+            else:
+                match["src"] = ""
     except:
         match["src"] = ""
 
@@ -73,7 +85,7 @@ def merge_matches(old_matches, new_matches):
     updated = {m["id"]: m for m in old_matches}
     for m in new_matches:
         if m["id"] not in updated or updated[m["id"]].get("src") != m.get("src"):
-            update_src(m)
+            fetch_hls_src(m)
             updated[m["id"]] = m
     return list(updated.values())
 
