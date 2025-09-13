@@ -2,7 +2,7 @@ name: Update V-League Korea Schedule
 
 on:
   schedule:
-    - cron: "0 22 * * *" # jalan jam 05:00 WIB (karena GitHub pakai UTC)
+    - cron: "0 22 * * *" # jalan jam 05:00 WIB (GitHub pakai UTC)
   workflow_dispatch: # bisa run manual juga
 
 jobs:
@@ -30,6 +30,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/VLeagueKorea.json
+          git add VLeagueKorea.json
           git commit -m "chore: auto-update V-League Korea schedule" || echo "No changes"
           git push
