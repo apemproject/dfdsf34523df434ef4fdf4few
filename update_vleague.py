@@ -1,90 +1,102 @@
+import requests
+import re
 import json
 import time
 from datetime import datetime, timezone, timedelta
-from playwright.sync_api import sync_playwright
 
 URL = "https://sports.news.naver.com/volleyball/schedule/index.nhn"
 output_file = "VLeagueKorea.json"
 LOCAL_TZ = timezone(timedelta(hours=8))
-CHECK_INTERVAL = 300  # detik, 5 menit
+CHECK_INTERVAL = 300  # 5 menit
 
-def fetch_page(playwright):
-    browser = playwright.chromium.launch(headless=True)
-    page = browser.new_page()
-    page.goto(URL, wait_until="networkidle")
-    return page, browser
-
-def parse_schedule(page):
-    # Cek __INITIAL_STATE__ dulu
+def fetch_html():
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0 Safari/537.36"
+    }
     try:
-        data_json = page.evaluate("() => window.__INITIAL_STATE__ || null")
-        if data_json and "schedule" in data_json:
-            matches = data_json["schedule"].get("matches", [])
-            return matches
-    except Exception:
-        pass
+        r = requests.get(URL, headers=headers, timeout=10)
+        r.raise_for_status()
+        return r.text
+    except Exception as e:
+        print("❌ Failed to fetch HTML:", e)
+        return ""
 
-    # Fallback: ambil dari DOM
+def parse_schedule(html):
     matches = []
-    try:
-        rows = page.query_selector_all("div.schedule_list > ul > li")
-        for row in rows:
-            try:
-                home = row.query_selector(".home_team").inner_text().strip()
-                away = row.query_selector(".away_team").inner_text().strip()
-                title = f"{home} vs {away}"
 
-                start_elem = row.query_selector(".time")
-                start_str = start_elem.inner_text().strip() if start_elem else ""
-                today = datetime.now(LOCAL_TZ).date()
-                start_dt = datetime.combine(today, datetime.strptime(start_str, "%H:%M").time()).astimezone(LOCAL_TZ)
-
-                poster_elem = row.query_selector("img.team_logo")
-                poster = poster_elem.get_attribute("src") if poster_elem else ""
-
-                live_elem = row.query_selector(".status_live")
-                src = row.query_selector("a.live_link").get_attribute("href") if live_elem else ""
-
+    # Coba ambil JSON dari window.__INITIAL_STATE__
+    match_json = re.search(r'window\.__INITIAL_STATE__\s*=\s*(\{.*\});', html)
+    if match_json:
+        try:
+            data = json.loads(match_json.group(1))
+            sched = data.get("schedule", {}).get("matches", [])
+            for m in sched:
                 matches.append({
-                    "title": title,
-                    "start": start_dt.isoformat(),
-                    "src": src,
-                    "poster": poster
+                    "title": f"{m.get('homeTeamName','')} vs {m.get('awayTeamName','')} | {m.get('tournamentName','')}",
+                    "start": m.get("startDate", ""),
+                    "src": m.get("streamUrl", ""),
+                    "poster": m.get("posterUrl", "")
                 })
-            except Exception:
-                continue
-    except Exception:
-        pass
+            print(f"✅ Found {len(matches)} matches from JSON")
+            return matches
+        except:
+            pass
+
+    # Fallback: ambil dari HTML (DOM statis)
+    rows = re.findall(r'<li class=".*?">.*?</li>', html, re.S)
+    for row in rows:
+        try:
+            home = re.search(r'class="home_team".*?>(.*?)<', row, re.S).group(1).strip()
+            away = re.search(r'class="away_team".*?>(.*?)<', row, re.S).group(1).strip()
+            title = f"{home} vs {away}"
+
+            time_str = re.search(r'class="time".*?>(.*?)<', row, re.S).group(1).strip()
+            today = datetime.now(LOCAL_TZ).date()
+            start_dt = datetime.combine(today, datetime.strptime(time_str, "%H:%M").time()).astimezone(LOCAL_TZ)
+
+            poster_match = re.search(r'<img .*?src="(.*?)"', row)
+            poster = poster_match.group(1) if poster_match else ""
+
+            live_match = re.search(r'class="status_live"', row)
+            src_match = re.search(r'<a class="live_link".*?href="(.*?)"', row)
+            src = src_match.group(1) if live_match and src_match else ""
+
+            matches.append({
+                "title": title,
+                "start": start_dt.isoformat(),
+                "src": src,
+                "poster": poster
+            })
+        except:
+            continue
+
+    print(f"✅ Found {len(matches)} matches from HTML fallback")
     return matches
 
 def filter_today(matches):
     today = datetime.now(LOCAL_TZ).date()
     filtered = []
-    for match in matches:
+    for m in matches:
         try:
-            start_dt = datetime.fromisoformat(match["start"])
-            if start_dt.date() == today:
-                filtered.append(match)
-        except Exception:
+            dt = datetime.fromisoformat(m["start"])
+            if dt.date() == today:
+                filtered.append(m)
+        except:
             continue
     return filtered
 
 def save_json(matches):
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(matches, f, ensure_ascii=False, indent=2)
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] ✅ Updated {output_file} dengan {len(matches)} match hari ini")
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] ✅ Updated {output_file} with {len(matches)} matches")
 
 def main():
-    with sync_playwright() as playwright:
-        page, browser = fetch_page(playwright)
-        try:
-            while True:
-                matches = parse_schedule(page)
-                today_matches = filter_today(matches)
-                save_json(today_matches)
-                time.sleep(CHECK_INTERVAL)
-        finally:
-            browser.close()
+    while True:
+        html = fetch_html()
+        matches = parse_schedule(html)
+        today_matches = filter_today(matches)
+        save_json(today_matches)
+        time.sleep(CHECK_INTERVAL)
 
 if __name__ == "__main__":
     main()
