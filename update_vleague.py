@@ -1,96 +1,90 @@
-import requests
 import json
-import re
-from datetime import datetime, timezone, timedelta
 import time
+from datetime import datetime, timezone, timedelta
+from playwright.sync_api import sync_playwright
 
 URL = "https://sports.news.naver.com/volleyball/schedule/index.nhn"
 output_file = "VLeagueKorea.json"
 LOCAL_TZ = timezone(timedelta(hours=8))
-MAX_RETRIES = 3
-RETRY_DELAY = 5  # detik
+CHECK_INTERVAL = 300  # detik, 5 menit
 
-def fetch_html():
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0 Safari/537.36"
-    }
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            r = requests.get(URL, headers=headers, timeout=10)
-            r.raise_for_status()
-            return r.text
-        except requests.exceptions.RequestException as e:
-            print(f"⚠️ Attempt {attempt}: {e}")
-            if attempt < MAX_RETRIES:
-                print(f"Retrying in {RETRY_DELAY}s...")
-                time.sleep(RETRY_DELAY)
-            else:
-                print("❌ Failed to fetch HTML after retries.")
-                return None
+def fetch_page(playwright):
+    browser = playwright.chromium.launch(headless=True)
+    page = browser.new_page()
+    page.goto(URL, wait_until="networkidle")
+    return page, browser
 
-def parse_schedule(html):
-    if not html:
-        return []
-
-    # Cari JSON di script window.__INITIAL_STATE__
-    match = re.search(r'window\.__INITIAL_STATE__\s*=\s*(\{.*\});', html)
-    if not match:
-        print("❌ Tidak menemukan JSON jadwal di halaman")
-        return []
-
+def parse_schedule(page):
+    # Cek __INITIAL_STATE__ dulu
     try:
-        data_json = json.loads(match.group(1))
-        print("✅ Found initial state JSON")
-    except json.JSONDecodeError:
-        print("❌ Failed to parse JSON")
-        return []
-
-    # Fallback path: coba beberapa kemungkinan key
-    for key in ["schedule", "matchList", "matches"]:
-        matches = data_json.get(key, [])
-        if matches:
-            print(f"✅ Using key '{key}' for matches")
+        data_json = page.evaluate("() => window.__INITIAL_STATE__ || null")
+        if data_json and "schedule" in data_json:
+            matches = data_json["schedule"].get("matches", [])
             return matches
+    except Exception:
+        pass
 
-    print("⚠️ Tidak ada match ditemukan. Perlu cek struktur terbaru Naver.")
-    return []
+    # Fallback: ambil dari DOM
+    matches = []
+    try:
+        rows = page.query_selector_all("div.schedule_list > ul > li")
+        for row in rows:
+            try:
+                home = row.query_selector(".home_team").inner_text().strip()
+                away = row.query_selector(".away_team").inner_text().strip()
+                title = f"{home} vs {away}"
+
+                start_elem = row.query_selector(".time")
+                start_str = start_elem.inner_text().strip() if start_elem else ""
+                today = datetime.now(LOCAL_TZ).date()
+                start_dt = datetime.combine(today, datetime.strptime(start_str, "%H:%M").time()).astimezone(LOCAL_TZ)
+
+                poster_elem = row.query_selector("img.team_logo")
+                poster = poster_elem.get_attribute("src") if poster_elem else ""
+
+                live_elem = row.query_selector(".status_live")
+                src = row.query_selector("a.live_link").get_attribute("href") if live_elem else ""
+
+                matches.append({
+                    "title": title,
+                    "start": start_dt.isoformat(),
+                    "src": src,
+                    "poster": poster
+                })
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return matches
 
 def filter_today(matches):
     today = datetime.now(LOCAL_TZ).date()
     filtered = []
-
     for match in matches:
-        start_time_str = match.get("startDate") or match.get("start_time")
-        if not start_time_str:
-            continue
         try:
-            start_dt = datetime.fromisoformat(start_time_str.replace("Z", "+00:00")).astimezone(LOCAL_TZ)
+            start_dt = datetime.fromisoformat(match["start"])
+            if start_dt.date() == today:
+                filtered.append(match)
         except Exception:
             continue
-
-        if start_dt.date() == today:
-            filtered.append({
-                "title": f"{match.get('homeTeamName', match.get('home_team', ''))} vs "
-                         f"{match.get('awayTeamName', match.get('away_team', ''))} | "
-                         f"{match.get('tournamentName', match.get('tournament', ''))}",
-                "start": start_dt.isoformat(),
-                "src": match.get("streamUrl", ""),
-                "poster": match.get("posterUrl", "")
-            })
-
-    print(f"📊 Total matches today: {len(filtered)}")
     return filtered
 
 def save_json(matches):
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(matches, f, ensure_ascii=False, indent=2)
-    print(f"✅ Saved {output_file} dengan {len(matches)} match hari ini")
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] ✅ Updated {output_file} dengan {len(matches)} match hari ini")
 
 def main():
-    html = fetch_html()
-    matches = parse_schedule(html)
-    today_matches = filter_today(matches)
-    save_json(today_matches)
+    with sync_playwright() as playwright:
+        page, browser = fetch_page(playwright)
+        try:
+            while True:
+                matches = parse_schedule(page)
+                today_matches = filter_today(matches)
+                save_json(today_matches)
+                time.sleep(CHECK_INTERVAL)
+        finally:
+            browser.close()
 
 if __name__ == "__main__":
     main()
