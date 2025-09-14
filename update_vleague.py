@@ -20,15 +20,6 @@ def fetch_schedule(date: str):
     r.raise_for_status()
     return r.json()
 
-def fetch_live_url(game_id: str):
-    url = f"https://api-gw.sports.naver.com/game/{game_id}/live"
-    try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=3)
-        r.raise_for_status()
-        return r.json().get("liveStreamUrl", "")
-    except:
-        return ""
-
 def build_team_mapping(raw):
     global TEAM_MAP
     for day in raw.get("result", {}).get("dates", []):
@@ -38,7 +29,7 @@ def build_team_mapping(raw):
         for game in games:
             for code in [game.get("homeTeamCode"), game.get("awayTeamCode")]:
                 if code and code not in TEAM_MAP:
-                    TEAM_MAP[code] = code  # nama tim = kode sementara
+                    TEAM_MAP[code] = code  # sementara nama = kode
 
 def parse_schedule(raw, date: str):
     matches = []
@@ -61,24 +52,14 @@ def parse_schedule(raw, date: str):
             start_time = game.get("startTime") or f"{date}T18:00:00+09:00"
             start_dt = datetime.fromisoformat(start_time)
 
-            status = "UPCOMING"
-            src = ""
-            if start_dt <= now and game.get("gameId"):
-                src = fetch_live_url(str(game["gameId"]))
-                if src:
-                    status = "LIVE"
-                else:
-                    status = "FINISHED"
-
-            # skip pertandingan yang sudah selesai
-            if status == "FINISHED":
-                continue
+            # Tentukan status tanpa fetch live URL
+            status = "UPCOMING" if start_dt > now else "LIVE"
 
             matches.append({
                 "title": title,
                 "start": start_time,
                 "status": status,
-                "src": src,
+                "src": "",  # kosong, fetch URL bisa on-demand
                 "poster": DEFAULT_POSTER
             })
 
