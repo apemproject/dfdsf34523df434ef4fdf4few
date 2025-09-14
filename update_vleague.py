@@ -39,7 +39,10 @@ def build_team_mapping(raw_list):
     global TEAM_MAP
     for raw in raw_list:
         for day in raw.get("result", {}).get("dates", []):
-            for game in day.get("gameInfos", []):
+            games = day.get("gameInfos")
+            if not isinstance(games, list):
+                continue  # lewati jika None atau bukan list
+            for game in games:
                 for code in [game.get("homeTeamCode"), game.get("awayTeamCode")]:
                     if code and code not in TEAM_MAP:
                         TEAM_MAP[code] = code  # sementara nama = kode
@@ -52,7 +55,10 @@ def parse_schedule(raw, date: str):
     for day in raw.get("result", {}).get("dates", []):
         if day.get("ymd") != date:
             continue
-        for game in day.get("gameInfos", []):
+        games = day.get("gameInfos")
+        if not isinstance(games, list):
+            continue
+        for game in games:
             home_code = game.get("homeTeamCode")
             away_code = game.get("awayTeamCode")
             home = TEAM_MAP.get(home_code, home_code or "Unknown")
