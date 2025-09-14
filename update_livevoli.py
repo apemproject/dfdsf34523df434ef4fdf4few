@@ -9,15 +9,23 @@ def fetch_live_data():
     r.raise_for_status()
     html = r.text
 
-    # 🔹 Ambil semua jadwal dari HTML
+    # Ambil semua jadwal dari HTML
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
+    seen = set()  # untuk track duplikat
+
     for date_str, time_str, src, title in matches:
         try:
             dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
             start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S") + "+07:00"
+
+            # cek duplikat
+            key = (title.strip(), start_iso, src.strip())
+            if key in seen:
+                continue  # lewati duplikat
+            seen.add(key)
 
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
@@ -31,20 +39,11 @@ def fetch_live_data():
         except Exception as e:
             print("⚠️ Error parsing:", date_str, time_str, title, e)
 
-    # 🔹 Hapus duplikat
-    seen = set()
-    unique_data = []
-    for item in data:
-        key = (item["title"], item["start"], item["src"])
-        if key not in seen:
-            seen.add(key)
-            unique_data.append(item)
-
-    # 🔹 Hapus jadwal yang sudah lewat
+    # Hapus jadwal yang sudah lewat
     now = datetime.now(timezone(timedelta(hours=7)))
-    data = [item for item in unique_data if datetime.fromisoformat(item["start"]) > now]
+    data = [item for item in data if datetime.fromisoformat(item["start"]) > now]
 
-    # 🔹 Simpan JSON
+    # Simpan JSON
     with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
