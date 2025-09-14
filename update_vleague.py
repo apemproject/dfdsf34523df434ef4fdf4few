@@ -1,7 +1,7 @@
 import requests
-from bs4 import BeautifulSoup
+import re
 import json
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 
 URL = "https://siegheil.micinproject.my.id/naver"
@@ -13,38 +13,39 @@ def fetch_schedule():
     try:
         r = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
         r.raise_for_status()
+        html = r.text
     except Exception as e:
         print("❌ Failed to fetch schedule:", e)
         return []
 
-    soup = BeautifulSoup(r.content, "html.parser")
     matches = []
 
-    # Sesuaikan selector dengan struktur HTML web asli
-    for item in soup.select("div.game"):
-        # ambil judul
-        title_tag = item.select_one("span.title")
-        if not title_tag:
-            continue
-        title = title_tag.get_text(strip=True)
+    # regex untuk ambil setiap div.game
+    game_blocks = re.findall(r'<div[^>]*class=["\']game["\'][^>]*>(.*?)</div>', html, re.DOTALL)
 
-        # ambil tanggal dan jam
-        date_tag = item.select_one("span.schedule")
-        if not date_tag:
+    for block in game_blocks:
+        # ambil title
+        title_match = re.search(r'<span[^>]*class=["\']title["\'][^>]*>(.*?)</span>', block)
+        if not title_match:
             continue
-        date_str = date_tag.get_text(strip=True)
+        title = title_match.group(1).strip()
+
+        # ambil tanggal & jam
+        date_match = re.search(r'<span[^>]*class=["\']schedule["\'][^>]*>(.*?)</span>', block)
+        if not date_match:
+            continue
+        date_str = date_match.group(1).strip()
         try:
             # contoh format: "14 September 2025 | 18:00 WIB"
             start = datetime.strptime(date_str, "%d %B %Y | %H:%M WIB")
-            # gunakan timezone +7 WIB
-            start = start.replace(tzinfo=timezone(timedelta(hours=7)))
+            start = start.replace(tzinfo=timezone(timedelta(hours=7)))  # WIB +7
         except:
             continue
         start_iso = start.isoformat()
 
         # ambil src streaming jika ada
-        a_tag = item.select_one("a.streaming")
-        src = a_tag["href"] if a_tag else ""
+        src_match = re.search(r'<a[^>]*class=["\']streaming["\'][^>]*href=["\'](.*?)["\']', block)
+        src = src_match.group(1).strip() if src_match else ""
 
         # tentukan status
         now = datetime.now(timezone(timedelta(hours=7)))
@@ -56,7 +57,7 @@ def fetch_schedule():
             status = "FINISHED"
 
         if status == "FINISHED":
-            continue  # skip pertandingan yang sudah selesai
+            continue  # skip yang sudah selesai
 
         matches.append({
             "title": title,
