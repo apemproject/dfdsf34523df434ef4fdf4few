@@ -128,7 +128,18 @@
       const response = await fetch('../LiveVoli.json');
       let data = await response.json();
 
-      data.sort((a, b) => new Date(a.start) - new Date(b.start));
+      const now = new Date();
+
+      // 🔹 Urutkan: LIVE di atas
+      data.sort((a, b) => {
+        const aStart = new Date(a.start);
+        const bStart = new Date(b.start);
+        const aLive = now >= aStart;
+        const bLive = now >= bStart;
+        if (aLive && !bLive) return -1;
+        if (!aLive && bLive) return 1;
+        return aStart - bStart;
+      });
 
       const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
       const userOffset = new Date().getTimezoneOffset() / -60;
@@ -140,7 +151,6 @@
 
       data.forEach((channel, index) => {
         const startTime = new Date(channel.start);
-        const now = new Date();
         const isLive = now >= startTime;
         const tanggalLengkap = `${hari[startTime.getDay()]}, ${String(startTime.getDate()).padStart(2,'0')}-${String(startTime.getMonth()+1).padStart(2,'0')}-${startTime.getFullYear()} | ${startTime.toLocaleTimeString('id-ID',{ hour:'2-digit', minute:'2-digit' })} ${zone}`;
         const delay = index * 0.1;
@@ -163,7 +173,11 @@
       });
     }
 
+    // Panggil pertama kali
     loadChannels();
+
+    // 🔹 Auto-refresh setiap 30 detik
+    setInterval(loadChannels, 30000);
 
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function(e) {
