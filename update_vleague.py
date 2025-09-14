@@ -1,19 +1,9 @@
 import requests
 import json
 from datetime import datetime, timedelta, timezone
-import os
 
 OUTPUT_JSON = "VLeagueKorea.json"
 DEBUG_RAW = "debug_raw.json"
-
-# Mapping kode tim ke nama resmi (contoh, bisa ditambahin)
-TEAM_MAP = {
-    "CS": "Korean Air Jumbos",
-    "HN": "Hyundai Capital Skywalkers",
-    "MP": "Samsung Bluefangs",
-    "HY": "Woori Card",
-    # tambahin mapping lain sesuai kebutuhan
-}
 
 def fetch_schedule(date: str):
     url = (
@@ -23,36 +13,43 @@ def fetch_schedule(date: str):
         f"&date={date}"
     )
     print(f"📡 Fetching {url}")
-    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
     r.raise_for_status()
     return r.json()
 
 def parse_schedule(raw, date: str):
     matches = []
-    for day in raw["result"]["dates"]:
-        if day["ymd"] != date:
+    
+    for day in raw.get("result", {}).get("dates", []):
+        if day.get("ymd") != date:
             continue
-        if not day.get("gameInfos"):
-            continue
-
-        for game in day["gameInfos"]:
-            home = TEAM_MAP.get(game["homeTeamCode"], game["homeTeamCode"])
-            away = TEAM_MAP.get(game["awayTeamCode"], game["awayTeamCode"])
-
+        for game in day.get("gameInfos", []):
+            # Ambil nama tim langsung dari API, fallback ke kode tim kalau kosong
+            home = game.get("homeTeamName") or game.get("homeTeamCode") or "Unknown"
+            away = game.get("awayTeamName") or game.get("awayTeamCode") or "Unknown"
+            
             title = f"{home} vs {away}"
 
-            # default jam 18:00 KST kalau ga ada di API
-            start_time = f"{date}T18:00:00+09:00"
+            # Ambil waktu mulai dari API kalau ada, default jam 18:00 KST
+            start_time = game.get("startTime") or f"{date}T18:00:00+09:00"
 
             match = {
                 "title": title,
                 "start": start_time,
-                "src": "",      # nanti bisa diisi dari endpoint detail game
-                "poster": ""    # nanti bisa diisi poster tim atau liga
+                "src": "",      # bisa diisi nanti
+                "poster": ""    # bisa diisi nanti
             }
             matches.append(match)
-
-    return matches
+    
+    # Hapus duplikat berdasarkan title + start
+    seen = set()
+    unique_matches = []
+    for m in matches:
+        key = (m['title'], m['start'])
+        if key not in seen:
+            unique_matches.append(m)
+            seen.add(key)
+    return unique_matches
 
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
@@ -64,7 +61,7 @@ def main():
     ).strftime("%Y-%m-%d")  # Korea Time
 
     raw = fetch_schedule(today)
-    save_json(DEBUG_RAW, raw)  # simpan raw data
+    save_json(DEBUG_RAW, raw)
 
     matches = parse_schedule(raw, today)
     save_json(OUTPUT_JSON, matches)
