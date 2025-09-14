@@ -1,114 +1,73 @@
 import requests
-import re
+from bs4 import BeautifulSoup
 import json
-import time
 from datetime import datetime, timedelta, timezone
-from concurrent.futures import ThreadPoolExecutor
 
-# =================== CONFIG ===================
-MAIN_URL = "https://agratv.vercel.app/jadwal.php"
-BASE_URL = "https://agratv.vercel.app/"
-OUTPUT_FILE = "VLeagueKorea.json"
-INTERVAL = 120  # cek tiap 2 menit
-LOCAL_TZ = timezone(timedelta(hours=7))  # WIB
-CHECK_WINDOW = timedelta(minutes=30)     # hanya cek src ±30 menit dari sekarang
-MAX_THREADS = 5                           # parallel fetch max 5
-# ==============================================
+def scrape_schedule():
+    base_url = "https://sports.news.naver.com"
+    schedule_url = f"{base_url}/volleyball/schedule/index"
 
-def fetch_html(url):
-    r = requests.get(url)
-    r.raise_for_status()
-    return r.text
+    headers = {"User-Agent": "Mozilla/5.0"}
+    res = requests.get(schedule_url, headers=headers)
+    res.raise_for_status()
+    soup = BeautifulSoup(res.text, "html.parser")
 
-def parse_main(html):
-    main_div = re.search(r'<div class="main">(.*?)</div>', html, re.S)
-    if not main_div:
-        return []
+    events = []
 
-    div_content = main_div.group(1)
-    links = re.findall(r"<a\s+href=['\"](.*?)['\"].*?>(.*?)</a>", div_content, re.S)
-    matches = []
+    # ambil tanggal di header
+    date_str = soup.select_one(".schedule_calendar strong").get_text(strip=True)
+    date_obj = datetime.strptime(date_str.split()[0], "%Y.%m.%d")
 
-    for href, text in links:
-        text = text.strip()
-        parts = text.split(" - ")
-        if len(parts) >= 3:
-            title = parts[0].replace("[UP]", "").strip() + " | " + parts[1].strip()
-            time_str = parts[-1].replace("WIB", "").strip()
-            today = datetime.now(LOCAL_TZ).date()
-            try:
-                start_dt = datetime.strptime(time_str, "%H:%M").replace(
-                    year=today.year, month=today.month, day=today.day, tzinfo=LOCAL_TZ
-                )
-                start_iso = start_dt.isoformat()
-            except:
-                start_iso = ""
-            matches.append({
-                "id": href,
-                "title": title,
-                "start": start_iso,
-                "href": href,
-                "src": "",
-                "poster": ""
-            })
-    return matches
+    kst = timezone(timedelta(hours=9))   # Korea Standard Time
+    now_kst = datetime.now(kst)
 
-def fetch_hls_src(match):
-    """Cek src HLS atau iframe hanya jika pertandingan ±CHECK_WINDOW atau src kosong"""
-    try:
-        start_dt = datetime.fromisoformat(match["start"])
-        now = datetime.now(LOCAL_TZ)
-        if abs(start_dt - now) <= CHECK_WINDOW or match.get("src") == "":
-            url = BASE_URL + match["href"]
-            r = requests.get(url, timeout=10)
-            r.raise_for_status()
-            html = r.text
+    for row in soup.select(".sch_tb tbody tr"):
+        cols = row.find_all("td")
+        if len(cols) < 4:
+            continue
 
-            m3u8 = re.search(r"(https?://.*?\.m3u8)", html)
-            if m3u8:
-                match["src"] = m3u8.group(1)
-            else:
-                iframe = re.search(r"<iframe.*?src=['\"](.*?)['\"]", html)
-                match["src"] = iframe.group(1) if iframe else ""
-    except:
-        pass
-    return match
+        time_txt = cols[0].get_text(strip=True)
+        team1 = cols[1].get_text(strip=True)
+        team2 = cols[3].get_text(strip=True)
 
-def load_json():
-    try:
-        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except:
-        return []
+        # link detail pertandingan
+        link_tag = cols[1].find("a") or cols[3].find("a")
+        match_link = base_url + link_tag["href"] if link_tag else ""
 
-def save_json(matches):
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(matches, f, ensure_ascii=False, indent=2)
+        # poster (thumbnail)
+        img_tag = cols[1].find("img") or cols[3].find("img")
+        poster = img_tag["src"] if img_tag else "/assets/default.jpg"
 
-def merge_matches(old_matches, new_matches):
-    updated = {m["id"]: m for m in old_matches}
-
-    # Fetch src secara paralel
-    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-        results = list(executor.map(fetch_hls_src, new_matches))
-
-    for m in results:
-        updated[m["id"]] = m
-
-    return list(updated.values())
-
-def main_loop():
-    while True:
+        # gabungkan tanggal + waktu
         try:
-            html = fetch_html(MAIN_URL)
-            new_matches = parse_main(html)
-            old_matches = load_json()
-            merged = merge_matches(old_matches, new_matches)
-            save_json(merged)
-            print(f"[{datetime.now().strftime('%H:%M:%S')}] ✅ Updated {len(merged)} matches")
-        except Exception as e:
-            print("❌ Error:", e)
-        time.sleep(INTERVAL)
+            match_time = datetime.strptime(
+                f"{date_obj.strftime('%Y-%m-%d')} {time_txt}", "%Y-%m-%d %H:%M"
+            ).replace(tzinfo=kst)
+        except ValueError:
+            # kalau waktu kosong (misalnya "취소" atau "연기")
+            continue
+
+        # skip kalau sudah lewat
+        if match_time < now_kst:
+            continue
+
+        # ubah ke format ISO +08:00
+        iso_time = match_time.astimezone(
+            timezone(timedelta(hours=8))
+        ).strftime("%Y-%m-%dT%H:%M:%S+08:00")
+
+        events.append({
+            "title": f"{team1} vs {team2}",
+            "start": iso_time,
+            "src": match_link,
+            "poster": poster
+        })
+
+    # simpan ke file
+    with open("VLeagueKorea.json", "w", encoding="utf-8") as f:
+        json.dump(events, f, ensure_ascii=False, indent=4)
+
+    print("✅ VLeagueKorea.json berhasil diperbarui")
 
 if __name__ == "__main__":
-    main_loop()
+    scrape_schedule()
