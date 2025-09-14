@@ -13,31 +13,33 @@ def fetch_live_data():
         print("⚠️ Gagal mengambil data:", e)
         return
 
-    # 🔹 Regex fleksibel untuk menangkap semua jadwal (tanggal & waktu opsional)
-    pattern = r'(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})?\s*WIB?\s*<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
+    # 🔹 Regex fleksibel untuk tangkap semua jadwal, termasuk yang sedang live
+    # Format: tanggal opsional, waktu wajib, WIB, link, judul
+    pattern = r'(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB\s*<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
-    seen = set()  # track duplikat
+    seen = set()  # track jadwal unik
 
     for date_str, time_str, src, title in matches:
         try:
-            # Jika tanggal/waktu tidak ada, gunakan waktu sekarang
-            if not date_str or not time_str:
+            # jika tanggal kosong, gunakan tanggal hari ini
+            if not date_str:
                 dt = datetime.now(timezone(timedelta(hours=7)))
+                dt = dt.replace(hour=int(time_str[:2]), minute=int(time_str[3:5]))
             else:
                 dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
                 dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
 
             start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
 
-            # cek duplikat
+            # hanya tampilkan satu entri untuk duplikat
             key = (title.strip(), start_iso, src.strip())
             if key in seen:
-                continue  # lewati duplikat
+                continue
             seen.add(key)
 
-            # ambil poster dari JWPlayer jika tersedia
+            # ambil poster JWPlayer jika ada
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
