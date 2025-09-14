@@ -9,13 +9,9 @@ def fetch_live_data():
     r.raise_for_status()
     html = r.text
 
-    # 🔹 Lewati bagian Watch Live - Schedule Screen
-    sections = re.split(r'Watch Live - Schedule Screen', html, maxsplit=1)
-    html_section = sections[1] if len(sections) > 1 else html
-
-    # 🔹 Ambil semua link resmi
+    # 🔹 Ambil semua jadwal dari HTML
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
-    matches = re.findall(pattern, html_section)
+    matches = re.findall(pattern, html)
 
     data = []
     for date_str, time_str, src, title in matches:
@@ -44,7 +40,7 @@ def fetch_live_data():
             seen.add(key)
             unique_data.append(item)
 
-    # 🔹 Hapus jadwal yang sudah lewat (WIB)
+    # 🔹 Hapus jadwal yang sudah lewat
     now = datetime.now(timezone(timedelta(hours=7)))
     data = [item for item in unique_data if datetime.fromisoformat(item["start"]) > now]
 
