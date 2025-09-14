@@ -1,13 +1,14 @@
-name: Update VLeague Korea Schedule
+name: Update V-League Schedule
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # update setiap 30 menit
-  workflow_dispatch:         # bisa dijalankan manual dari GitHub
+    - cron: "0 * * * *"   # jalan tiap jam
+  workflow_dispatch:       # bisa dijalankan manual dari tab Actions
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -15,18 +16,20 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.10"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
 
       - name: Run scraper
-        run: python scraper.py
+        run: python update_vleague.py
 
-      - name: Commit and push
+      - name: Commit & push changes
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add VLeagueKorea.json
-          git commit -m "Update VLeague Korea schedule [skip ci]" || echo "No changes"
+          git commit -m "Update V-League schedule [skip ci]" || echo "No changes to commit"
           git push
