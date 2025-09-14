@@ -9,9 +9,12 @@ def fetch_live_data():
     r.raise_for_status()
     html = r.text
 
-    # Ambil semua jadwal dari HTML
+    # 🔹 Ambil seluruh HTML (termasuk Watch Live - Schedule Screen)
+    html_section = html
+
+    # 🔹 Regex untuk ambil semua jadwal
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
-    matches = re.findall(pattern, html)
+    matches = re.findall(pattern, html_section)
 
     data = []
     seen = set()  # untuk track duplikat
