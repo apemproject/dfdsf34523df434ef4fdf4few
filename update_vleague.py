@@ -1,91 +1,54 @@
 import requests
 import json
-from datetime import datetime, timedelta, timezone
-
-API_URL = "https://api-gw.sports.naver.com/cms/templates/volleyball_new_home_feed"
-OUTPUT_FILE = "VLeagueKorea.json"
-DEBUG_FILE = "debug_raw.json"
-
-KST = timezone(timedelta(hours=9))
-LOCAL_TZ = timezone(timedelta(hours=8))
+from datetime import datetime
 
 def fetch_data():
-    """Ambil data mentah dari API Naver Sport"""
-    r = requests.get(API_URL, timeout=10)
+    url = "https://api-gw.sports.naver.com/cms/templates/volleyball_schedule_league_tab"
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+    }
+    r = requests.get(url, headers=headers)
     r.raise_for_status()
-    return r.json()
+    data = r.json()
 
-def parse_schedule(raw):
-    """Parse jadwal ke format JSON sederhana"""
+    # simpan raw biar bisa dicek strukturnya
+    with open("debug_raw.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    return data
+
+def parse_matches(data):
     matches = []
-
     try:
-        contents = raw.get("result", {}).get("content", [])
-    except Exception:
+        game_list = data["result"]["gameList"]
+    except KeyError:
+        print("⚠️ Tidak ada gameList di response.")
         return matches
 
-    for block in contents:
-        items = block.get("items", [])
-        for g in items:
-            if g.get("type") != "game":
-                continue
-
-            home = g.get("homeTeamName", "")
-            away = g.get("awayTeamName", "")
-            title = f"{home} vs {away}"
-
-            start_time = g.get("gameDateTime")
-            if start_time:
-                try:
-                    dt = datetime.fromisoformat(start_time.replace("Z", "+09:00"))
-                    dt_local = dt.astimezone(LOCAL_TZ)
-                    start_str = dt_local.isoformat()
-                except Exception:
-                    start_str = ""
-            else:
-                start_str = ""
-
-            matches.append({
-                "title": title,
-                "start": start_str,
-                "src": "",
-                "poster": ""
-            })
-
+    for item in game_list:
+        matches.append({
+            "date": item.get("gameDate"),
+            "time": item.get("gameTime"),
+            "home": item.get("homeTeamName"),
+            "away": item.get("awayTeamName"),
+            "homeScore": item.get("homeScore"),
+            "awayScore": item.get("awayScore"),
+            "status": item.get("status")
+        })
     return matches
-
-def clean_expired(matches):
-    now = datetime.now(LOCAL_TZ)
-    cleaned = []
-    for m in matches:
-        try:
-            dt = datetime.fromisoformat(m["start"])
-            if dt + timedelta(hours=3) > now:
-                cleaned.append(m)
-        except Exception:
-            continue
-    return cleaned
 
 def main():
     raw = fetch_data()
+    matches = parse_matches(raw)
 
-    # Simpan debug file
-    with open(DEBUG_FILE, "w", encoding="utf-8") as f:
-        json.dump(raw, f, ensure_ascii=False, indent=2)
+    print(f"Parsed matches: {len(matches)}")
 
-    matches = parse_schedule(raw)
-    print("Parsed matches:", len(matches))
-
-    for m in matches:
-        print(m["title"], m["start"])
-
-    matches = clean_expired(matches)
-
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    with open("VLeagueKorea.json", "w", encoding="utf-8") as f:
         json.dump(matches, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Saved {len(matches)} matches to {OUTPUT_FILE}")
-    print(f"📝 Raw data saved to {DEBUG_FILE}")
+    print(f"✅ Saved {len(matches)} matches to VLeagueKorea.json")
+    print("📝 Raw data saved to debug_raw.json")
 
 if __name__ == "__main__":
     main()
