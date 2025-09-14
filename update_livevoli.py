@@ -1,40 +1,47 @@
 import requests, re, json
 from datetime import datetime, timezone, timedelta
 
+# 🌐 URL sumber jadwal
 URL = "https://halu.serv00.net/poli2.php"
+
+# 💾 File JSON output
 OUTPUT = "LiveVoli.json"
 
+# ⏱ Waktu timezone WIB
+TZ = timezone(timedelta(hours=7))
+
 def fetch_live_data():
-    r = requests.get(URL, timeout=15)
-    r.raise_for_status()
-    html = r.text
+    try:
+        r = requests.get(URL, timeout=15)
+        r.raise_for_status()
+        html = r.text
+    except Exception as e:
+        print("⚠️ Gagal ambil data:", e)
+        return
 
-    # 🔹 Ambil seluruh HTML (termasuk Live and upcoming)
-    html_section = html
-
-    # 🔹 Regex untuk ambil semua jadwal
+    # 🔹 Regex ambil semua jadwal + link
+    # Format: 14-09-2025 12:50 WIB <a href=link>Title</a>
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
-    matches = re.findall(pattern, html_section)
+    matches = re.findall(pattern, html)
 
     data = []
-    seen_titles = set()  # untuk track duplikat berdasarkan judul
-
-    now = datetime.now(timezone(timedelta(hours=7)))
+    seen = set()  # deduplikasi
 
     for date_str, time_str, src, title in matches:
         try:
+            # ⏰ Format ISO dengan timezone
             dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
             start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S") + "+07:00"
 
-            # cek duplikat berdasarkan title saja
-            if title.strip() in seen_titles:
-                continue  # lewati jika sudah ada
-            seen_titles.add(title.strip())
+            key = (title.strip(), start_iso, src.strip())
+            if key in seen:
+                continue  # lewati duplikat
+            seen.add(key)
 
+            # 🔹 Ambil poster dari JWPlayer
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
-            # 🔹 Simpan semua jadwal, termasuk yang sedang live
             data.append({
                 "title": title.strip(),
                 "start": start_iso,
@@ -44,18 +51,17 @@ def fetch_live_data():
         except Exception as e:
             print("⚠️ Error parsing:", date_str, time_str, title, e)
 
-    # 🔹 Hanya hapus jadwal yang sudah lewat lebih dari 1 jam, biar live masih muncul
-    filtered_data = []
-    for item in data:
-        start_dt = datetime.fromisoformat(item["start"])
-        if start_dt + timedelta(hours=1) > now:
-            filtered_data.append(item)
+    # 🔹 Hapus jadwal yang sudah lewat (opsional, bisa dikomentari kalau mau semua tetap muncul)
+    now = datetime.now(TZ)
+    data = [item for item in data if datetime.fromisoformat(item["start"]) > now]
 
-    # Simpan JSON
-    with open(OUTPUT, "w", encoding="utf-8") as f:
-        json.dump(filtered_data, f, ensure_ascii=False, indent=2)
-
-    print(f"💾 Data berhasil disimpan ({len(filtered_data)} pertandingan).")
+    # 🔹 Simpan JSON
+    try:
+        with open(OUTPUT, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"💾 Data berhasil disimpan ({len(data)} pertandingan).")
+    except Exception as e:
+        print("⚠️ Gagal simpan JSON:", e)
 
 if __name__ == "__main__":
     fetch_live_data()
