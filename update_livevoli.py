@@ -12,13 +12,13 @@ print("✅ Request success")
 print(f"🔎 HTML length: {len(html)}")
 print("🔎 HTML preview:\n", html[:500])
 
-# Regex fleksibel: href=... sampai spasi sebelum target=
+# Regex fleksibel: cari jadwal
 pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s*<a href=([^\s]+)\s+target=_blank>([^<]+)</a>'
 matches = re.findall(pattern, html)
 
 print(f"📊 Jumlah match ditemukan: {len(matches)}")
 for m in matches:
-    print("➡️", m)  # debug biar kelihatan di log
+    print("➡️", m)  # debug
 
 data = []
 for date_str, time_str, src, title in matches:
@@ -38,6 +38,17 @@ for date_str, time_str, src, title in matches:
         })
     except Exception as e:
         print("⚠️ Error parsing:", date_str, time_str, title, e)
+
+# 🔹 Hapus duplikat berdasarkan title+start+src
+seen = set()
+unique_data = []
+for item in data:
+    key = (item["title"], item["start"], item["src"])
+    if key not in seen:
+        seen.add(key)
+        unique_data.append(item)
+
+data = unique_data
 
 if data:
     with open(OUTPUT, "w", encoding="utf-8") as f:
