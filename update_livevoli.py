@@ -1,70 +1,60 @@
-import requests, re, json
+import requests, re, json, time
 from datetime import datetime, timezone, timedelta
 
 URL = "https://halu.serv00.net/poli2.php"
 OUTPUT = "LiveVoli.json"
+UPDATE_INTERVAL = 60  # detik, 60 detik = 1 menit
 
 def fetch_live_data():
     try:
         r = requests.get(URL, timeout=15)
         r.raise_for_status()
         html = r.text
-    except Exception as e:
-        print("⚠️ Gagal mengambil data:", e)
-        return
 
-    # 🔹 Ambil semua link .m3u8
-    pattern = r'<a href=[\'"]?([^\'"\s>]+\.m3u8)[\'"]?.*?>([^<]+)</a>'
-    matches = re.findall(pattern, html)
+        # 🔹 Buang "Watch Live - Schedule Screen"
+        sections = re.split(r'Watch Live - Schedule Screen', html, flags=re.IGNORECASE)
+        html_section = sections[1] if len(sections) > 1 else html
 
-    data = []
-    seen = set()
+        # 🔹 Ambil jadwal <a href=...>
+        pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
+        matches = re.findall(pattern, html_section)
 
-    for src, title in matches:
-        try:
-            # cari tanggal dan waktu di sebelah link (format: DD-MM-YYYY HH:MM WIB)
-            dt_match = re.search(r'(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB', html[:html.find(src)])
-            if dt_match:
-                date_str, time_str = dt_match.groups()
-                if not date_str:
-                    dt = datetime.now(timezone(timedelta(hours=7)))
-                    dt = dt.replace(hour=int(time_str[:2]), minute=int(time_str[3:5]))
-                else:
-                    dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
-                    dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
-            else:
-                # jika tidak ditemukan, pakai waktu sekarang
-                dt = datetime.now(timezone(timedelta(hours=7)))
+        data = []
+        seen_titles = set()
 
-            start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
-
-            key = (title.strip(), start_iso, src.strip())
-            if key in seen:
+        for date_str, time_str, src, title in matches:
+            title_clean = title.strip()
+            if title_clean in seen_titles:
                 continue
-            seen.add(key)
+            seen_titles.add(title_clean)
 
-            # ambil poster JWPlayer jika ada
-            m = re.search(r'/media/([^/]+)/', src)
-            poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
+            try:
+                dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
+                start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S") + "+07:00"
 
-            data.append({
-                "title": title.strip(),
-                "start": start_iso,
-                "src": src.strip(),
-                "poster": poster
-            })
-        except Exception as e:
-            print("⚠️ Error parsing:", title, e)
+                m = re.search(r'/media/([^/]+)/', src)
+                poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
-    # hapus jadwal yang sudah lewat
-    now = datetime.now(timezone(timedelta(hours=7)))
-    data = [item for item in data if datetime.fromisoformat(item["start"]) > now]
+                data.append({
+                    "title": title_clean,
+                    "start": start_iso,
+                    "src": src.strip(),
+                    "poster": poster
+                })
+            except Exception as e:
+                print("⚠️ Error parsing:", date_str, time_str, title, e)
 
-    # simpan JSON
-    with open(OUTPUT, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        now = datetime.now(timezone(timedelta(hours=7)))
+        data = [item for item in data if datetime.fromisoformat(item["start"]) > now]
 
-    print(f"💾 Data berhasil disimpan ({len(data)} pertandingan).")
+        with open(OUTPUT, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+        print(f"💾 Data berhasil diperbarui ({len(data)} pertandingan).")
+    except Exception as e:
+        print("⚠️ Error fetch/update:", e)
 
 if __name__ == "__main__":
-    fetch_live_data()
+    while True:
+        fetch_live_data()
+        time.sleep(UPDATE_INTERVAL)
