@@ -3,12 +3,10 @@ import json
 from datetime import datetime, timedelta, timezone
 import time
 
-OUTPUT_JSON = "VLeagueKorea.json"
 DEBUG_RAW_DIR = "debug_raw"
 DEFAULT_POSTER = "assets/default_poster.png"
 
-# Mapping awal (akan diisi otomatis dari API)
-TEAM_MAP = {}
+TEAM_MAP = {}  # akan diisi otomatis dari API
 
 def fetch_schedule(date: str):
     url = (
@@ -26,22 +24,17 @@ def fetch_live_url(game_id: str):
     try:
         r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
         r.raise_for_status()
-        data = r.json()
-        return data.get("liveStreamUrl", "")
+        return r.json().get("liveStreamUrl", "")
     except:
         return ""
 
 def build_team_mapping(raw_list):
-    """
-    Ambil semua kode tim dari raw JSON dan buat mapping otomatis
-    Jika belum ada di TEAM_MAP, nama tim disamakan dengan kode
-    """
     global TEAM_MAP
     for raw in raw_list:
         for day in raw.get("result", {}).get("dates", []):
             games = day.get("gameInfos")
             if not isinstance(games, list):
-                continue  # lewati jika None atau bukan list
+                continue
             for game in games:
                 for code in [game.get("homeTeamCode"), game.get("awayTeamCode")]:
                     if code and code not in TEAM_MAP:
@@ -78,7 +71,10 @@ def parse_schedule(raw, date: str):
                 else:
                     status = "FINISHED"
 
-            # Poster default dari assets
+            # Skip pertandingan yang sudah FINISHED
+            if status == "FINISHED":
+                continue
+
             poster = DEFAULT_POSTER
 
             matches.append({
@@ -104,14 +100,10 @@ def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-def update_loop():
+def update_loop(days_ahead=2):
     korea_tz = timezone(timedelta(hours=9))
     while True:
-        dates = [
-            (datetime.now(korea_tz) + timedelta(days=i)).strftime("%Y-%m-%d")
-            for i in range(2)
-        ]
-        all_matches = []
+        dates = [(datetime.now(korea_tz) + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(days_ahead)]
         raw_list = []
 
         # Fetch semua jadwal
@@ -123,17 +115,16 @@ def update_loop():
             except Exception as e:
                 print(f"❌ Error fetching {date}: {e}")
 
-        # Build mapping otomatis dari semua kode tim
+        # Build mapping tim
         build_team_mapping(raw_list)
 
-        # Parse schedule
+        # Parse & save per hari
         for i, raw in enumerate(raw_list):
             date = dates[i]
             matches = parse_schedule(raw, date)
-            all_matches.extend(matches)
+            save_json(f"{date}.json", matches)  # JSON per hari
+            print(f"[{datetime.now(korea_tz).strftime('%Y-%m-%d %H:%M:%S')}] Updated {len(matches)} matches for {date}")
 
-        save_json(OUTPUT_JSON, all_matches)
-        print(f"[{datetime.now(korea_tz).strftime('%Y-%m-%d %H:%M:%S')}] Updated {len(all_matches)} matches")
         time.sleep(60)
 
 if __name__ == "__main__":
