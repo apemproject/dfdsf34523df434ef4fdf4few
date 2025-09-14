@@ -1,98 +1,92 @@
 import requests
+from bs4 import BeautifulSoup
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone, timedelta
 import time
 
-OUTPUT_JSON = "today.json"
-DEBUG_RAW = "debug_raw_today.json"
+URL = "https://siegheil.micinproject.my.id/naver"
+OUTPUT_JSON = "naver_schedule.json"
 DEFAULT_POSTER = "assets/default_poster.png"
+UPDATE_INTERVAL = 60  # detik
 
-TEAM_MAP = {}  # otomatis diisi dari API
+def fetch_schedule():
+    try:
+        r = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
+        r.raise_for_status()
+    except Exception as e:
+        print("❌ Failed to fetch schedule:", e)
+        return []
 
-def fetch_schedule(date: str):
-    url = (
-        "https://api-gw.sports.naver.com/schedule/calendar"
-        f"?superCategoryId=volleyball"
-        f"&categoryIds=%2Ckovo%2Cwkovo%2Cuvolleyball%2Cvolleyballetc"
-        f"&date={date}"
-    )
-    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
-    r.raise_for_status()
-    return r.json()
-
-def build_team_mapping(raw):
-    global TEAM_MAP
-    for day in raw.get("result", {}).get("dates", []):
-        games = day.get("gameInfos")
-        if not isinstance(games, list):
-            continue
-        for game in games:
-            for code in [game.get("homeTeamCode"), game.get("awayTeamCode")]:
-                if code and code not in TEAM_MAP:
-                    TEAM_MAP[code] = code  # sementara nama = kode
-
-def parse_schedule(raw, date: str):
+    soup = BeautifulSoup(r.content, "html.parser")
     matches = []
-    korea_tz = timezone(timedelta(hours=9))
-    now = datetime.now(korea_tz)
 
-    for day in raw.get("result", {}).get("dates", []):
-        if day.get("ymd") != date:
+    # Sesuaikan selector dengan struktur HTML web asli
+    for item in soup.select("div.game"):
+        # ambil judul
+        title_tag = item.select_one("span.title")
+        if not title_tag:
             continue
-        games = day.get("gameInfos")
-        if not isinstance(games, list):
+        title = title_tag.get_text(strip=True)
+
+        # ambil tanggal dan jam
+        date_tag = item.select_one("span.schedule")
+        if not date_tag:
             continue
-        for game in games:
-            home_code = game.get("homeTeamCode")
-            away_code = game.get("awayTeamCode")
-            home = TEAM_MAP.get(home_code, home_code or "Unknown")
-            away = TEAM_MAP.get(away_code, away_code or "Unknown")
+        date_str = date_tag.get_text(strip=True)
+        try:
+            # contoh format: "14 September 2025 | 18:00 WIB"
+            start = datetime.strptime(date_str, "%d %B %Y | %H:%M WIB")
+            # gunakan timezone +7 WIB
+            start = start.replace(tzinfo=timezone(timedelta(hours=7)))
+        except:
+            continue
+        start_iso = start.isoformat()
 
-            title = f"{home} vs {away}"
-            start_time = game.get("startTime") or f"{date}T18:00:00+09:00"
-            start_dt = datetime.fromisoformat(start_time)
+        # ambil src streaming jika ada
+        a_tag = item.select_one("a.streaming")
+        src = a_tag["href"] if a_tag else ""
 
-            # Tentukan status tanpa fetch live URL
-            status = "UPCOMING" if start_dt > now else "LIVE"
+        # tentukan status
+        now = datetime.now(timezone(timedelta(hours=7)))
+        if src:
+            status = "LIVE"
+        elif start > now:
+            status = "UPCOMING"
+        else:
+            status = "FINISHED"
 
-            matches.append({
-                "title": title,
-                "start": start_time,
-                "status": status,
-                "src": "",  # kosong, fetch URL bisa on-demand
-                "poster": DEFAULT_POSTER
-            })
+        if status == "FINISHED":
+            continue  # skip pertandingan yang sudah selesai
 
-    # Hapus duplikat
+        matches.append({
+            "title": title,
+            "start": start_iso,
+            "status": status,
+            "src": src,
+            "poster": DEFAULT_POSTER
+        })
+
+    # hapus duplikat
     seen = set()
     unique_matches = []
     for m in matches:
-        key = (m['title'], m['start'])
+        key = (m["title"], m["start"])
         if key not in seen:
             unique_matches.append(m)
             seen.add(key)
 
     return unique_matches
 
-def save_json(path, data):
-    with open(path, "w", encoding="utf-8") as f:
+def save_json(data):
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def update_loop():
-    korea_tz = timezone(timedelta(hours=9))
     while True:
-        today = datetime.now(korea_tz).strftime("%Y-%m-%d")
-        try:
-            raw = fetch_schedule(today)
-            save_json(DEBUG_RAW, raw)
-            build_team_mapping(raw)
-            matches = parse_schedule(raw, today)
-            save_json(OUTPUT_JSON, matches)
-            print(f"[{datetime.now(korea_tz).strftime('%H:%M:%S')}] Updated {len(matches)} matches for {today}")
-        except Exception as e:
-            print(f"❌ Error: {e}")
-
-        time.sleep(60)
+        matches = fetch_schedule()
+        save_json(matches)
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] Updated {len(matches)} matches")
+        time.sleep(UPDATE_INTERVAL)
 
 if __name__ == "__main__":
     update_loop()
