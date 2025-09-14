@@ -1,31 +1,43 @@
-name: Update LiveVoli.json
+name: Auto Update LiveVoli.json
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # jalan tiap 5 menit
-  workflow_dispatch:         # bisa dijalankan manual dari tab Actions
+    - cron: '*/5 * * * *' # setiap 5 menit
+  workflow_dispatch:
 
 jobs:
-  update-json:
+  update_livevoli:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Setup Python
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
       - name: Run update script
         run: python update_livevoli.py
 
-      - name: Commit and push changes
+      - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull latest changes
+        run: git pull --rebase origin main
+
+      - name: Commit and push changes
+        run: |
           git add LiveVoli.json
-          git diff --cached --quiet || git commit -m "Auto update LiveVoli.json"
-          git push
+          git commit -m "Auto update LiveVoli.json" || echo "No changes to commit"
+          git push origin main
