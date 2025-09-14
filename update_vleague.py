@@ -1,54 +1,78 @@
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
-def fetch_data():
-    url = "https://api-gw.sports.naver.com/cms/templates/volleyball_schedule_league_tab"
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json"
-    }
-    r = requests.get(url, headers=headers)
+API_BASE = "https://api-gw.sports.naver.com"
+TAB_URL = f"{API_BASE}/cms/templates/volleyball_schedule_league_tab"
+OUTPUT_FILE = "VLeagueKorea.json"
+DEBUG_FILE = "debug_raw.json"
+
+KST = timezone(timedelta(hours=9))
+
+def fetch_leagues():
+    """Ambil daftar liga (kovo, wkovo, dll)"""
+    r = requests.get(TAB_URL, timeout=10)
     r.raise_for_status()
     data = r.json()
+    leagues = []
+    try:
+        leagues = data["result"]["templates"][0]["json"]["dataList"]
+    except Exception as e:
+        print("❌ Gagal ambil data liga:", e)
+    return leagues
 
-    # simpan raw biar bisa dicek strukturnya
-    with open("debug_raw.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+def fetch_schedule(categoryId, date_str):
+    """Ambil jadwal dari 1 kategori dan tanggal tertentu"""
+    url = f"{API_BASE}/schedule/games/{categoryId}?date={date_str}"
+    r = requests.get(url, timeout=10)
+    r.raise_for_status()
+    return r.json()
 
-    return data
-
-def parse_matches(data):
+def parse_matches(raw, categoryId):
+    """Parse data jadwal jadi list dict sederhana"""
     matches = []
     try:
-        game_list = data["result"]["gameList"]
-    except KeyError:
-        print("⚠️ Tidak ada gameList di response.")
-        return matches
-
-    for item in game_list:
-        matches.append({
-            "date": item.get("gameDate"),
-            "time": item.get("gameTime"),
-            "home": item.get("homeTeamName"),
-            "away": item.get("awayTeamName"),
-            "homeScore": item.get("homeScore"),
-            "awayScore": item.get("awayScore"),
-            "status": item.get("status")
-        })
+        games = raw.get("result", {}).get("games", [])
+        for g in games:
+            matches.append({
+                "category": categoryId,
+                "date": g.get("gameDate"),
+                "time": g.get("gameTime"),
+                "home": g.get("homeTeamName"),
+                "away": g.get("awayTeamName"),
+                "homeScore": g.get("homeTeamScore"),
+                "awayScore": g.get("awayTeamScore"),
+                "status": g.get("statusName")
+            })
+    except Exception as e:
+        print(f"⚠️ Gagal parse {categoryId}: {e}")
     return matches
 
 def main():
-    raw = fetch_data()
-    matches = parse_matches(raw)
+    today = datetime.now(KST).strftime("%Y-%m-%d")
+    leagues = fetch_leagues()
+    all_matches = []
+    raw_dump = {}
 
-    print(f"Parsed matches: {len(matches)}")
+    for league in leagues:
+        categoryId = league.get("categoryId")
+        if not categoryId:
+            continue
+        print(f"📡 Fetching {categoryId} for {today}")
+        raw = fetch_schedule(categoryId, today)
+        raw_dump[categoryId] = raw
+        matches = parse_matches(raw, categoryId)
+        all_matches.extend(matches)
 
-    with open("VLeagueKorea.json", "w", encoding="utf-8") as f:
-        json.dump(matches, f, ensure_ascii=False, indent=2)
+    # simpan hasil akhir
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(all_matches, f, ensure_ascii=False, indent=2)
+    print(f"✅ Saved {len(all_matches)} matches to {OUTPUT_FILE}")
 
-    print(f"✅ Saved {len(matches)} matches to VLeagueKorea.json")
-    print("📝 Raw data saved to debug_raw.json")
+    # simpan raw untuk debug
+    with open(DEBUG_FILE, "w", encoding="utf-8") as f:
+        json.dump(raw_dump, f, ensure_ascii=False, indent=2)
+    print(f"📝 Raw data saved to {DEBUG_FILE}")
 
 if __name__ == "__main__":
     main()
