@@ -15,39 +15,62 @@ def fetch_data():
     r.raise_for_status()
     return r.json()
 
+def extract_matches(raw):
+    """coba cari list pertandingan di berbagai struktur API"""
+    candidates = []
+
+    # 1. feedData -> matchSchedule -> scheduleList
+    for item in raw.get("feedData", []):
+        if "matchSchedule" in item:
+            candidates.extend(item["matchSchedule"].get("scheduleList", []))
+
+    # 2. feedData -> matchList
+    for item in raw.get("feedData", []):
+        if "matchList" in item:
+            candidates.extend(item["matchList"])
+
+    # 3. result -> matchSchedule
+    if "result" in raw and "matchSchedule" in raw["result"]:
+        candidates.extend(raw["result"]["matchSchedule"].get("scheduleList", []))
+
+    # 4. result -> games
+    if "result" in raw and "games" in raw["result"]:
+        candidates.extend(raw["result"]["games"])
+
+    return candidates
+
 def parse_schedule(raw):
     matches = []
-    
-    for item in raw.get("feedData", []):
-        if "matchSchedule" not in item:
-            continue
-        for match in item["matchSchedule"].get("scheduleList", []):
-            try:
-                home = match["homeTeamName"]
-                away = match["awayTeamName"]
-                start_time = match["startTime"]  # contoh: 2025-10-10T18:05:00+09:00
-                
-                # link detail pertandingan (kalau ada)
-                match_id = match.get("gameId") or match.get("id")
-                detail_link = f"https://m.sports.naver.com/game/{match_id}" if match_id else ""
+    for match in extract_matches(raw):
+        try:
+            home = match.get("homeTeamName") or match.get("homeName") or ""
+            away = match.get("awayTeamName") or match.get("awayName") or ""
+            start_time = match.get("startTime") or match.get("gameDate")
 
-                # poster pakai logo tim (fallback kosong)
-                home_logo = match.get("homeTeamEmblem") or ""
-                away_logo = match.get("awayTeamEmblem") or ""
-                poster = home_logo if home_logo else away_logo
+            if not start_time or not home or not away:
+                continue
 
-                # konversi ke +08:00
-                dt = datetime.fromisoformat(start_time)
-                dt_utc8 = dt.astimezone(timezone(timedelta(hours=8)))
-                
-                matches.append({
-                    "title": f"{home} vs {away}",
-                    "start": dt_utc8.isoformat(),
-                    "src": detail_link,
-                    "poster": poster
-                })
-            except Exception as e:
-                print("Skip match:", e)
+            # konversi waktu ke +08:00
+            dt = datetime.fromisoformat(start_time)
+            dt_utc8 = dt.astimezone(timezone(timedelta(hours=8)))
+
+            # link detail pertandingan
+            match_id = match.get("gameId") or match.get("id")
+            detail_link = f"https://m.sports.naver.com/game/{match_id}" if match_id else ""
+
+            # poster (pakai logo tim kalau ada)
+            home_logo = match.get("homeTeamEmblem") or match.get("homeLogo") or ""
+            away_logo = match.get("awayTeamEmblem") or match.get("awayLogo") or ""
+            poster = home_logo if home_logo else away_logo
+
+            matches.append({
+                "title": f"{home} vs {away}",
+                "start": dt_utc8.isoformat(),
+                "src": detail_link,
+                "poster": poster
+            })
+        except Exception as e:
+            print("Skip match:", e)
     return matches
 
 def clean_expired(data):
@@ -62,6 +85,7 @@ def main():
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(matches, f, ensure_ascii=False, indent=2)
+
     print(f"✅ Saved {len(matches)} matches to {OUTPUT_FILE}")
 
 if __name__ == "__main__":
