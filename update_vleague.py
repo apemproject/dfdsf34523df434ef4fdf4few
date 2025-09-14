@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime, timedelta, timezone
+import os
+
 
 def scrape_schedule():
     base_url = "https://sports.news.naver.com"
@@ -18,7 +20,7 @@ def scrape_schedule():
     date_str = soup.select_one(".schedule_calendar strong").get_text(strip=True)
     date_obj = datetime.strptime(date_str.split()[0], "%Y.%m.%d")
 
-    kst = timezone(timedelta(hours=9))   # Korea Standard Time
+    kst = timezone(timedelta(hours=9))  # Korea Standard Time
     now_kst = datetime.now(kst)
 
     for row in soup.select(".sch_tb tbody tr"):
@@ -32,42 +34,37 @@ def scrape_schedule():
 
         # link detail pertandingan
         link_tag = cols[1].find("a") or cols[3].find("a")
-        match_link = base_url + link_tag["href"] if link_tag else ""
+        link = base_url + link_tag["href"] if link_tag else ""
 
-        # poster (thumbnail)
-        img_tag = cols[1].find("img") or cols[3].find("img")
-        poster = img_tag["src"] if img_tag else "/assets/default.jpg"
-
-        # gabungkan tanggal + waktu
-        try:
-            match_time = datetime.strptime(
-                f"{date_obj.strftime('%Y-%m-%d')} {time_txt}", "%Y-%m-%d %H:%M"
-            ).replace(tzinfo=kst)
-        except ValueError:
-            # kalau waktu kosong (misalnya "취소" atau "연기")
-            continue
+        # waktu pertandingan (gabung tanggal + jam)
+        if ":" in time_txt:
+            hour, minute = map(int, time_txt.split(":"))
+            start_dt = datetime(
+                date_obj.year, date_obj.month, date_obj.day, hour, minute, tzinfo=kst
+            )
+        else:
+            continue  # skip kalau tidak ada jam
 
         # skip kalau sudah lewat
-        if match_time < now_kst:
+        if start_dt + timedelta(hours=2) < now_kst:
             continue
 
-        # ubah ke format ISO +08:00
-        iso_time = match_time.astimezone(
-            timezone(timedelta(hours=8))
-        ).strftime("%Y-%m-%dT%H:%M:%S+08:00")
-
-        events.append({
+        event = {
             "title": f"{team1} vs {team2}",
-            "start": iso_time,
-            "src": match_link,
-            "poster": poster
-        })
+            "start": start_dt.astimezone(timezone(timedelta(hours=8))).isoformat(),  # konversi ke GMT+8
+            "src": link,
+            "poster": ""  # bisa diisi thumbnail kalau ada
+        }
+        events.append(event)
 
-    # simpan ke file
-    with open("VLeagueKorea.json", "w", encoding="utf-8") as f:
-        json.dump(events, f, ensure_ascii=False, indent=4)
+    return events
 
-    print("✅ VLeagueKorea.json berhasil diperbarui")
 
 if __name__ == "__main__":
-    scrape_schedule()
+    data = scrape_schedule()
+
+    out_file = "VLeagueKorea.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ Updated {out_file} with {len(data)} events")
