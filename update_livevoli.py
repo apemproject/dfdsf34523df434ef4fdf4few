@@ -13,32 +13,37 @@ def fetch_live_data():
         print("⚠️ Gagal mengambil data:", e)
         return
 
-    # 🔹 Regex fleksibel untuk menangkap semua jadwal, termasuk live
-    pattern = r'(?:<title>.*?</title>)?\s*(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB\s*<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
+    # 🔹 Ambil semua link .m3u8
+    pattern = r'<a href=[\'"]?([^\'"\s>]+\.m3u8)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
     seen = set()
 
-    for date_str, time_str, src, title in matches:
+    for src, title in matches:
         try:
-            # jika tanggal kosong, gunakan tanggal hari ini
-            if not date_str:
-                dt = datetime.now(timezone(timedelta(hours=7)))
-                dt = dt.replace(hour=int(time_str[:2]), minute=int(time_str[3:5]))
+            # cari tanggal dan waktu di sebelah link (format: DD-MM-YYYY HH:MM WIB)
+            dt_match = re.search(r'(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB', html[:html.find(src)])
+            if dt_match:
+                date_str, time_str = dt_match.groups()
+                if not date_str:
+                    dt = datetime.now(timezone(timedelta(hours=7)))
+                    dt = dt.replace(hour=int(time_str[:2]), minute=int(time_str[3:5]))
+                else:
+                    dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
+                    dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
             else:
-                dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
-                dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
+                # jika tidak ditemukan, pakai waktu sekarang
+                dt = datetime.now(timezone(timedelta(hours=7)))
 
             start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
 
-            # filter duplikat
             key = (title.strip(), start_iso, src.strip())
             if key in seen:
                 continue
             seen.add(key)
 
-            # ambil poster JWPlayer
+            # ambil poster JWPlayer jika ada
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
@@ -49,7 +54,7 @@ def fetch_live_data():
                 "poster": poster
             })
         except Exception as e:
-            print("⚠️ Error parsing:", date_str, time_str, title, e)
+            print("⚠️ Error parsing:", title, e)
 
     # hapus jadwal yang sudah lewat
     now = datetime.now(timezone(timedelta(hours=7)))
