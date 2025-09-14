@@ -1,62 +1,60 @@
 import requests
 import json
 from datetime import datetime, timedelta, timezone
-import os
 
-API_URL = "https://api-gw.sports.naver.com/schedule/games/vleague"
+API_URL = "https://api-gw.sports.naver.com/cms/templates/volleyball_new_home_feed"
 OUTPUT_FILE = "VLeagueKorea.json"
 DEBUG_FILE = "debug_raw.json"
 
-# Zona waktu Korea (UTC+9)
 KST = timezone(timedelta(hours=9))
-# Konversi ke UTC+8 sesuai permintaan
 LOCAL_TZ = timezone(timedelta(hours=8))
-
 
 def fetch_data():
     """Ambil data mentah dari API Naver Sport"""
-    params = {
-        "date": datetime.now(KST).strftime("%Y%m%d"),
-        "category": "volleyball",
-    }
-    r = requests.get(API_URL, params=params, timeout=10)
+    r = requests.get(API_URL, timeout=10)
     r.raise_for_status()
     return r.json()
 
-
 def parse_schedule(raw):
-    """Parse jadwal ke format JSON yang diinginkan"""
+    """Parse jadwal ke format JSON sederhana"""
     matches = []
 
     try:
-        game_list = raw.get("result", {}).get("gameList", [])
+        contents = raw.get("result", {}).get("content", [])
     except Exception:
         return matches
 
-    for g in game_list:
-        title = f"{g.get('homeTeamName','')} vs {g.get('awayTeamName','')}"
-        start_time = g.get("gameDateTime")
+    for block in contents:
+        items = block.get("items", [])
+        for g in items:
+            if g.get("type") != "game":
+                continue
 
-        # convert start_time (KST) ke UTC+8
-        if start_time:
-            dt = datetime.fromisoformat(start_time.replace("Z", "+09:00"))
-            dt_local = dt.astimezone(LOCAL_TZ)
-            start_str = dt_local.isoformat()
-        else:
-            start_str = ""
+            home = g.get("homeTeamName", "")
+            away = g.get("awayTeamName", "")
+            title = f"{home} vs {away}"
 
-        matches.append({
-            "title": title,
-            "start": start_str,
-            "src": "",    # bisa diisi otomatis jika ada link streaming
-            "poster": ""  # bisa diisi thumbnail jika ada
-        })
+            start_time = g.get("gameDateTime")
+            if start_time:
+                try:
+                    dt = datetime.fromisoformat(start_time.replace("Z", "+09:00"))
+                    dt_local = dt.astimezone(LOCAL_TZ)
+                    start_str = dt_local.isoformat()
+                except Exception:
+                    start_str = ""
+            else:
+                start_str = ""
+
+            matches.append({
+                "title": title,
+                "start": start_str,
+                "src": "",
+                "poster": ""
+            })
 
     return matches
 
-
 def clean_expired(matches):
-    """Hapus jadwal yang sudah lewat 3 jam dari sekarang"""
     now = datetime.now(LOCAL_TZ)
     cleaned = []
     for m in matches:
@@ -68,11 +66,10 @@ def clean_expired(matches):
             continue
     return cleaned
 
-
 def main():
     raw = fetch_data()
 
-    # simpan debug file
+    # Simpan debug file
     with open(DEBUG_FILE, "w", encoding="utf-8") as f:
         json.dump(raw, f, ensure_ascii=False, indent=2)
 
@@ -89,7 +86,6 @@ def main():
 
     print(f"✅ Saved {len(matches)} matches to {OUTPUT_FILE}")
     print(f"📝 Raw data saved to {DEBUG_FILE}")
-
 
 if __name__ == "__main__":
     main()
