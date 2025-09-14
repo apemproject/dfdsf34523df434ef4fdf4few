@@ -1,1 +1,405 @@
+[
+  {
+    "title": "Ansan OK vs KB Stars | KOVO CUP 2025",
+    "start": "2025-09-15T14:30:00+08:00",
+    "src": "",
+    "poster": "assets/5.jpg"
+  },
+  {
+    "title": "Hyundai Skywalkers vs Samsung Blue Fangs | KOVO CUP 2025",
+    "start": "2025-09-15T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/6.jpg"
+  },
+  {
+    "title": "Woori vs Kepco | KOVO CUP 2025",
+    "start": "2025-09-16T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/8.jpg"
+  },
+  {
+    "title": "KB Stars vs Hyundai Skywalkers | KOVO CUP 2025",
+    "start": "2025-09-17T14:30:00+08:00",
+    "src": "",
+    "poster": "assets/9.jpg"
+  },
+  {
+    "title": "Samsung Blue Fangs vs Ansan OK | KOVO CUP 2025",
+    "start": "2025-09-17T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/10.jpg"
+  },
+  {
+    "title": "KAL Jumbos vs Kepco | KOVO CUP 2025",
+    "start": "2025-09-18T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/12.jpg"
+  },
+  {
+    "title": "Semifinal A1 vs B2 | KOVO CUP 2025",
+    "start": "2025-09-19T14:30:00+08:00",
+    "src": "",
+    "poster": "assets/kovo cup.png"
+  },
+  {
+    "title": "Semifinal B1 vs A2 | KOVO CUP 2025",
+    "start": "2025-09-19T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/kovo cup.png"
+  },
+  {
+    "title": "Final A1/B2 vs A2/B1 | KOVO CUP 2025",
+    "start": "2025-09-20T14:30:00+08:00",
+    "src": "",
+    "poster": "assets/kovo cup.png"
+  },
+  
 
+
+  
+  {
+    "title": "Hyundai Hillstate vs Pink Spiders | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-21T11:30:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/13.jpg"
+  },
+  {
+    "title": "GS Caltex vs AI Peppers | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-21T14:00:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/14.jpg"
+  },
+  {
+    "title": "Expressway Hi-Pass vs Duc Giang | KOVO CUP 2025 (Grup B)",
+    "start": "2025-09-22T13:30:00+07:00",
+    "src": "",
+    "poster": "assets/15.jpg"
+  },
+  {
+    "title": "Red Sparks vs IBK Altos | KOVO CUP 2025 (Grup B)",
+    "start": "2025-09-22T17:00:00+07:00",
+    "src": "",
+    "poster": "assets/16.jpg"
+  },
+  {
+    "title": "Pink Spiders vs AI Peppers | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-23T13:30:00+07:00",
+    "src": "",
+    "poster": "assets/17.jpg"
+  },
+  {
+    "title": "Hyundai Hillstate vs GS Caltex | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-23T17:00:00+07:00",
+    "src": "",
+    "poster": "assets/18.jpg"
+  },
+  {
+    "title": "Duc Giang vs Red Sparks | KOVO CUP 2025 (Grup B)",
+    "start": "2025-09-24T13:30:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/19.jpg"
+  },
+  {
+    "title": "IBK Altos vs Expressway Hi-Pass | KOVO CUP 2025 (Grup B)",
+    "start": "2025-09-24T17:00:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/20.jpg"
+  },
+  {
+    "title": "AI Peppers vs Hyundai Hillstate | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-25T15:00:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/21.jpg"
+  },
+  {
+    "title": "GS Caltex vs Pink Spiders | KOVO CUP 2025 (Grup A)",
+    "start": "2025-09-25T19:00:00+07:00",
+    "src": "",
+    "poster": "assets/21.jpg"
+  },
+  {
+    "title": "IBK Altos vs Duc Giang | KOVO CUP 2025 (Grup B)",
+    "start": "2025-09-26T13:30:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/23.jpg"
+  },
+  {
+    "title": "Red Sparks vs Expressway | KOVO CUP 2025 Hi-Pass (Grup B)",
+    "start": "2025-09-26T17:00:00+07:00",
+    "src": "https://files.catbox.moe/4h8bem.mp4",
+    "poster": "assets/24.jpg"
+  },
+  {
+    "title": "Semifinal A1 vs B2 | KOVO CUP 2025",
+    "start": "2025-09-27T11:30:00+07:00",
+    "src": "",
+    "poster": "assets/kovo cup.png"
+  },
+  {
+    "title": "Semifinal B1 vs A2 | KOVO CUP 2025",
+    "start": "2025-09-27T14:00:00+07:00",
+    "src": "",
+    "poster": "assets/kovo cup.png"
+  },
+  {
+    "title": "Final A1/B2 vs A2/B1 | KOVO CUP 2025",
+    "start": "2025-09-28T11:30:00+07:00",
+    "src": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    "poster": "assets/kovo cup.png"
+  },
+
+
+
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Incheon Korean Air Jumbos",
+    "start": "2025-10-18T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Incheon Heungkuk Life Pink Spiders vs Daejeon Jungkwanjang Red Sparks",
+    "start": "2025-10-18T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Busan OK Savings Bank OKman",
+    "start": "2025-10-19T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "GS Caltex Seoul KIXX vs Hwaseong IBK Altos",
+    "start": "2025-10-19T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon KEPCO Vixtorm vs Seoul Woori Card WooriWON",
+    "start": "2025-10-20T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gwangju Pepper Savings Bank AI PEPPERS vs Gimcheon Korea Expressway Hi-Pass",
+    "start": "2025-10-21T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Incheon Heungkuk Life Pink Spiders vs Suwon Hyundai E&C Hillstate",
+    "start": "2025-10-22T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Uijeongbu KB Insurance Stars",
+    "start": "2025-10-22T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Jungkwanjang Red Sparks vs GS Caltex Seoul KIXX",
+    "start": "2025-10-23T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Incheon Korean Air Jumbos vs Suwon KEPCO Vixtorm",
+    "start": "2025-10-23T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Hwaseong IBK Altos vs Gwangju Pepper Savings Bank AI PEPPERS",
+    "start": "2025-10-24T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Seoul Woori Card WooriWON vs Busan OK Savings Bank OKman",
+    "start": "2025-10-24T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gimcheon Korea Expressway Hi-Pass vs Incheon Heungkuk Life Pink Spiders",
+    "start": "2025-10-25T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Cheonan Hyundai Capital Skywalkers",
+    "start": "2025-10-25T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon Hyundai E&C Hillstate vs Daejeon Jungkwanjang Red Sparks",
+    "start": "2025-10-26T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Uijeongbu KB Insurance Stars vs Incheon Korean Air Jumbos",
+    "start": "2025-10-26T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Hwaseong IBK Altos vs Gimcheon Korea Expressway Hi-Pass",
+    "start": "2025-10-28T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Seoul Woori Card WooriWON vs Daejeon Samsung Bluefangs",
+    "start": "2025-10-28T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "GS Caltex Seoul KIXX vs Incheon Heungkuk Life Pink Spiders",
+    "start": "2025-10-29T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon KEPCO Vixtorm vs Cheonan Hyundai Capital Skywalkers",
+    "start": "2025-10-29T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gwangju Pepper Savings Bank AI PEPPERS vs Suwon Hyundai E&C Hillstate",
+    "start": "2025-10-30T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Uijeongbu KB Insurance Stars vs Busan OK Savings Bank OKman",
+    "start": "2025-10-30T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Jungkwanjang Red Sparks vs Hwaseong IBK Altos",
+    "start": "2025-10-31T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Incheon Korean Air Jumbos vs Seoul Woori Card WooriWON",
+    "start": "2025-10-31T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "GS Caltex Seoul KIXX vs Gimcheon Korea Expressway Hi-Pass",
+    "start": "2025-11-01T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon KEPCO Vixtorm vs Daejeon Samsung Bluefangs",
+    "start": "2025-11-01T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Incheon Heungkuk Life Pink Spiders vs Gwangju Pepper Savings Bank AI PEPPERS",
+    "start": "2025-11-02T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Busan OK Savings Bank OKman",
+    "start": "2025-11-02T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon Hyundai E&C Hillstate vs Hwaseong IBK Altos",
+    "start": "2025-11-04T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Uijeongbu KB Insurance Stars vs Seoul Woori Card WooriWON",
+    "start": "2025-11-04T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gimcheon Korea Expressway Hi-Pass vs Daejeon Jungkwanjang Red Sparks",
+    "start": "2025-11-05T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Incheon Korean Air Jumbos",
+    "start": "2025-11-05T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gwangju Pepper Savings Bank AI PEPPERS vs GS Caltex Seoul KIXX",
+    "start": "2025-11-06T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon KEPCO Vixtorm vs Busan OK Savings Bank OKman",
+    "start": "2025-11-06T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Hwaseong IBK Altos vs Incheon Heungkuk Life Pink Spiders",
+    "start": "2025-11-07T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Cheonan Hyundai Capital Skywalkers vs Seoul Woori Card WooriWON",
+    "start": "2025-11-07T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Gimcheon Korea Expressway Hi-Pass vs Suwon Hyundai E&C Hillstate",
+    "start": "2025-11-08T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Samsung Bluefangs vs Uijeongbu KB Insurance Stars",
+    "start": "2025-11-08T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Daejeon Jungkwanjang Red Sparks vs Gwangju Pepper Savings Bank AI PEPPERS",
+    "start": "2025-11-09T15:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Busan OK Savings Bank OKman vs Incheon Korean Air Jumbos",
+    "start": "2025-11-09T13:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Suwon Hyundai E&C Hillstate vs GS Caltex Seoul KIXX",
+    "start": "2025-11-11T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  },
+  {
+    "title": "Uijeongbu KB Insurance Stars vs Suwon KEPCO Vixtorm",
+    "start": "2025-11-11T18:00:00+08:00",
+    "src": "",
+    "poster": "assets/bg gameonx1.jpg"
+  }
+]
