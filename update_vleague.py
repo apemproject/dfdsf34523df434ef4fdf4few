@@ -5,22 +5,10 @@ import time
 
 OUTPUT_JSON = "VLeagueKorea.json"
 DEBUG_RAW_DIR = "debug_raw"
+DEFAULT_POSTER = "assets/default_poster.png"
 
-# Mapping kode tim terbaru
-TEAM_MAP = {
-    "1001": "Hyundai Capital Skywalkers",
-    "1002": "Korean Air Jumbos",
-    "1004": "Suntory Sunbirds",
-    "1009": "Woori Card",
-    # Tambahkan semua kode tim lain sesuai API
-}
-
-TEAM_POSTER = {
-    "1001": "https://example.com/logo_hcsky.png",
-    "1002": "https://example.com/logo_kajumbos.png",
-    "1004": "https://example.com/logo_suntory.png",
-    "1009": "https://example.com/logo_wooricard.png",
-}
+# Mapping awal (akan diisi otomatis dari API)
+TEAM_MAP = {}
 
 def fetch_schedule(date: str):
     url = (
@@ -34,9 +22,6 @@ def fetch_schedule(date: str):
     return r.json()
 
 def fetch_live_url(game_id: str):
-    """
-    Ambil live URL dari API detail game jika tersedia.
-    """
     url = f"https://api-gw.sports.naver.com/game/{game_id}/live"
     try:
         r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
@@ -45,6 +30,19 @@ def fetch_live_url(game_id: str):
         return data.get("liveStreamUrl", "")
     except:
         return ""
+
+def build_team_mapping(raw_list):
+    """
+    Ambil semua kode tim dari raw JSON dan buat mapping otomatis
+    Jika belum ada di TEAM_MAP, nama tim disamakan dengan kode
+    """
+    global TEAM_MAP
+    for raw in raw_list:
+        for day in raw.get("result", {}).get("dates", []):
+            for game in day.get("gameInfos", []):
+                for code in [game.get("homeTeamCode"), game.get("awayTeamCode")]:
+                    if code and code not in TEAM_MAP:
+                        TEAM_MAP[code] = code  # sementara nama = kode
 
 def parse_schedule(raw, date: str):
     matches = []
@@ -64,18 +62,18 @@ def parse_schedule(raw, date: str):
             start_time = game.get("startTime") or f"{date}T18:00:00+09:00"
             start_dt = datetime.fromisoformat(start_time)
 
-            # Tentukan status pertandingan
+            # Tentukan status dan src
             status = "UPCOMING"
             src = ""
-            if start_dt <= now:
-                if game.get("gameId"):
-                    src = fetch_live_url(str(game["gameId"]))
-                    if src:
-                        status = "LIVE"
-                    else:
-                        status = "FINISHED"
+            if start_dt <= now and game.get("gameId"):
+                src = fetch_live_url(str(game["gameId"]))
+                if src:
+                    status = "LIVE"
+                else:
+                    status = "FINISHED"
 
-            poster = TEAM_POSTER.get(home_code, "")
+            # Poster default dari assets
+            poster = DEFAULT_POSTER
 
             matches.append({
                 "title": title,
@@ -108,15 +106,25 @@ def update_loop():
             for i in range(2)
         ]
         all_matches = []
+        raw_list = []
 
+        # Fetch semua jadwal
         for date in dates:
             try:
                 raw = fetch_schedule(date)
                 save_json(f"{DEBUG_RAW_DIR}_{date}.json", raw)
-                matches = parse_schedule(raw, date)
-                all_matches.extend(matches)
+                raw_list.append(raw)
             except Exception as e:
-                print(f"❌ Error fetching/parsing {date}: {e}")
+                print(f"❌ Error fetching {date}: {e}")
+
+        # Build mapping otomatis dari semua kode tim
+        build_team_mapping(raw_list)
+
+        # Parse schedule
+        for i, raw in enumerate(raw_list):
+            date = dates[i]
+            matches = parse_schedule(raw, date)
+            all_matches.extend(matches)
 
         save_json(OUTPUT_JSON, all_matches)
         print(f"[{datetime.now(korea_tz).strftime('%Y-%m-%d %H:%M:%S')}] Updated {len(all_matches)} matches")
