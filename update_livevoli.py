@@ -13,13 +13,12 @@ def fetch_live_data():
         print("⚠️ Gagal mengambil data:", e)
         return
 
-    # 🔹 Regex fleksibel untuk tangkap semua jadwal, termasuk yang sedang live
-    # Format: tanggal opsional, waktu wajib, WIB, link, judul
-    pattern = r'(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB\s*<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
+    # 🔹 Regex fleksibel untuk menangkap semua jadwal, termasuk live
+    pattern = r'(?:<title>.*?</title>)?\s*(\d{2}-\d{2}-\d{4})?\s*(\d{2}:\d{2})\s*WIB\s*<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
-    seen = set()  # track jadwal unik
+    seen = set()
 
     for date_str, time_str, src, title in matches:
         try:
@@ -33,13 +32,13 @@ def fetch_live_data():
 
             start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S%z")
 
-            # hanya tampilkan satu entri untuk duplikat
+            # filter duplikat
             key = (title.strip(), start_iso, src.strip())
             if key in seen:
                 continue
             seen.add(key)
 
-            # ambil poster JWPlayer jika ada
+            # ambil poster JWPlayer
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
@@ -52,11 +51,11 @@ def fetch_live_data():
         except Exception as e:
             print("⚠️ Error parsing:", date_str, time_str, title, e)
 
-    # Hapus jadwal yang sudah lewat
+    # hapus jadwal yang sudah lewat
     now = datetime.now(timezone(timedelta(hours=7)))
     data = [item for item in data if datetime.fromisoformat(item["start"]) > now]
 
-    # Simpan JSON
+    # simpan JSON
     with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
