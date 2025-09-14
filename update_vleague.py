@@ -1,6 +1,7 @@
 import requests
 import re
 import json
+import hashlib
 from datetime import datetime, timedelta, timezone
 import time
 
@@ -9,6 +10,8 @@ OUTPUT_JSON = "naver_schedule.json"
 DEFAULT_POSTER = "assets/default_poster.png"
 UPDATE_INTERVAL = 60  # detik
 
+last_html_hash = None
+
 def fetch_schedule():
     try:
         r = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
@@ -16,38 +19,42 @@ def fetch_schedule():
         html = r.text
     except Exception as e:
         print("❌ Failed to fetch schedule:", e)
-        return []
+        return [], None
 
+    # hash HTML untuk deteksi perubahan
+    html_hash = hashlib.md5(html.encode("utf-8")).hexdigest()
+    return html, html_hash
+
+def parse_schedule(html):
     matches = []
 
-    # regex untuk ambil setiap div.game
+    # ambil setiap div.game
     game_blocks = re.findall(r'<div[^>]*class=["\']game["\'][^>]*>(.*?)</div>', html, re.DOTALL)
 
     for block in game_blocks:
-        # ambil title
+        # title
         title_match = re.search(r'<span[^>]*class=["\']title["\'][^>]*>(.*?)</span>', block)
         if not title_match:
             continue
         title = title_match.group(1).strip()
 
-        # ambil tanggal & jam
+        # tanggal & jam
         date_match = re.search(r'<span[^>]*class=["\']schedule["\'][^>]*>(.*?)</span>', block)
         if not date_match:
             continue
         date_str = date_match.group(1).strip()
         try:
-            # contoh format: "14 September 2025 | 18:00 WIB"
             start = datetime.strptime(date_str, "%d %B %Y | %H:%M WIB")
             start = start.replace(tzinfo=timezone(timedelta(hours=7)))  # WIB +7
         except:
             continue
         start_iso = start.isoformat()
 
-        # ambil src streaming jika ada
+        # src streaming jika ada
         src_match = re.search(r'<a[^>]*class=["\']streaming["\'][^>]*href=["\'](.*?)["\']', block)
         src = src_match.group(1).strip() if src_match else ""
 
-        # tentukan status
+        # status
         now = datetime.now(timezone(timedelta(hours=7)))
         if src:
             status = "LIVE"
@@ -57,7 +64,7 @@ def fetch_schedule():
             status = "FINISHED"
 
         if status == "FINISHED":
-            continue  # skip yang sudah selesai
+            continue
 
         matches.append({
             "title": title,
@@ -83,10 +90,22 @@ def save_json(data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def update_loop():
+    global last_html_hash
     while True:
-        matches = fetch_schedule()
-        save_json(matches)
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] Updated {len(matches)} matches")
+        html, html_hash = fetch_schedule()
+        if html is None:
+            time.sleep(UPDATE_INTERVAL)
+            continue
+
+        if html_hash == last_html_hash:
+            # tidak ada perubahan, skip parsing
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] No changes, skipping update")
+        else:
+            matches = parse_schedule(html)
+            save_json(matches)
+            last_html_hash = html_hash
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Updated {len(matches)} matches")
+
         time.sleep(UPDATE_INTERVAL)
 
 if __name__ == "__main__":
