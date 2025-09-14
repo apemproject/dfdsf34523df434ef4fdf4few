@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 URL = "https://halu.serv00.net/poli2.php"
 OUTPUT = "LiveVoli.json"
-MATCH_DURATION_HOURS = 2  # asumsi durasi pertandingan 2 jam
+MATCH_DURATION_HOURS = 3  # asumsi durasi pertandingan 2 jam
 
 def fetch_live_data():
     try:
