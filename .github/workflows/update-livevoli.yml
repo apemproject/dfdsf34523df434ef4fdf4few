@@ -2,7 +2,7 @@ name: Update LiveVoli.json
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # jalan tiap 30 menit
+    - cron: "*/5 * * * *"   # jalan tiap 5 menit
   workflow_dispatch:         # bisa dijalankan manual dari tab Actions
 
 jobs:
