@@ -109,7 +109,7 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-6 pt-20 pb-20">
-    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Beach Pro Tour</h2>
+    <h2 id="match-title" class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-6">Beach Volleyball</h2>
     <div id="channel-list" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 p-2 sm:p-4">
 
     </div>
@@ -126,7 +126,7 @@
 
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('../SVLeagueJepang.json');
+      const response = await fetch('../beachvolleyball.json');
       let data = await response.json();
 
       data.sort((a, b) => new Date(a.start) - new Date(b.start));
