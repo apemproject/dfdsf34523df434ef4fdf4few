@@ -1,4 +1,4 @@
-name: Auto Update LiveVoli.json
+name: Auto Update volleyballworld.json
 
 on:
   schedule:
@@ -22,13 +22,13 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Update LiveVoli.json
-        run: python update_livevoli.py
+      - name: Update volleyballworld.json
+        run: python update_volleyballworld.py
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LiveVoli.json
-          git commit -m "Auto update LiveVoli.json" || echo "No changes to commit"
+          git add volleyballworld.json
+          git commit -m "Auto update volleyballworld.json" || echo "No changes to commit"
           git push
