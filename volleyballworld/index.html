@@ -125,7 +125,7 @@
 
     async function loadChannels() {
       const container = document.getElementById('channel-list');
-      const response = await fetch('../LiveVoli.json');
+      const response = await fetch('../volleyballworld.json');
       let data = await response.json();
 
       const now = new Date();
@@ -156,7 +156,7 @@
         const delay = index * 0.1;
 
         container.innerHTML += `
-          <a href="/Watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}" 
+          <a href="/watch?url=${encodeURIComponent(channel.src)}&title=${encodeURIComponent(channel.title)}" 
              class="channel-card bg-slate-900 p-1 sm:p-2 rounded-md shadow-lg ring-1 ${isLive ? 'ring-red-500/100' : 'ring-gray-500/100'} fade-in h-full flex flex-col justify-between text-xs sm:text-sm md:text-base"
              style="animation-delay: ${delay}s;">
             <div class="poster-container w-full aspect-video rounded-md overflow-hidden">
