@@ -3,7 +3,6 @@ from datetime import datetime, timezone, timedelta
 
 URL = "https://halu.serv00.net/poli2.php"
 OUTPUT = "volleyballworld.json"
-MATCH_DURATION_HOURS = 3  # asumsi durasi pertandingan 2 jam
 
 def fetch_live_data():
     try:
@@ -14,18 +13,19 @@ def fetch_live_data():
         print("⚠️ Error fetching HTML:", e)
         return
 
-    # 🔹 Ambil semua jadwal (Live + Upcoming)
+    # 🔹 Ambil semua jadwal (Live + Upcoming) langsung dari sumber
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
-    seen = set()  # untuk duplikat
+    seen = set()  # untuk hindari duplikat
 
     for date_str, time_str, src, title in matches:
         title = title.strip()
         try:
             dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
-            start_iso = dt.strftime("%Y-%m-%dT%H:%M:%S") + "+07:00"
+            dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
+            start_iso = dt.isoformat()
 
             # cek duplikat berdasarkan judul + waktu + src
             key = (title, start_iso, src.strip())
@@ -46,20 +46,13 @@ def fetch_live_data():
         except Exception as e:
             print("⚠️ Error parsing:", date_str, time_str, title, e)
 
-    # 🔹 Filter pertandingan yang sudah selesai (tapi biarkan yang sedang live)
-    now = datetime.now(timezone(timedelta(hours=7)))
-    filtered = []
-    for item in data:
-        start_dt = datetime.fromisoformat(item["start"])
-        end_dt = start_dt + timedelta(hours=MATCH_DURATION_HOURS)
-        if end_dt > now:
-            filtered.append(item)
+    print(f"📊 Total match diambil dari sumber: {len(data)}")
 
-    # 🔹 Simpan JSON
+    # 🔹 Simpan JSON persis mengikuti sumber
     try:
         with open(OUTPUT, "w", encoding="utf-8") as f:
-            json.dump(filtered, f, ensure_ascii=False, indent=2)
-        print(f"💾 Data berhasil disimpan ({len(filtered)} pertandingan).")
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"💾 Data berhasil disimpan ke {OUTPUT} ({len(data)} pertandingan).")
     except Exception as e:
         print("⚠️ Error saving JSON:", e)
 
