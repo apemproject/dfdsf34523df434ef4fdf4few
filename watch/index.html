@@ -27,6 +27,7 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <style>
   body {background:url('/assets/bg gameonx.jpg') no-repeat center center fixed; background-size:cover; color:#e5e7eb; min-height:100vh; position:relative;}
   body::before {content:""; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:-1;}
@@ -131,6 +132,15 @@ const video=document.getElementById("video");
 const skipLeft=document.getElementById("skipLeft");
 const skipRight=document.getElementById("skipRight");
 
+const videoSrc = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"; // ganti ke link m3u8 kamu
+if (video.canPlayType("application/vnd.apple.mpegurl")) {
+  video.src = videoSrc; 
+} else if (Hls.isSupported()) {
+  const hls = new Hls();
+  hls.loadSource(videoSrc);
+  hls.attachMedia(video);
+}
+
 function doSkip(sec){
   video.currentTime=Math.min(Math.max(0,video.currentTime+sec),video.duration);
   if(sec<0){
@@ -186,6 +196,7 @@ video.addEventListener("touchmove",e=>{
   }
 });
 </script>
+
 <script>
 document.getElementById("menu-btn").addEventListener("click",()=>{
   document.getElementById("mobile-menu").classList.toggle("hidden");
