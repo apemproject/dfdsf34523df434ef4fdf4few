@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GameOnX - Watch</title>
 
-<meta name="description" content="Tonton live streaming voli di GameOnX">
-<meta property="og:title" content="GameOnX - Live Streaming">
-<meta property="og:description" content="Tonton live streaming voli di GameOnX">
-<meta property="og:image" content="https://gameonx.my.id/assets/bg mp.png">
-<meta property="og:url" content="https://gameonx.my.id">
-<meta property="og:type" content="website">
+  <meta name="description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:title" content="GameOnX - Live Streaming">
+  <meta property="og:description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:image" content="https://gameonx.my.id/assets/bg mp.png">
+  <meta property="og:url" content="https://gameonx.my.id">
+  <meta property="og:type" content="website">
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GameOnX - Live Streaming">
-<meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
-<meta name="twitter:image" content="https://gameonx.my.id/assets/bg mp.png">
-<meta name="twitter:url" content="https://gameonx.my.id">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GameOnX - Live Streaming">
+  <meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
+  <meta name="twitter:image" content="https://gameonx.my.id/assets/bg mp.png">
+  <meta name="twitter:url" content="https://gameonx.my.id">
 
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-<link rel="manifest" href="assets/site.webmanifest">
-<link rel="stylesheet" href="assets/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="assets/site.webmanifest">
+  <link rel="stylesheet" href="assets/style.css">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -120,8 +120,8 @@
         </div>
       </div>
       <div class="settings-menu" id="settingsMenu"></div>
-      <div id="skipLeft" class="skip-feedback skip-left"></div>
-      <div id="skipRight" class="skip-feedback skip-right"></div>
+      <div id="skipLeft" class="skip-feedback skip-left"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 18l-6-6 6-6"/></svg></div>
+      <div id="skipRight" class="skip-feedback skip-right"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M9 6l6 6-6 6"/></svg></div>
     </div>
   </div>
 </main>
@@ -217,14 +217,58 @@ playBtn.onclick = ()=> {
 volumeBtn.onclick = ()=>{video.muted=!video.muted; updateVolumeIcon();};
 volumeSlider.addEventListener("input",()=>{video.volume=volumeSlider.value; video.muted=video.volume==0; updateVolumeIcon();});
 
-fullscreenBtn.onclick = ()=>{ if(!document.fullscreenElement) player.requestFullscreen().catch(err=>alert(err.message)); else document.exitFullscreen(); };
+fullscreenBtn.onclick = async () => {
+  try {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (!document.fullscreenElement) {
+      await player.requestFullscreen();
+
+      if (isMobile) {
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape').catch(()=>{});
+        } else {
+          player.style.transform = 'rotate(90deg)';
+          player.style.width = '100vh';
+          player.style.height = '100vw';
+          player.style.position = 'fixed';
+          player.style.top = '0';
+          player.style.left = '0';
+          player.style.zIndex = '9999';
+          player.style.background = '#000';
+        }
+      }
+    } else {
+      await document.exitFullscreen();
+
+      player.style.transform = '';
+      player.style.width = '';
+      player.style.height = '';
+      player.style.position = '';
+      player.style.top = '';
+      player.style.left = '';
+      player.style.zIndex = '';
+      player.style.background = '';
+    }
+  } catch (err) {
+    console.log('Fullscreen/Orientation error:', err);
+  }
+};
+
 settingsBtn.onclick = ()=>{settingsMenu.classList.toggle("show"); settingsBtn.classList.toggle("spin");};
 document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show"); settingsBtn.classList.remove("spin");}});
-pipBtn.onclick = ()=>{ if(document.pictureInPictureElement) document.exitPictureInPicture(); else if(document.pictureInPictureEnabled) video.requestPictureInPicture(); };
+
+pipBtn.onclick = ()=>{ 
+  if(document.pictureInPictureElement) document.exitPictureInPicture();
+  else if(document.pictureInPictureEnabled) video.requestPictureInPicture(); 
+};
 video.addEventListener('leavepictureinpicture', ()=> { video.play().catch(()=>{}); });
 
 video.addEventListener("timeupdate",()=>{progressBar.style.width = (video.currentTime/video.duration)*100 + "%";});
-progressContainer.addEventListener("click",e=>{ const pos=(e.offsetX/progressContainer.offsetWidth)*video.duration; video.currentTime=pos; });
+progressContainer.addEventListener("click",e=>{
+  const pos=(e.offsetX/progressContainer.offsetWidth)*video.duration;
+  video.currentTime=pos;
+});
 
 document.addEventListener("keydown",e=>{
   switch(e.key){
@@ -253,53 +297,12 @@ document.addEventListener("keydown", e=>{
   if(e.ctrlKey && e.shiftKey && ["I","J","C","K","M","E"].includes(e.key.toUpperCase())) e.preventDefault();
   if(e.ctrlKey && ["U","S","P"].includes(e.key.toUpperCase())) e.preventDefault();
 });
+</script>
 
-document.getElementById("menu-btn").addEventListener("click",function(){ document.getElementById("mobile-menu").classList.toggle("hidden"); });
-
-function checkOrientation() {
-  if(window.innerWidth > window.innerHeight){
-    if(!document.fullscreenElement) player.requestFullscreen().catch(()=>{});
-  } else {
-    if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
-  }
-}
-window.addEventListener("resize", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
-checkOrientation();
-
-let lastTap = 0;
-player.addEventListener("touchend", function(e){
-  const currentTime = new Date().getTime();
-  const tapLength = currentTime - lastTap;
-  if(tapLength < 300 && tapLength > 0){
-    const x = e.changedTouches[0].clientX;
-    if(x < window.innerWidth/2){
-      video.currentTime = Math.max(0, video.currentTime-10);
-      showSkipFeedback(skipLeft);
-    } else{
-      video.currentTime = Math.min(video.duration, video.currentTime+10);
-      showSkipFeedback(skipRight);
-    }
-  }
-  lastTap = currentTime;
+<script>
+document.getElementById("menu-btn").addEventListener("click",function(){
+  document.getElementById("mobile-menu").classList.toggle("hidden");
 });
-
-function showSkipFeedback(element){
-  element.style.opacity=1;
-  element.style.transition="opacity 0.3s ease-in-out";
-  setTimeout(()=>{element.style.opacity=0;},500);
-}
-
-skipLeft.innerHTML = `<svg viewBox="0 0 100 100" width="80" height="80">
-  <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="rgba(0,0,0,0.5)"/>
-  <polyline points="60,35 40,50 60,65" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <text x="50" y="50" text-anchor="middle" dy="10" font-size="24" fill="white">10</text>
-</svg>`;
-skipRight.innerHTML = `<svg viewBox="0 0 100 100" width="80" height="80">
-  <circle cx="50" cy="50" r="40" stroke="white" stroke-width="4" fill="rgba(0,0,0,0.5)"/>
-  <polyline points="40,35 60,50 40,65" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <text x="50" y="50" text-anchor="middle" dy="10" font-size="24" fill="white">10</text>
-</svg>`;
 </script>
 </body>
 </html>
