@@ -5,61 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GameOnX - Watch</title>
 
-<meta name="description" content="Tonton live streaming voli di GameOnX">
-<meta property="og:title" content="GameOnX - Live Streaming">
-<meta property="og:description" content="Tonton live streaming voli di GameOnX">
-<meta property="og:image" content="https://gameonx.my.id/assets/bg mp.png">
-<meta property="og:url" content="https://gameonx.my.id">
-<meta property="og:type" content="website">
+  <meta name="description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:title" content="GameOnX - Live Streaming">
+  <meta property="og:description" content="Tonton live streaming voli di GameOnX">
+  <meta property="og:image" content="https://gameonx.my.id/assets/bg mp.png">
+  <meta property="og:url" content="https://gameonx.my.id">
+  <meta property="og:type" content="website">
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GameOnX - Live Streaming">
-<meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
-<meta name="twitter:image" content="https://gameonx.my.id/assets/bg mp.png">
-<meta name="twitter:url" content="https://gameonx.my.id">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GameOnX - Live Streaming">
+  <meta name="twitter:description" content="Tonton live streaming voli di GameOnX">
+  <meta name="twitter:image" content="https://gameonx.my.id/assets/bg mp.png">
+  <meta name="twitter:url" content="https://gameonx.my.id">
 
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-<link rel="manifest" href="assets/site.webmanifest">
-<link rel="stylesheet" href="assets/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="assets/site.webmanifest">
+  <link rel="stylesheet" href="assets/style.css">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 <style>
-  body {background:url('/assets/bg gameonx.jpg') no-repeat center center fixed; background-size:cover; color:#e5e7eb; min-height:100vh; position:relative;}
-  body::before {content:""; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:-1;}
-  main {max-width:7xl; margin:auto; padding-top:5rem; padding-bottom:5rem;}
-  .player {position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.5);}
-  .player video {width:100%; height:100%; object-fit:contain;}
-  .progress-container {position:absolute; bottom:48px; left:0; width:100%; height:3px; background:rgba(255,255,255,0.2); cursor:pointer; z-index:30; border-radius:2px; transition:opacity .3s ease; opacity:0;}
-  .progress-bar {width:0%; height:100%; background:limegreen; border-radius:2px; transition:width 0.1s linear;}
-  .controls {position:absolute; bottom:0; left:0; right:0; padding:8px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to top,rgba(0,0,0,.6),transparent); opacity:0; transition:opacity .3s ease;}
-  .btn {background:none; border:none; cursor:pointer; color:white; padding:6px;}
-  .btn svg {stroke:white; stroke-width:1.5; fill:none; width:22px; height:22px;}
-  .left,.right {display:flex; align-items:center; gap:8px;}
-  .volume-live {display:flex; align-items:center; gap:4px;}
-  .volume-container {display:flex; align-items:center;}
-  .volume-slider {width:0; opacity:0; margin-left:6px; transition:all .3s ease; cursor:pointer; -webkit-appearance:none; height:3px; background:rgba(255,255,255,.3); border-radius:2px;}
-  .volume-slider::-webkit-slider-thumb {-webkit-appearance:none; width:10px; height:10px; border-radius:50%; background:white; cursor:pointer;}
-  .volume-container:hover .volume-slider {width:80px; opacity:1;}
-  .live-label {display:flex; align-items:center; gap:4px; font-size:13px; font-weight:500; color:white;}
-  .live-label::before {content:""; display:inline-block; width:8px; height:8px; border-radius:50%; background:#ff2e2e;}
-  .settings-menu {position:absolute; bottom:50px; right:10px; background:rgba(0,0,0,.9); color:white; font-size:14px; border-radius:8px; overflow:hidden; display:flex; flex-direction:column; min-width:160px; opacity:0; transform:translateY(10px); pointer-events:none; transition:all .25s ease;}
-  .settings-menu div {padding:10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;}
-  .settings-menu div:hover {background:rgba(255,255,255,.1);}
-  .settings-menu div.active::before {content:"✓ "; margin-right:4px; color:#fff;}
-  .settings-menu.show {opacity:1; transform:translateY(0); pointer-events:auto;}
-  .hd {font-size:11px; color:lime; margin-left:6px;}
-  .skip-feedback {position:absolute; top:50%; font-size:32px; color:white; opacity:0; pointer-events:none; transform:translateY(-50%) scale(0.5); transition:opacity .3s ease, transform .3s ease; text-align:center;}
-  .skip-left {left:20%;}
-  .skip-right {right:20%;}
-  .skip-feedback.show {opacity:1 !important; transform:translateY(-50%) scale(1) !important;}
-  .skip-feedback span {display:block; font-size:18px; font-weight:bold; margin-top:4px;}
-  #indicator {position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:white; font-size:20px; font-weight:bold; pointer-events:none; opacity:0; transition:opacity .3s ease;}
-  #indicator.show {opacity:1;}
+  body {
+    background: url('/assets/bg gameonx.jpg') no-repeat center center fixed;
+    background-size: cover; color: #e5e7eb; min-height: 100vh; position: relative;
+  }
+  body::before { content:""; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:-1; }
+  main { max-width:7xl; margin:auto; padding-top:5rem; padding-bottom:5rem; }
+  .player { position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
+  .player video { width:100%; height:100%; object-fit:contain; }
+  .progress-container { position: absolute; bottom: 48px; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.2); cursor: pointer; z-index: 30; border-radius: 2px; transition: opacity .3s ease; opacity: 0; }
+  .progress-bar { width: 0%; height: 100%; background: limegreen; border-radius: 2px; transition: width 0.1s linear; }
+  .controls { position:absolute; bottom:0; left:0; right:0; padding:8px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to top,rgba(0,0,0,.6),transparent); opacity:0; transition:opacity .3s ease; }
+  .btn { background:none; border:none; cursor:pointer; color:white; padding:6px; }
+  .btn svg { stroke:white; stroke-width:1.5; fill:none; width:22px; height:22px; }
+  .left,.right { display:flex; align-items:center; gap:8px; }
+  .volume-live { display:flex; align-items:center; gap:4px; }
+  .volume-container { display:flex; align-items:center; }
+  .volume-slider { width:0; opacity:0; margin-left:6px; transition:all .3s ease; cursor:pointer; -webkit-appearance:none; height:3px; background:rgba(255,255,255,.3); border-radius:2px; }
+  .volume-slider::-webkit-slider-thumb { -webkit-appearance:none; width:10px; height:10px; border-radius:50%; background:white; cursor:pointer; }
+  .volume-container:hover .volume-slider { width:80px; opacity:1; }
+  .live-label { display:flex; align-items:center; gap:4px; font-size:13px; font-weight:500; color:white; }
+  .live-label::before { content:""; display:inline-block; width:8px; height:8px; border-radius:50%; background:#ff2e2e; }
+  .settings-menu { position:absolute; bottom:50px; right:10px; background:rgba(0,0,0,.9); color:white; font-size:14px; border-radius:8px; overflow:hidden; display:flex; flex-direction:column; min-width:160px; opacity:0; transform:translateY(10px); pointer-events:none; transition:all .25s ease; }
+  .settings-menu div { padding:10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+  .settings-menu div:hover { background:rgba(255,255,255,.1); }
+  .settings-menu div.active::before { content:"✓ "; margin-right:4px; color:#fff; }
+  .settings-menu.show { opacity:1; transform:translateY(0); pointer-events:auto; }
+  .hd { font-size:11px; color:lime; margin-left:6px; }
+  .skip-feedback { position:absolute; top:50%; transform:translateY(-50%); font-size:32px; color:white; opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  .skip-left { left:20%; }
+  .skip-right { right:20%; }
+  .spin { animation:spin .6s linear; }
+  @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
   @media (max-width:768px){
     .player video{border-radius:0;}
     .settings-menu{font-size:12px;min-width:120px;bottom:40px;right:5px;}
@@ -92,15 +92,25 @@
     <div class="border-b border-white mb-6"></div>
     <div class="player">
       <video id="video" playsinline poster="/assets/poster mp.jpg" muted></video>
-      <div id="progressContainer" class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+
+      <div id="progressContainer" class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
       <div class="controls">
         <div class="left">
           <button class="btn" id="play"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></button>
           <div class="volume-live">
             <div class="volume-container">
-              <button class="btn" id="volume" title="Volume"><svg id="volumeIcon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+              <button class="btn" id="volume" title="Volume">
+                <svg id="volumeIcon" viewBox="0 0 24 24">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+              </button>
               <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-            </div><span class="live-label">Live</span>
+            </div>
+            <span class="live-label">Live</span>
           </div>
         </div>
         <div class="right">
@@ -110,15 +120,8 @@
         </div>
       </div>
       <div class="settings-menu" id="settingsMenu"></div>
-      <div id="skipLeft" class="skip-feedback skip-left">
-        <svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 18l-6-6 6-6"/></svg>
-        <span>-10s</span>
-      </div>
-      <div id="skipRight" class="skip-feedback skip-right">
-        <svg viewBox="0 0 24 24" width="48" height="48"><path d="M9 6l6 6-6 6"/></svg>
-        <span>+10s</span>
-      </div>
-      <div id="indicator"></div>
+      <div id="skipLeft" class="skip-feedback skip-left"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 18l-6-6 6-6"/></svg></div>
+      <div id="skipRight" class="skip-feedback skip-right"><svg viewBox="0 0 24 24" width="48" height="48"><path d="M9 6l6 6-6 6"/></svg></div>
     </div>
   </div>
 </main>
@@ -128,77 +131,143 @@
 </footer>
 
 <script>
-const video=document.getElementById("video");
-const skipLeft=document.getElementById("skipLeft");
-const skipRight=document.getElementById("skipRight");
+const urlParams = new URLSearchParams(window.location.search);
+const streamUrl = urlParams.get('url');
+const title = urlParams.get('title');
+document.getElementById('match-title').textContent = decodeURIComponent(title);
 
-const videoSrc = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"; // ganti ke link m3u8 kamu
-if (video.canPlayType("application/vnd.apple.mpegurl")) {
-  video.src = videoSrc; 
-} else if (Hls.isSupported()) {
-  const hls = new Hls();
-  hls.loadSource(videoSrc);
-  hls.attachMedia(video);
-}
+const video = document.getElementById("video"),
+      playBtn = document.getElementById("play"),
+      volumeBtn = document.getElementById("volume"),
+      volumeSlider = document.getElementById("volumeSlider"),
+      volumeIcon = document.getElementById("volumeIcon"),
+      fullscreenBtn = document.getElementById("fullscreen"),
+      settingsBtn = document.getElementById("settingsBtn"),
+      pipBtn = document.getElementById("pipBtn"),
+      settingsMenu = document.getElementById("settingsMenu"),
+      controls = document.querySelector(".controls"),
+      player = document.querySelector(".player"),
+      skipLeft = document.getElementById("skipLeft"),
+      skipRight = document.getElementById("skipRight"),
+      progressBar = document.getElementById("progressBar"),
+      progressContainer = document.getElementById("progressContainer");
 
-function doSkip(sec){
-  video.currentTime=Math.min(Math.max(0,video.currentTime+sec),video.duration);
-  if(sec<0){
-    skipLeft.classList.add("show");
-    setTimeout(()=>skipLeft.classList.remove("show"),500);
-  } else {
-    skipRight.classList.add("show");
-    setTimeout(()=>skipRight.classList.remove("show"),500);
+function updateVolumeIcon(){
+  if(video.muted || video.volume===0){
+    volumeIcon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+  } else if(video.volume<0.5){
+    volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>';
+  } else{
+    volumeIcon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
   }
 }
+
+function initPlayerState(){
+  playBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  updateVolumeIcon();
+}
+
+let hls;
+if(Hls.isSupported()){
+  hls = new Hls();
+  hls.loadSource(streamUrl);
+  hls.attachMedia(video);
+  hls.on(Hls.Events.MANIFEST_PARSED,function(e,data){
+    video.muted = true;
+    video.play().catch(()=>{});
+    initPlayerState();
+
+    settingsMenu.innerHTML="";
+    let autoDiv = document.createElement("div");
+    autoDiv.textContent = "Auto";
+    autoDiv.classList.add("active");
+    autoDiv.onclick = ()=>{hls.currentLevel=-1; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); autoDiv.classList.add("active"); settingsMenu.classList.remove("show");};
+    settingsMenu.appendChild(autoDiv);
+
+    data.levels.forEach((level,i)=>{
+      let div = document.createElement("div");
+      div.textContent = level.height+"p";
+      if(level.height>=720){ let span = document.createElement("span"); span.className="hd"; span.textContent="HD"; div.appendChild(span); }
+      div.onclick = ()=>{hls.currentLevel=i; [...settingsMenu.children].forEach(c=>c.classList.remove("active")); div.classList.add("active"); settingsMenu.classList.remove("show");};
+      settingsMenu.appendChild(div);
+    });
+    hls.currentLevel=-1;
+  });
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+  video.src=streamUrl;
+  video.autoplay=true;
+  video.muted=true;
+  initPlayerState();
+}
+
+video.addEventListener('click', e => {
+  if(video.muted) { video.muted=false; updateVolumeIcon(); }
+});
+
+playBtn.onclick = ()=> {
+  if(video.paused){
+    video.play();
+    initPlayerState();
+  } else {
+    video.pause();
+    playBtn.innerHTML='<svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>';
+  }
+};
+
+volumeBtn.onclick = ()=>{video.muted=!video.muted; updateVolumeIcon();};
+volumeSlider.addEventListener("input",()=>{video.volume=volumeSlider.value; video.muted=video.volume==0; updateVolumeIcon();});
+
+fullscreenBtn.onclick = ()=>{
+  if(!document.fullscreenElement) player.requestFullscreen().catch(err=>alert(err.message));
+  else document.exitFullscreen();
+};
+
+settingsBtn.onclick = ()=>{settingsMenu.classList.toggle("show"); settingsBtn.classList.toggle("spin");};
+document.addEventListener("click",e=>{if(!settingsMenu.contains(e.target)&&!settingsBtn.contains(e.target)){settingsMenu.classList.remove("show"); settingsBtn.classList.remove("spin");}});
+
+pipBtn.onclick = ()=>{ 
+  if(document.pictureInPictureElement) document.exitPictureInPicture();
+  else if(document.pictureInPictureEnabled) video.requestPictureInPicture(); 
+};
+video.addEventListener('leavepictureinpicture', ()=> { video.play().catch(()=>{}); });
+
+video.addEventListener("timeupdate",()=>{progressBar.style.width = (video.currentTime/video.duration)*100 + "%";});
+progressContainer.addEventListener("click",e=>{
+  const pos=(e.offsetX/progressContainer.offsetWidth)*video.duration;
+  video.currentTime=pos;
+});
 
 document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowLeft"){ doSkip(-10); }
-  if(e.key==="ArrowRight"){ doSkip(10); }
+  switch(e.key){
+    case " ": e.preventDefault(); playBtn.click(); break;
+    case "ArrowLeft": video.currentTime=Math.max(0,video.currentTime-10); skipLeft.style.opacity=1; setTimeout(()=>skipLeft.style.opacity=0,500); break;
+    case "ArrowRight": video.currentTime=Math.min(video.duration,video.currentTime+10); skipRight.style.opacity=1; setTimeout(()=>skipRight.style.opacity=0,500); break;
+    case "f": fullscreenBtn.click(); break;
+    case "m": volumeBtn.click(); break;
+  }
 });
 
-let lastTap=0;
-video.addEventListener("touchend",e=>{
-  let currentTime=new Date().getTime();
-  let tapLength=currentTime-lastTap;
-  if(tapLength<300 && tapLength>0){
-    let x=e.changedTouches[0].clientX;
-    if(x<window.innerWidth/2){ doSkip(-10); }
-    else{ doSkip(10); }
-  }
-  lastTap=currentTime;
-});
+let controlsTimeout;
+function showControls(){
+  controls.style.opacity=1;
+  progressContainer.style.opacity=1;
+  clearTimeout(controlsTimeout);
+  controlsTimeout=setTimeout(()=>{controls.style.opacity=0; progressContainer.style.opacity=0;},3000);
+}
+player.addEventListener("mousemove",showControls);
+player.addEventListener("mouseleave",()=>{controls.style.opacity=0; progressContainer.style.opacity=0;});
+showControls();
 
-let startX,startY;
-video.addEventListener("touchstart",e=>{
-  startX=e.touches[0].clientX;
-  startY=e.touches[0].clientY;
-});
-video.addEventListener("touchmove",e=>{
-  let dx=e.touches[0].clientX-startX;
-  let dy=e.touches[0].clientY-startY;
-  let indicator=document.getElementById("indicator");
-  if(Math.abs(dy)>Math.abs(dx)){
-    if(startX>window.innerWidth/2){
-      video.volume=Math.min(1,Math.max(0,video.volume-dy/300));
-      indicator.innerHTML="🔊 "+Math.round(video.volume*100)+"%";
-    }else{
-      let b=video.style.filter.match(/brightness\((.*?)\)/);
-      let current=b?parseFloat(b[1]):1;
-      let newB=Math.min(2,Math.max(0.1,current-dy/300));
-      video.style.filter=`brightness(${newB})`;
-      indicator.innerHTML="☀️ "+Math.round(newB*100)+"%";
-    }
-    indicator.classList.add("show");
-    clearTimeout(indicator.hideTimer);
-    indicator.hideTimer=setTimeout(()=>indicator.classList.remove("show"),500);
-    startY=e.touches[0].clientY;
-  }
+document.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener("keydown", e=>{
+  if(e.key==="F12") e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ["I","J","C","K","M","E"].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && ["U","S","P"].includes(e.key.toUpperCase())) e.preventDefault();
 });
 </script>
 
 <script>
-document.getElementById("menu-btn").addEventListener("click",()=>{
+document.getElementById("menu-btn").addEventListener("click",function(){
   document.getElementById("mobile-menu").classList.toggle("hidden");
 });
 </script>
