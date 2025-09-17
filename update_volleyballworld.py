@@ -13,27 +13,27 @@ def fetch_live_data():
         print("⚠️ Error fetching HTML:", e)
         return
 
-    # 🔹 Ambil semua jadwal (Live + Upcoming) langsung dari sumber
     pattern = r'(\d{2}-\d{2}-\d{4})\s+(\d{2}:\d{2})\s+WIB\s+<a href=[\'"]?([^\'"\s>]+)[\'"]?.*?>([^<]+)</a>'
     matches = re.findall(pattern, html)
 
     data = []
-    seen = set()  # untuk hindari duplikat
+    seen = set() 
 
     for date_str, time_str, src, title in matches:
         title = title.strip()
         try:
             dt = datetime.strptime(f"{date_str} {time_str}", "%d-%m-%Y %H:%M")
             dt = dt.replace(tzinfo=timezone(timedelta(hours=7)))
+
+            dt = dt + timedelta(minutes=10)
+
             start_iso = dt.isoformat()
 
-            # cek duplikat berdasarkan judul + waktu + src
             key = (title, start_iso, src.strip())
             if key in seen:
                 continue
             seen.add(key)
 
-            # ambil poster dari URL JWPlayer
             m = re.search(r'/media/([^/]+)/', src)
             poster = f"https://cdn.jwplayer.com/v2/media/{m.group(1)}/poster.jpg?width=1920" if m else ""
 
@@ -48,7 +48,6 @@ def fetch_live_data():
 
     print(f"📊 Total match diambil dari sumber: {len(data)}")
 
-    # 🔹 Simpan JSON persis mengikuti sumber
     try:
         with open(OUTPUT, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
