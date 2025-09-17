@@ -3,7 +3,7 @@ name: Auto Update volleyballworld.json
 on:
   schedule:
     # Setiap 30 menit
-    - cron: '*/15 * * * *'
+    - cron: '*/20 * * * *'
   workflow_dispatch: # Bisa dijalankan manual juga
 
 jobs:
