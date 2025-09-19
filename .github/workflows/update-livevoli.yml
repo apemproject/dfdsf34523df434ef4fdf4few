@@ -2,8 +2,8 @@ name: Update Volleyballworld JSON
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # jalan tiap 5 menit
-  workflow_dispatch:        # bisa dijalankan manual dari GitHub Actions tab
+    - cron: "*/5 * * * *" 
+  workflow_dispatch:       
 
 jobs:
   update:
