@@ -1,34 +1,33 @@
-name: Auto Update volleyballworld.json
+name: Update Volleyballworld JSON
 
 on:
   schedule:
-    # Setiap 30 menit
-    - cron: '*/30 * * * *'
-  workflow_dispatch: # Bisa dijalankan manual juga
+    - cron: "*/5 * * * *"  # jalan tiap 5 menit
+  workflow_dispatch:        # bisa dijalankan manual dari GitHub Actions tab
 
 jobs:
-  update-json:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install dependencies
         run: pip install requests
 
-      - name: Update volleyballworld.json
+      - name: Run update script
         run: python update_volleyballworld.py
 
-      - name: Commit and push changes
+      - name: Commit & Push changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           git add volleyballworld.json
-          git commit -m "Auto update volleyballworld.json" || echo "No changes to commit"
+          git commit -m "Update volleyballworld.json [ci skip]" || echo "No changes to commit"
           git push
