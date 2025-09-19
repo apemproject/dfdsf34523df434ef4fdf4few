@@ -3,7 +3,7 @@ name: Update Volleyballworld JSON
 on:
   schedule:
     - cron: "*/5 * * * *" 
-  workflow_dispatch:       
+  workflow_dispatch:
 
 jobs:
   update:
@@ -29,5 +29,9 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add volleyballworld.json
-          git commit -m "Update volleyballworld.json [ci skip]" || echo "No changes to commit"
-          git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Update volleyballworld.json [ci skip]"
+            git push
+          else
+            echo "⚡ Tidak ada perubahan, skip commit & push."
+          fi
