@@ -1,16 +1,11 @@
 [
   {
     "title": "KAL Jumbos vs Samsung Blue Fangs | KOVO CUP 2025",
-    "start": "2025-09-19T14:30:00+08:00",
+    "start": "2025-09-19T18:00:00+08:00",
     "src": "https://livecloud.akamaized.net/sports/lip2_kr2/anmssgpu0004/so12k7tmmahlfblejlecpoip9w36ct6cpg/playlist.m3u8?hdnts=st=1758276303~exp=1758308713~acl=*/so12k7tmmahlfblejlecpoip9w36ct6cpg/*~hmac=a8a0738a8b4253857ccaa8d6934cd0a56f6606b690b9ead80b86396ac7ff436f",
     "poster": "assets/kovo cup.png"
   },
-  {
-    "title": "Semifinal B1 vs A2 | KOVO CUP 2025",
-    "start": "2025-09-19T18:00:00+08:00",
-    "src": "",
-    "poster": "assets/kovo cup.png"
-  },
+
   {
     "title": "Final A1/B2 vs A2/B1 | KOVO CUP 2025",
     "start": "2025-09-20T14:30:00+08:00",
