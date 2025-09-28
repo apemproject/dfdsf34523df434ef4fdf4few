@@ -1,11 +1,5 @@
 [
-  {
-    "title": "MBC",
-    "start": "",
-    "src": "https://ns1.tjmbc.co.kr/live/myStream.sdp/playlist.m3u8",
-    "poster": ""
-  },
-  
+ 
   {
     "title": "Incheon Heungkuk Life Pink Spiders vs Daejeon Jungkwanjang Red Sparks",
     "start": "2025-10-18T15:00:00+08:00",
@@ -251,5 +245,11 @@
     "start": "2025-11-11T18:00:00+08:00",
     "src": "",
     "poster": "assets/man/35.jpg"
+  },
+  {
+    "title": "MBC",
+    "start": "",
+    "src": "https://ns1.tjmbc.co.kr/live/myStream.sdp/playlist.m3u8",
+    "poster": ""
   }
 ]
