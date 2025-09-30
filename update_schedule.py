@@ -2,11 +2,11 @@ import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
 
 PLAYLIST_ID = "FljcQiNy"
-BASE_URL = f"https://cdn.jwplayer.com/v2/playlists/{PLAYLIST_ID}"
+BASE_URL = f"https://zapp-5434-volleyball-tv.web.app/jw/playlists/{PLAYLIST_ID}"
 OUTFILE = "volleyballbeach.json"
 
 def fetch_schedule_all(limit=50):
-    """Ambil semua jadwal dari JWPlayer dengan pagination"""
+    """Ambil semua jadwal dengan pagination"""
     all_entries = []
     offset = 0
 
@@ -17,7 +17,7 @@ def fetch_schedule_all(limit=50):
         r.raise_for_status()
         data = r.json()
 
-        entries = data.get("playlist", [])
+        entries = data.get("entry", [])
         if not entries:
             break
 
@@ -71,7 +71,7 @@ def parse_entries(entries):
                 src = link.get("href")
                 break
 
-        media_id = e.get("id") or e.get("mediaid")
+        media_id = e.get("id")
 
         result.append({
             "title": title,
