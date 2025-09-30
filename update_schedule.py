@@ -1,33 +1,14 @@
 import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
 
-PLAYLIST_ID = "FljcQiNy"
-BASE_URL = f"https://zapp-5434-volleyball-tv.web.app/jw/playlists/{PLAYLIST_ID}"
+URL = "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy"
 OUTFILE = "volleyballbeach.json"
 
-def fetch_schedule_all(limit=50):
-    """Ambil semua jadwal dengan pagination"""
-    all_entries = []
-    offset = 0
-
-    while True:
-        url = f"{BASE_URL}?page_limit={limit}&page_offset={offset}"
-        print(f"🔎 Fetch {url}")
-        r = requests.get(url, timeout=20)
-        r.raise_for_status()
-        data = r.json()
-
-        entries = data.get("entry", [])
-        if not entries:
-            break
-
-        all_entries.extend(entries)
-        if len(entries) < limit:
-            break
-
-        offset += limit
-
-    return all_entries
+def fetch_schedule():
+    r = requests.get(URL, timeout=20)
+    r.raise_for_status()
+    data = r.json()
+    return data.get("entry", [])
 
 def parse_entries(entries):
     result = []
@@ -83,7 +64,7 @@ def parse_entries(entries):
 
 def main():
     try:
-        entries = fetch_schedule_all(limit=50)
+        entries = fetch_schedule()
     except Exception as e:
         print("❌ Gagal fetch data:", e)
         sys.exit(1)
