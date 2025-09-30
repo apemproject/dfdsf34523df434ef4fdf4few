@@ -2,7 +2,7 @@ import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
 
 URL = "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy"
-OUTFILE = "volleyballworld.json"
+OUTFILE = "volleyballbeach.json"
 
 def fetch_schedule():
     r = requests.get(URL, timeout=20)
