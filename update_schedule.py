@@ -15,7 +15,6 @@ def parse_entries(entries):
     for e in entries:
         title = e.get("title")
 
-        # ambil poster dari media_group
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
@@ -23,7 +22,6 @@ def parse_entries(entries):
             if imgs:
                 poster = imgs[-1]["src"]
 
-        # ambil start time dengan beberapa fallback
         ext = e.get("extensions", {})
         start = (
             e.get("scheduled_start") or
@@ -31,7 +29,6 @@ def parse_entries(entries):
             ext.get("match_date")
         )
 
-        # fallback ke actions[].options.startDate (timestamp ms)
         if not start and "actions" in ext:
             for act in ext.get("actions", []):
                 if act.get("type") == "add_to_calendar":
@@ -40,13 +37,11 @@ def parse_entries(entries):
                         start = datetime.fromtimestamp(ts / 1000, tz=timezone.utc).isoformat()
                         break
 
-        # konversi ke WIB (UTC+7)
         if start and isinstance(start, str):
             dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
             dt = dt.astimezone(timezone(timedelta(hours=7)))
             start = dt.isoformat()
 
-        # ambil src langsung dari links
         src = None
         for link in e.get("links", []):
             if link.get("type") == "application/vnd.apple.mpegurl":
