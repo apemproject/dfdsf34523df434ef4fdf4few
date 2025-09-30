@@ -14,6 +14,8 @@ def parse_entries(entries):
     result = []
     for e in entries:
         title = e.get("title")
+
+        # ambil poster dari media_group
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
@@ -21,23 +23,27 @@ def parse_entries(entries):
             if imgs:
                 poster = imgs[-1]["src"]
 
-        ext = e.get("extensions", {})
-        start = ext.get("VCH.ScheduledStart")
-
+        # ambil start time (prioritas root, fallback ke extensions)
+        start = e.get("scheduled_start") or e.get("extensions", {}).get("VCH.ScheduledStart")
         if start:
             dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
             dt = dt.astimezone(timezone(timedelta(hours=7)))
             start = dt.isoformat()
 
-        media_id = e["id"]
+        # ambil src langsung dari links
+        src = None
+        for link in e.get("links", []):
+            if link.get("type") == "application/vnd.apple.mpegurl":
+                src = link.get("href")
+                break
 
-        src = f"https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/{media_id}/live.isml/.m3u8"
+        media_id = e.get("id")
 
         result.append({
             "title": title,
             "start": start,
-            "src": src,
-            "poster": f"https://cdn.jwplayer.com/v2/media/{media_id}/poster.jpg?width=1920"
+            "src": src or f"https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/{media_id}/live.isml/.m3u8",
+            "poster": poster or f"https://cdn.jwplayer.com/v2/media/{media_id}/poster.jpg?width=1920"
         })
     return result
 
