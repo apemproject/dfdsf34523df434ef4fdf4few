@@ -1,20 +1,40 @@
 import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
 
-URL = "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy"
+PLAYLIST_ID = "FljcQiNy"
+BASE_URL = f"https://cdn.jwplayer.com/v2/playlists/{PLAYLIST_ID}"
 OUTFILE = "volleyballbeach.json"
 
-def fetch_schedule():
-    r = requests.get(URL, timeout=20)
-    r.raise_for_status()
-    data = r.json()
-    return data.get("entry", [])
+def fetch_schedule_all(limit=50):
+    """Ambil semua jadwal dari JWPlayer dengan pagination"""
+    all_entries = []
+    offset = 0
+
+    while True:
+        url = f"{BASE_URL}?page_limit={limit}&page_offset={offset}"
+        print(f"🔎 Fetch {url}")
+        r = requests.get(url, timeout=20)
+        r.raise_for_status()
+        data = r.json()
+
+        entries = data.get("playlist", [])
+        if not entries:
+            break
+
+        all_entries.extend(entries)
+        if len(entries) < limit:
+            break
+
+        offset += limit
+
+    return all_entries
 
 def parse_entries(entries):
     result = []
     for e in entries:
         title = e.get("title")
 
+        # ambil poster
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
@@ -22,6 +42,7 @@ def parse_entries(entries):
             if imgs:
                 poster = imgs[-1]["src"]
 
+        # ambil start time dengan prioritas
         ext = e.get("extensions", {})
         start = (
             e.get("scheduled_start") or
@@ -29,26 +50,33 @@ def parse_entries(entries):
             ext.get("match_date")
         )
 
+        # fallback ke actions.startDate (epoch ms)
         if not start and "actions" in ext:
             for act in ext.get("actions", []):
                 if act.get("type") == "add_to_calendar":
                     ts = act.get("options", {}).get("startDate")
                     if ts:
-                        start = datetime.fromtimestamp(ts / 1000, tz=timezone.utc).isoformat()
+                        dt = datetime.fromtimestamp(ts / 1000, tz=timezone.utc)
+                        start = dt.isoformat()
                         break
 
-        if start and isinstance(start, str):
-            dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
-            dt = dt.astimezone(timezone(timedelta(hours=7)))
-            start = dt.isoformat()
+        # konversi string waktu ke WIB
+        if isinstance(start, str):
+            try:
+                dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
+                dt = dt.astimezone(timezone(timedelta(hours=7)))
+                start = dt.isoformat()
+            except Exception:
+                pass
 
+        # ambil src HLS
         src = None
         for link in e.get("links", []):
             if link.get("type") == "application/vnd.apple.mpegurl":
                 src = link.get("href")
                 break
 
-        media_id = e.get("id")
+        media_id = e.get("id") or e.get("mediaid")
 
         result.append({
             "title": title,
@@ -60,7 +88,7 @@ def parse_entries(entries):
 
 def main():
     try:
-        entries = fetch_schedule()
+        entries = fetch_schedule_all(limit=50)
     except Exception as e:
         print("❌ Gagal fetch data:", e)
         sys.exit(1)
