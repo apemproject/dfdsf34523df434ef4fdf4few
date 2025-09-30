@@ -34,7 +34,6 @@ def parse_entries(entries):
     for e in entries:
         title = e.get("title")
 
-        # ambil poster
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
@@ -42,7 +41,6 @@ def parse_entries(entries):
             if imgs:
                 poster = imgs[-1]["src"]
 
-        # ambil start time dengan prioritas
         ext = e.get("extensions", {})
         start = (
             e.get("scheduled_start") or
@@ -50,7 +48,6 @@ def parse_entries(entries):
             ext.get("match_date")
         )
 
-        # fallback ke actions.startDate (epoch ms)
         if not start and "actions" in ext:
             for act in ext.get("actions", []):
                 if act.get("type") == "add_to_calendar":
@@ -60,7 +57,6 @@ def parse_entries(entries):
                         start = dt.isoformat()
                         break
 
-        # konversi string waktu ke WIB
         if isinstance(start, str):
             try:
                 dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
@@ -69,7 +65,6 @@ def parse_entries(entries):
             except Exception:
                 pass
 
-        # ambil src HLS
         src = None
         for link in e.get("links", []):
             if link.get("type") == "application/vnd.apple.mpegurl":
