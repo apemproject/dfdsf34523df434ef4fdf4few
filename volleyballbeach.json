@@ -18,18 +18,6 @@
     "poster": "https://cdn.jwplayer.com/v2/media/O2Urm6Go/poster.jpg?width=720"
   },
   {
-    "title": "Omag-Mt San Giovanni In Marignano -  Igor Gorgonzola Novara | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/nlqc301T/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/nlqc301T/poster.jpg?width=720"
-  },
-  {
-    "title": "Cbf Balducci Hr Macerata -  Cuneo Granda Volley | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/V8oWkKsg/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/V8oWkKsg/poster.jpg?width=720"
-  },
-  {
     "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/9VSmyYux/live.isml/.m3u8",
@@ -42,16 +30,28 @@
     "poster": "https://cdn.jwplayer.com/v2/media/lfAQGDx0/poster.jpg?width=720"
   },
   {
-    "title": "Qualification | Central Court | Elite 16 Newport 2025",
-    "start": "2025-10-07T21:57:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/HoEwDSAc/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/HoEwDSAc/poster.jpg?width=720"
+    "title": "Omag-Mt San Giovanni In Marignano -  Igor Gorgonzola Novara | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/nlqc301T/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/nlqc301T/poster.jpg?width=720"
+  },
+  {
+    "title": "Cbf Balducci Hr Macerata -  Cuneo Granda Volley | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/V8oWkKsg/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/V8oWkKsg/poster.jpg?width=720"
   },
   {
     "title": "Qualification | Court 3 | Elite 16 Newport 2025",
     "start": "2025-10-07T21:57:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/rVfA5UbN/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/rVfA5UbN/poster.jpg?width=720"
+  },
+  {
+    "title": "Qualification | Central Court | Elite 16 Newport 2025",
+    "start": "2025-10-07T21:57:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/HoEwDSAc/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/HoEwDSAc/poster.jpg?width=720"
   },
   {
     "title": "Qualification | Court 2 | Elite 16 Newport 2025",
@@ -96,6 +96,18 @@
     "poster": "https://cdn.jwplayer.com/v2/media/tEwwx53m/poster.jpg?width=720"
   },
   {
+    "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-A",
+    "start": "2025-10-10T16:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/IFmtmlq1/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/IFmtmlq1/poster.jpg?width=720"
+  },
+  {
+    "title": "Osaka Marvelous - Victorina Himeji | Round 1-A",
+    "start": "2025-10-10T17:00:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/qcmDPtJN/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/qcmDPtJN/poster.jpg?width=720"
+  },
+  {
     "title": "Main Draw & Quarter Finals | Day 4 | Central Court | Elite 16 Newport 2025",
     "start": "2025-10-10T22:57:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/9yYI9qvJ/live.isml/.m3u8",
@@ -106,17 +118,5 @@
     "start": "2025-10-10T22:57:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/bbepfcok/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/bbepfcok/poster.jpg?width=720"
-  },
-  {
-    "title": "TBC v TBC | Quarter Final (M) | Newport 2025",
-    "start": "2025-10-11T03:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/WUA1EXMU/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/WUA1EXMU/poster.jpg?width=720"
-  },
-  {
-    "title": "TBC v TBC | Quarter Final (M) | Newport 2025",
-    "start": "2025-10-11T03:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/xGnbgsVk/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/xGnbgsVk/poster.jpg?width=720"
   }
 ]
