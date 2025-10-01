@@ -18,7 +18,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
       - name: Run updater
         run: python update_schedule.py
@@ -28,6 +28,6 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add volleyballbeach.json
+          git add schedules/*.json
           git commit -m "Update schedule [skip ci]" || echo "No changes"
           git push
