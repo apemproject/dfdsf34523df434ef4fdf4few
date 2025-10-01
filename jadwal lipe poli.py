@@ -4,8 +4,9 @@ from datetime import datetime, timezone, timedelta
 # daftar URL + nama file JSON
 SOURCES = [
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvLeague.json"},
-    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/8PkxmOMj", "outfile": "beach_live.json"},
-    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy", "outfile": "indoor_live.json"},
+    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy", "outfile": "volleyballworld.json"},
+    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/MeMYn3wh", "outfile": "volleyballbeach.json"},
+
 ]
 
 def fetch_schedule(url):
