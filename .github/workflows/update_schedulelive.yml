@@ -21,7 +21,7 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Run updater
-        run: python update_schedule.py
+        run: python schedulelive.py
 
       - name: Commit changes
         if: success()
