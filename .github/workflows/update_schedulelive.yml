@@ -21,7 +21,7 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Run updater
-        run: python jadwal lipe poli.py
+        run: python jadwallipepoli.py
 
       - name: Commit changes
         if: success()
