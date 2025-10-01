@@ -98,6 +98,12 @@
   {
     "title": "VolleyWroclaw - ECO HARPOON LOS Nowy Dwor Mazowiecki | Round 1",
     "start": "2025-10-09T22:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/0oa5ULYV/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/0oa5ULYV/poster.jpg?width=720"
+  },
+  {
+    "title": "VolleyWroclaw - ECO HARPOON LOS Nowy Dwor Mazowiecki | Round 1",
+    "start": "2025-10-09T22:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/GtezdZsM/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/GtezdZsM/poster.jpg?width=720"
   },
@@ -108,15 +114,9 @@
     "poster": "https://cdn.jwplayer.com/v2/media/dBnnl5aM/poster.jpg?width=720"
   },
   {
-    "title": "Osaka Marvelous - Victorina Himeji | Round 1-A",
-    "start": "2025-10-10T17:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/LYd1BRdc/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/LYd1BRdc/poster.jpg?width=720"
-  },
-  {
-    "title": "PGE Budowlani Lodz - ITA TOOLS Stal Mielec | Round 1",
-    "start": "2025-10-10T22:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/tAFokF7c/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/tAFokF7c/poster.jpg?width=720"
+    "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-A",
+    "start": "2025-10-10T16:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/leH3Fg7q/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/leH3Fg7q/poster.jpg?width=720"
   }
 ]
