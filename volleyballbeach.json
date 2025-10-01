@@ -1,5 +1,29 @@
 [
   {
+    "title": "Bartoccini-Mc Restauri Perugia -  Megabox Ondulati Del Savio Vallefoglia | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/pk7rxYOs/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/pk7rxYOs/poster.jpg?width=720"
+  },
+  {
+    "title": "Il Bisonte Firenze -  Reale Mutua Fenera Chieri 76 | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/KNKnPG9V/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/KNKnPG9V/poster.jpg?width=720"
+  },
+  {
+    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/RFw1AIor/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/RFw1AIor/poster.jpg?width=720"
+  },
+  {
+    "title": "Eurotek Laica Uyba -  Prosecco Doc A.Carraro Imoco Conegliano | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/FfxjGug6/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/FfxjGug6/poster.jpg?width=720"
+  },
+  {
     "title": "Qualification | Court 3 | Elite 16 Newport 2025",
     "start": "2025-10-07T21:57:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/rVfA5UbN/live.isml/.m3u8",
@@ -94,29 +118,5 @@
     "start": "2025-10-11T05:00:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/CnlFk15g/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/CnlFk15g/poster.jpg?width=720"
-  },
-  {
-    "title": "TBC v TBC | Quarter Final (W) | Newport 2025",
-    "start": "2025-10-11T05:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/dia70wA9/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/dia70wA9/poster.jpg?width=720"
-  },
-  {
-    "title": "TBC v TBC | Quarter Final (W) | Newport 2025",
-    "start": "2025-10-11T06:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/r7Wwc9Pw/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/r7Wwc9Pw/poster.jpg?width=720"
-  },
-  {
-    "title": "TBC v TBC | Quarter Final (W) | Newport 2025",
-    "start": "2025-10-11T06:00:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/sO0RdI1L/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/sO0RdI1L/poster.jpg?width=720"
-  },
-  {
-    "title": "Semi-Finals, Bronze & Gold | Day 5 | Central Court | Elite 16 Newport 2025",
-    "start": "2025-10-11T22:57:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/lON4O5vq/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/lON4O5vq/poster.jpg?width=720"
   }
 ]
