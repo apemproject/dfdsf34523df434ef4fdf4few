@@ -1,9 +1,9 @@
-name: Update Schedules 
+name: Update Schedules
 
 on:
   schedule:
-    - cron: "*/5 * * * *" 
-  workflow_dispatch:     
+    - cron: "*/5 * * * *"  
+  workflow_dispatch:
 
 jobs:
   update:
@@ -25,10 +25,11 @@ jobs:
         run: python jadwallipepoli.py
 
       - name: Commit changes
-        if: success()
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
+          # Tambahkan semua file JSON yang diupdate
           git add jepangsvleague.json liveeventvoli.json volleyballbeach.json volleyballworld.json
+          # Commit hanya jika ada perubahan
           git diff --cached --quiet || git commit -m "Update schedules [skip ci]"
           git push
