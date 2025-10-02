@@ -1,5 +1,6 @@
-import requests, json, os, sys
+import requests, json, os
 from datetime import datetime, timezone, timedelta
+import subprocess
 
 SOURCES = [
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvleague.json"},
@@ -18,30 +19,14 @@ def parse_entries(entries):
     result = []
     for e in entries:
         title = e.get("title")
-
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
             imgs = media_group[0].get("media_item", [])
             if imgs:
                 poster = imgs[-1]["src"]
-
         ext = e.get("extensions", {})
-        start = (
-            e.get("scheduled_start") or
-            ext.get("VCH.ScheduledStart") or
-            ext.get("match_date")
-        )
-
-        if not start and "actions" in ext:
-            for act in ext.get("actions", []):
-                if act.get("type") == "add_to_calendar":
-                    ts = act.get("options", {}).get("startDate")
-                    if ts:
-                        dt = datetime.fromtimestamp(ts / 1000, tz=timezone.utc)
-                        start = dt.isoformat()
-                        break
-
+        start = e.get("scheduled_start") or ext.get("VCH.ScheduledStart") or ext.get("match_date")
         if isinstance(start, str):
             try:
                 dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
@@ -49,14 +34,12 @@ def parse_entries(entries):
                 start = dt.isoformat()
             except Exception:
                 pass
-
         media_id = e.get("id")
         src = None
         for link in e.get("links", []):
             if link.get("type") == "application/vnd.apple.mpegurl":
                 src = link.get("href")
                 break
-
         result.append({
             "title": title,
             "start": start,
@@ -70,9 +53,25 @@ def load_json_safe(filename):
         try:
             with open(filename, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
+        except json.JSONDecodeError:
             return []
-    return []
+    else:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump([], f, ensure_ascii=False, indent=2)
+        return []
+
+def save_json_and_commit(filename, data):
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"📊 Update tersimpan di {filename} ({len(data)} jadwal).")
+    
+    try:
+        subprocess.run(["git", "add", filename], check=True)
+        subprocess.run(["git", "commit", "-m", f"Update {filename} [skip ci]"], check=True)
+        subprocess.run(["git", "push"], check=True)
+        print(f"✅ {filename} berhasil di-commit & di-push")
+    except subprocess.CalledProcessError:
+        print(f"⚠️ Gagal commit/push {filename}, pastikan repo sudah dikonfigurasi")
 
 def main():
     for s in SOURCES:
@@ -82,23 +81,14 @@ def main():
             print(f"❌ Gagal fetch {s['url']}: {e}")
             continue
 
-        print(f"{s['outfile']} → fetched {len(entries)} entries") 
-        if entries:
-            print(f"Contoh entry mentah: {json.dumps(entries[0], ensure_ascii=False, indent=2)}")
-
         new_data = parse_entries(entries)
-        print(f"{s['outfile']} → parsed {len(new_data)} entries") 
-
         old_data = load_json_safe(s["outfile"])
 
         if old_data == new_data:
             print(f"⚡ Tidak ada update → skip {s['outfile']}.")
             continue
 
-        with open(s["outfile"], "w", encoding="utf-8") as f:
-            json.dump(new_data, f, ensure_ascii=False, indent=2)
-
-        print(f"📊 Update tersimpan di {s['outfile']} ({len(new_data)} jadwal).")
+        save_json_and_commit(s["outfile"], new_data)
 
 if __name__ == "__main__":
     main()
