@@ -60,16 +60,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/iouMlGIi/poster.jpg?width=720"
   },
   {
-    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-B",
-    "start": "2025-10-12T10:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/rrTPPeRA/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/rrTPPeRA/poster.jpg?width=720"
-  },
-  {
     "title": "Aranmare Yamagata - Astemo Rivale Ibaraki | Round 1-B",
     "start": "2025-10-12T10:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/cb2RlFCq/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/cb2RlFCq/poster.jpg?width=720"
+  },
+  {
+    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRrkn/media/rrTPPeRA/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/rrTPPeRA/poster.jpg?width=720"
   },
   {
     "title": "Queenseis Kariya - Gunma Greenwings | Round 1-A",
