@@ -12,12 +12,6 @@
     "poster": "https://cdn.jwplayer.com/v2/media/aSwdGnND/poster.jpg?width=720"
   },
   {
-    "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/2RRVsmv8/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/2RRVsmv8/poster.jpg?width=720"
-  },
-  {
     "title": "Omag-Mt San Giovanni In Marignano -  Igor Gorgonzola Novara | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/5pwH8Yxe/live.isml/.m3u8",
@@ -34,6 +28,12 @@
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/8t86Q2fb/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/8t86Q2fb/poster.jpg?width=720"
+  },
+  {
+    "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/2RRVsmv8/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/2RRVsmv8/poster.jpg?width=720"
   },
   {
     "title": "Il Bisonte Firenze -  Reale Mutua Fenera Chieri 76 | Round 1",
