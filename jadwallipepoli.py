@@ -52,44 +52,48 @@ def parse_entries(entries):
                 break
 
         media_id = e.get("id")
-
         result.append({
             "title": title,
             "start": start,
-            "src": src or f"https://livecdn.euw1-0005.jwplive.com/live/sites/fM9jRkn/media/{media_id}/live.isml/.m3u8",
+            "src": src or f"https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/{media_id}/live.isml/.m3u8",
             "poster": poster or f"https://cdn.jwplayer.com/v2/media/{media_id}/poster.jpg?width=1920"
         })
     return result
 
-def main():
-    updated_files = []
-    for src in SOURCES:
-        url = src["url"]
-        outfile = src["outfile"]
+def update_file(outfile, data):
+    # Cek apakah ada perubahan
+    old_data = []
+    if os.path.exists(outfile):
+        with open(outfile, "r", encoding="utf-8") as f:
+            try:
+                old_data = json.load(f)
+            except Exception:
+                old_data = []
 
+    if old_data != data:
+        with open(outfile, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"📊 Update tersimpan di {outfile} ({len(data)} jadwal).")
+        return True
+    else:
+        print(f"⚡ Tidak ada update → skip {outfile}.")
+        return False
+
+def main():
+    any_update = False
+    for src in SOURCES:
         try:
-            entries = fetch_schedule(url)
+            entries = fetch_schedule(src["url"])
         except Exception as e:
-            print(f"❌ Gagal fetch data dari {url}: {e}")
+            print(f"❌ Gagal fetch data dari {src['url']}: {e}")
             continue
 
-        new_data = parse_entries(entries)
+        parsed = parse_entries(entries)
+        updated = update_file(src["outfile"], parsed)
+        if updated:
+            any_update = True
 
-        if os.path.exists(outfile):
-            with open(outfile, "r", encoding="utf-8") as f:
-                old_data = json.load(f)
-        else:
-            old_data = []
-
-        if old_data != new_data:
-            with open(outfile, "w", encoding="utf-8") as f:
-                json.dump(new_data, f, ensure_ascii=False, indent=2)
-            updated_files.append(outfile)
-            print(f"📊 Update tersimpan di {outfile} ({len(new_data)} jadwal).")
-        else:
-            print(f"⚡ Tidak ada update → skip {outfile}.")
-
-    if not updated_files:
+    if not any_update:
         print("⚡ Tidak ada update di semua sumber → skip commit.")
         sys.exit(0)
 
