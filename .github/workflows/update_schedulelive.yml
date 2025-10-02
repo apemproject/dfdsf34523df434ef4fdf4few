@@ -1,16 +1,16 @@
-name: Update Schedule Live
+name: Update Schedules 
 
 on:
   schedule:
-    - cron: "* * * * *" 
-  workflow_dispatch:
+    - cron: "*/5 * * * *" 
+  workflow_dispatch:     
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -19,19 +19,16 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install requests
 
       - name: Run updater
         run: python jadwallipepoli.py
 
-      - name: Configure Git
+      - name: Commit changes
+        if: success()
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-
-      - name: Commit & Push changes
-        run: |
-          git add *.json
-          # hanya commit jika ada perubahan
-          git diff --cached --quiet || git commit -m "Auto update schedule [skip ci]"
+          git add jepangsvleague.json liveeventvoli.json volleyballbeach.json volleyballworld.json
+          git diff --cached --quiet || git commit -m "Update schedules [skip ci]"
           git push
