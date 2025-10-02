@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 # daftar URL + nama file JSON
 SOURCES = [
-    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvLeague.json"},
+    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvleague.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy", "outfile": "liveeventvoli.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/MeMYn3wh", "outfile": "volleyballbeach.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/eMqXVhhW", "outfile": "volleyballworld.json"},
