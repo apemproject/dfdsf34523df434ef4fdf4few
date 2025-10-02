@@ -1,7 +1,6 @@
 import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
 
-# daftar URL + nama file JSON
 SOURCES = [
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvleague.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy", "outfile": "liveeventvoli.json"},
@@ -67,7 +66,6 @@ def parse_entries(entries):
     return result
 
 def load_json_safe(filename):
-    """Membaca JSON tapi fallback ke list kosong jika error atau file kosong"""
     if os.path.exists(filename):
         try:
             with open(filename, "r", encoding="utf-8") as f:
@@ -84,7 +82,12 @@ def main():
             print(f"❌ Gagal fetch {s['url']}: {e}")
             continue
 
+        print(f"{s['outfile']} → fetched {len(entries)} entries") 
+        if entries:
+            print(f"Contoh entry mentah: {json.dumps(entries[0], ensure_ascii=False, indent=2)}")
+
         new_data = parse_entries(entries)
+        print(f"{s['outfile']} → parsed {len(new_data)} entries") 
 
         old_data = load_json_safe(s["outfile"])
 
