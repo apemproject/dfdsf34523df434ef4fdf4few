@@ -1,6 +1,5 @@
-import requests, json, os
+import requests, json, os, sys
 from datetime import datetime, timezone, timedelta
-import subprocess
 
 SOURCES = [
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvleague.json"},
@@ -19,7 +18,6 @@ def parse_entries(entries):
     result = []
     for e in entries:
         title = e.get("title")
-
         poster = None
         media_group = e.get("media_group", [])
         if media_group:
@@ -28,11 +26,7 @@ def parse_entries(entries):
                 poster = imgs[-1]["src"]
 
         ext = e.get("extensions", {})
-        start = (
-            e.get("scheduled_start") or
-            ext.get("VCH.ScheduledStart") or
-            ext.get("match_date")
-        )
+        start = e.get("scheduled_start") or ext.get("VCH.ScheduledStart") or ext.get("match_date")
 
         if not start and "actions" in ext:
             for act in ext.get("actions", []):
@@ -72,6 +66,7 @@ def main():
     for src in SOURCES:
         url = src["url"]
         outfile = src["outfile"]
+
         try:
             entries = fetch_schedule(url)
         except Exception as e:
@@ -86,14 +81,13 @@ def main():
         else:
             old_data = []
 
-        if old_data == new_data:
+        if old_data != new_data:
+            with open(outfile, "w", encoding="utf-8") as f:
+                json.dump(new_data, f, ensure_ascii=False, indent=2)
+            updated_files.append(outfile)
+            print(f"📊 Update tersimpan di {outfile} ({len(new_data)} jadwal).")
+        else:
             print(f"⚡ Tidak ada update → skip {outfile}.")
-            continue
-
-        with open(outfile, "w", encoding="utf-8") as f:
-            json.dump(new_data, f, ensure_ascii=False, indent=2)
-        updated_files.append(outfile)
-        print(f"📊 Update tersimpan di {outfile} ({len(new_data)} jadwal).")
 
     if not updated_files:
         print("⚡ Tidak ada update di semua sumber → skip commit.")
