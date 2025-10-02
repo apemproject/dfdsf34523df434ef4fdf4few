@@ -12,22 +12,52 @@
     "poster": "https://cdn.jwplayer.com/v2/media/UMbibQl8/poster.jpg?width=720"
   },
   {
-    "title": "Toray Arrows Shizuoka - Tokyo Great Bears | Round 1-A",
-    "start": "2025-10-25T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/4862xzVT/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/4862xzVT/poster.jpg?width=720"
-  },
-  {
     "title": "Vc Nagano Tridents - Nippon Steel Sakai Blazers | Round 1-A",
     "start": "2025-10-25T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/jO4oeZ0w/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/jO4oeZ0w/poster.jpg?width=720"
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/X58priMw/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/X58priMw/poster.jpg?width=720"
+  },
+  {
+    "title": "Toray Arrows Shizuoka - Tokyo Great Bears | Round 1-A",
+    "start": "2025-10-25T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/gpbmBt8r/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/gpbmBt8r/poster.jpg?width=720"
   },
   {
     "title": "Wolfdogs Nagoya - Hiroshima Thunders | Round 1-A",
     "start": "2025-10-25T12:25:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/K3F2QEyV/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/K3F2QEyV/poster.jpg?width=720"
+  },
+  {
+    "title": "Osaka Bluteon - Suntory Sunbirds Osaka | Round 1-B",
+    "start": "2025-10-25T16:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/LpgEPRXb/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/LpgEPRXb/poster.jpg?width=720"
+  },
+  {
+    "title": "Voreas Hokkaido - Jtekt Stings Aichi | Round 1-B",
+    "start": "2025-10-26T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/gVFNasx7/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/gVFNasx7/poster.jpg?width=720"
+  },
+  {
+    "title": "Vc Nagano Tridents - Nippon Steel Sakai Blazers | Round 1-B",
+    "start": "2025-10-26T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/WOX0hZW0/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/WOX0hZW0/poster.jpg?width=720"
+  },
+  {
+    "title": "Wolfdogs Nagoya - Hiroshima Thunders | Round 1-B",
+    "start": "2025-10-26T11:25:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/wBCM7i73/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/wBCM7i73/poster.jpg?width=720"
+  },
+  {
+    "title": "Toray Arrows Shizuoka - Tokyo Great Bears | Round 1-B",
+    "start": "2025-10-26T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/tA1FrYz1/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/tA1FrYz1/poster.jpg?width=720"
   },
   {
     "title": "Suntory Sunbirds Osaka - Tokyo Great Bears | Round 2-A",
