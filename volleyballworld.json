@@ -72,6 +72,18 @@
     "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
   },
   {
+    "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-B",
+    "start": "2025-10-11T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/rIsHHUYt/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/rIsHHUYt/poster.jpg?width=720"
+  },
+  {
+    "title": "Osaka Marvelous - Victorina Himeji | Round 1-B",
+    "start": "2025-10-11T12:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/28UO1sWy/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/28UO1sWy/poster.jpg?width=720"
+  },
+  {
     "title": "LOTTO Chemik Police - Sokol & Hagric Mogilno | Round 1",
     "start": "2025-10-11T17:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/sKlyMXLc/live.isml/.m3u8",
@@ -84,39 +96,27 @@
     "poster": "https://cdn.jwplayer.com/v2/media/5hdWz2XB/poster.jpg?width=720"
   },
   {
-    "title": "Queenseis Kariya - Gunma Greenwings | Round 1-A",
-    "start": "2025-10-12T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/yRq05KCi/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/yRq05KCi/poster.jpg?width=720"
+    "title": "Saitama Ageo Medics - Pfu Bluecats Ishikawa Kahoku | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/T016i4Os/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/T016i4Os/poster.jpg?width=720"
   },
   {
-    "title": "Prosecco Doc A.Carraro Imoco Conegliano -  Cuneo Granda Volley | Round 2",
-    "start": "2025-10-12T20:50:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/n5I7X2RT/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/n5I7X2RT/poster.jpg?width=720"
+    "title": "Aranmare Yamagata - Astemo Rivale Ibaraki | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/oDziM6Bv/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/oDziM6Bv/poster.jpg?width=720"
   },
   {
-    "title": "Bergamo -  Omag-Mt San Giovanni In Marignano | Round 2",
-    "start": "2025-10-12T21:50:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/QnoI6iyK/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/QnoI6iyK/poster.jpg?width=720"
+    "title": "Denso Airybees - Toray Arrows Shiga | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/63QipmoN/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/63QipmoN/poster.jpg?width=720"
   },
   {
-    "title": "Igor Gorgonzola Novara -  Eurotek Laica Uyba | Round 2",
-    "start": "2025-10-12T21:50:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/g5bmL5kp/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/g5bmL5kp/poster.jpg?width=720"
-  },
-  {
-    "title": "Megabox Ondulati Del Savio Vallefoglia -  Il Bisonte Firenze | Round 2",
-    "start": "2025-10-12T21:50:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/56qJmoal/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/56qJmoal/poster.jpg?width=720"
-  },
-  {
-    "title": "Cbf Balducci Hr Macerata -  Wash4green Monviso Volley | Round 2",
-    "start": "2025-10-12T21:50:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/vNw8ya4t/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/vNw8ya4t/poster.jpg?width=720"
+    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/ETKRtxSm/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/ETKRtxSm/poster.jpg?width=720"
   }
 ]
