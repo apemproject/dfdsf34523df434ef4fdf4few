@@ -6,7 +6,7 @@ SOURCES = [
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/cUqft8Cd", "outfile": "jepangsvLeague.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/FljcQiNy", "outfile": "volleyballworld.json"},
     {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/MeMYn3wh", "outfile": "volleyballbeach.json"},
-
+    {"url": "https://zapp-5434-volleyball-tv.web.app/jw/playlists/eMqXVhhW", "outfile": "poliitali.json"},
 ]
 
 def fetch_schedule(url):
