@@ -66,6 +66,16 @@ def parse_entries(entries):
         })
     return result
 
+def load_json_safe(filename):
+    """Membaca JSON tapi fallback ke list kosong jika error atau file kosong"""
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            return []
+    return []
+
 def main():
     for s in SOURCES:
         try:
@@ -76,11 +86,7 @@ def main():
 
         new_data = parse_entries(entries)
 
-        if os.path.exists(s["outfile"]):
-            with open(s["outfile"], "r", encoding="utf-8") as f:
-                old_data = json.load(f)
-        else:
-            old_data = []
+        old_data = load_json_safe(s["outfile"])
 
         if old_data == new_data:
             print(f"⚡ Tidak ada update → skip {s['outfile']}.")
