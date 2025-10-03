@@ -1,11 +1,5 @@
 [
   {
-    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/r4geLS2y/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/r4geLS2y/poster.jpg?width=720"
-  },
-  {
     "title": "Omag-Mt San Giovanni In Marignano -  Igor Gorgonzola Novara | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/gAGCe1tz/live.isml/.m3u8",
@@ -30,6 +24,12 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Y4mVVbd3/poster.jpg?width=720"
   },
   {
+    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XF5xiLlu/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/XF5xiLlu/poster.jpg?width=720"
+  },
+  {
     "title": "Il Bisonte Firenze -  Reale Mutua Fenera Chieri 76 | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/HXtu7uyE/live.isml/.m3u8",
@@ -40,6 +40,12 @@
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Te8oyJxU/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/Te8oyJxU/poster.jpg?width=720"
+  },
+  {
+    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1 Italian League",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/LcDNVcbk/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/LcDNVcbk/poster.jpg?width=720"
   },
   {
     "title": "VolleyWroclaw - ECO HARPOON LOS Nowy Dwor Mazowiecki | Round 1",
@@ -112,11 +118,5 @@
     "start": "2025-10-11T17:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/7O6Uh3Uz/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/7O6Uh3Uz/poster.jpg?width=720"
-  },
-  {
-    "title": "UNI Opole - LKS Commercecon Lodz | Round 1",
-    "start": "2025-10-11T19:35:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/arEZisF3/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/arEZisF3/poster.jpg?width=720"
   }
 ]
