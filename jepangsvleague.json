@@ -48,16 +48,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/mHbi7xjR/poster.jpg?width=720"
   },
   {
-    "title": "Saitama Ageo Medics - Pfu Bluecats Ishikawa Kahoku | Round 1-B",
-    "start": "2025-10-12T10:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/T016i4Os/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/T016i4Os/poster.jpg?width=720"
-  },
-  {
     "title": "Aranmare Yamagata - Astemo Rivale Ibaraki | Round 1-B",
     "start": "2025-10-12T10:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/oDziM6Bv/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/oDziM6Bv/poster.jpg?width=720"
+  },
+  {
+    "title": "Saitama Ageo Medics - Pfu Bluecats Ishikawa Kahoku | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/T016i4Os/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/T016i4Os/poster.jpg?width=720"
   },
   {
     "title": "Denso Airybees - Toray Arrows Shiga | Round 1-B",
