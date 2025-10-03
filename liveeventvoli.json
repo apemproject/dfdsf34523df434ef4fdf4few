@@ -12,6 +12,12 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Dliozqj2/poster.jpg?width=720"
   },
   {
+    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/qP0vXLmi/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/qP0vXLmi/poster.jpg?width=720"
+  },
+  {
     "title": "Cbf Balducci Hr Macerata -  Cuneo Granda Volley | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/IWKfmqSk/live.isml/.m3u8",
@@ -24,12 +30,6 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Y4mVVbd3/poster.jpg?width=720"
   },
   {
-    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XF5xiLlu/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/XF5xiLlu/poster.jpg?width=720"
-  },
-  {
     "title": "Il Bisonte Firenze -  Reale Mutua Fenera Chieri 76 | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/HXtu7uyE/live.isml/.m3u8",
@@ -40,12 +40,6 @@
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Te8oyJxU/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/Te8oyJxU/poster.jpg?width=720"
-  },
-  {
-    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1 Italian League",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/LcDNVcbk/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/LcDNVcbk/poster.jpg?width=720"
   },
   {
     "title": "Qualification | Central Court | Elite 16 Newport 2025",
@@ -118,5 +112,11 @@
     "start": "2025-10-10T17:00:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/lt7Nznte/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/lt7Nznte/poster.jpg?width=720"
+  },
+  {
+    "title": "PGE Budowlani Lodz - ITA TOOLS Stal Mielec | Round 1",
+    "start": "2025-10-10T22:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/TmNcJDaY/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/TmNcJDaY/poster.jpg?width=720"
   }
 ]
