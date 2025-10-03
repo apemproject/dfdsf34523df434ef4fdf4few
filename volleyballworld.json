@@ -12,16 +12,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Dliozqj2/poster.jpg?width=720"
   },
   {
-    "title": "Eurotek Laica Uyba -  Prosecco Doc A.Carraro Imoco Conegliano | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Y4mVVbd3/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/Y4mVVbd3/poster.jpg?width=720"
-  },
-  {
     "title": "Cbf Balducci Hr Macerata -  Cuneo Granda Volley | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/IWKfmqSk/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/IWKfmqSk/poster.jpg?width=720"
+  },
+  {
+    "title": "Eurotek Laica Uyba -  Prosecco Doc A.Carraro Imoco Conegliano | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Y4mVVbd3/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/Y4mVVbd3/poster.jpg?width=720"
   },
   {
     "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
@@ -84,28 +84,22 @@
     "poster": "https://cdn.jwplayer.com/v2/media/qlT6Khzy/poster.jpg?width=720"
   },
   {
-    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-A",
-    "start": "2025-10-11T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XL21LuCF/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
-  },
-  {
     "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-B",
     "start": "2025-10-11T11:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/rIsHHUYt/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/rIsHHUYt/poster.jpg?width=720"
   },
   {
+    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-A",
+    "start": "2025-10-11T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XL21LuCF/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
+  },
+  {
     "title": "Osaka Marvelous - Victorina Himeji | Round 1-B",
     "start": "2025-10-11T12:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/mHbi7xjR/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/mHbi7xjR/poster.jpg?width=720"
-  },
-  {
-    "title": "LOTTO Chemik Police - Sokol & Hagric Mogilno | Round 1",
-    "start": "2025-10-11T17:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/sKlyMXLc/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/sKlyMXLc/poster.jpg?width=720"
   },
   {
     "title": "LOTTO Chemik Police - Sokol & Hagric Mogilno | Round 1",
@@ -118,5 +112,11 @@
     "start": "2025-10-11T19:35:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/arEZisF3/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/arEZisF3/poster.jpg?width=720"
+  },
+  {
+    "title": "Savino Del Bene Scandicci -  Bartoccini-Mc Restauri Perugia | Round 2",
+    "start": "2025-10-12T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/5hdWz2XB/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/5hdWz2XB/poster.jpg?width=720"
   }
 ]
