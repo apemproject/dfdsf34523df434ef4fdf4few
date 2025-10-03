@@ -24,6 +24,12 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Y4mVVbd3/poster.jpg?width=720"
   },
   {
+    "title": "Wash4green Monviso Volley -  Savino Del Bene Scandicci | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/jRce4TWu/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/jRce4TWu/poster.jpg?width=720"
+  },
+  {
     "title": "Il Bisonte Firenze -  Reale Mutua Fenera Chieri 76 | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/HXtu7uyE/live.isml/.m3u8",
@@ -112,11 +118,5 @@
     "start": "2025-10-11T19:35:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/arEZisF3/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/arEZisF3/poster.jpg?width=720"
-  },
-  {
-    "title": "Savino Del Bene Scandicci -  Bartoccini-Mc Restauri Perugia | Round 2",
-    "start": "2025-10-12T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/5hdWz2XB/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/5hdWz2XB/poster.jpg?width=720"
   }
 ]
