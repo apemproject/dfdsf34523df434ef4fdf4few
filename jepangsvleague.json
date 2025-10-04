@@ -30,16 +30,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/qlT6Khzy/poster.jpg?width=720"
   },
   {
-    "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-B",
-    "start": "2025-10-11T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/rIsHHUYt/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/rIsHHUYt/poster.jpg?width=720"
-  },
-  {
     "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-A",
     "start": "2025-10-11T11:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XL21LuCF/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
+  },
+  {
+    "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-B",
+    "start": "2025-10-11T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/rIsHHUYt/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/rIsHHUYt/poster.jpg?width=720"
   },
   {
     "title": "Osaka Marvelous - Victorina Himeji | Round 1-B",
@@ -48,16 +48,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/mHbi7xjR/poster.jpg?width=720"
   },
   {
-    "title": "Saitama Ageo Medics - Pfu Bluecats Ishikawa Kahoku | Round 1-B",
-    "start": "2025-10-12T10:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/T016i4Os/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/T016i4Os/poster.jpg?width=720"
-  },
-  {
     "title": "Aranmare Yamagata - Astemo Rivale Ibaraki | Round 1-B",
     "start": "2025-10-12T10:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/oDziM6Bv/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/oDziM6Bv/poster.jpg?width=720"
+  },
+  {
+    "title": "Saitama Ageo Medics - Pfu Bluecats Ishikawa Kahoku | Round 1-B",
+    "start": "2025-10-12T10:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/T016i4Os/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/T016i4Os/poster.jpg?width=720"
   },
   {
     "title": "Denso Airybees - Toray Arrows Shiga | Round 1-B",
@@ -102,16 +102,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/6AEm96Q7/poster.jpg?width=720"
   },
   {
-    "title": "Osaka Marvelous - Aranmare Yamagata | Round 2-A",
-    "start": "2025-10-18T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/ntiA5P4n/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/ntiA5P4n/poster.jpg?width=720"
-  },
-  {
     "title": "Astemo Rivale Ibaraki - Denso Airybees | Round 2-A",
     "start": "2025-10-18T11:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/3OPgvG64/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/3OPgvG64/poster.jpg?width=720"
+  },
+  {
+    "title": "Osaka Marvelous - Aranmare Yamagata | Round 2-A",
+    "start": "2025-10-18T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/ntiA5P4n/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/ntiA5P4n/poster.jpg?width=720"
   },
   {
     "title": "Saga Hisamitsu Springs - Queenseis Kariya | Round 2-A",
