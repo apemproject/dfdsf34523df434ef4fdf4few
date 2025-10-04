@@ -36,16 +36,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/mdvRXaaf/poster.jpg?width=720"
   },
   {
-    "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Te8oyJxU/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/Te8oyJxU/poster.jpg?width=720"
-  },
-  {
     "title": "Eurotek Laica Uyba -  Prosecco Doc A.Carraro Imoco Conegliano | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/WONU3FjZ/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/WONU3FjZ/poster.jpg?width=720"
+  },
+  {
+    "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
+    "start": "2025-10-07T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Te8oyJxU/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/Te8oyJxU/poster.jpg?width=720"
   },
   {
     "title": "Qualification | Central Court | Elite 16 Newport 2025",
