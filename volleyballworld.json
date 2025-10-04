@@ -30,12 +30,6 @@
     "poster": "https://cdn.jwplayer.com/v2/media/T4ETgEe7/poster.jpg?width=720"
   },
   {
-    "title": "Eurotek Laica Uyba -  Prosecco Doc A.Carraro Imoco Conegliano | Round 1",
-    "start": "2025-10-07T01:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/mdvRXaaf/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/mdvRXaaf/poster.jpg?width=720"
-  },
-  {
     "title": "Numia Vero Volley Milano -  Bergamo | Round 1",
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Te8oyJxU/live.isml/.m3u8",
@@ -46,6 +40,12 @@
     "start": "2025-10-07T01:20:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/WONU3FjZ/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/WONU3FjZ/poster.jpg?width=720"
+  },
+  {
+    "title": "VolleyWroclaw - ECO HARPOON LOS Nowy Dwor Mazowiecki | Round 1",
+    "start": "2025-10-09T22:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/Njlgwo70/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/Njlgwo70/poster.jpg?width=720"
   },
   {
     "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-A",
@@ -84,16 +84,16 @@
     "poster": "https://cdn.jwplayer.com/v2/media/qlT6Khzy/poster.jpg?width=720"
   },
   {
-    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-A",
-    "start": "2025-10-11T11:55:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XL21LuCF/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
-  },
-  {
     "title": "Kurobe Aqua Fairies - Okayama Seagulls | Round 1-B",
     "start": "2025-10-11T11:55:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/rIsHHUYt/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/rIsHHUYt/poster.jpg?width=720"
+  },
+  {
+    "title": "Nec Red Rockets Kawasaki - Saga Hisamitsu Springs | Round 1-A",
+    "start": "2025-10-11T11:55:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/XL21LuCF/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/XL21LuCF/poster.jpg?width=720"
   },
   {
     "title": "Osaka Marvelous - Victorina Himeji | Round 1-B",
@@ -108,15 +108,15 @@
     "poster": "https://cdn.jwplayer.com/v2/media/Hw3vJjp0/poster.jpg?width=720"
   },
   {
-    "title": "LOTTO Chemik Police - Sokol & Hagric Mogilno | Round 1",
-    "start": "2025-10-11T17:20:00+07:00",
-    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/8CfQq28w/live.isml/.m3u8",
-    "poster": "https://cdn.jwplayer.com/v2/media/8CfQq28w/poster.jpg?width=720"
-  },
-  {
     "title": "UNI Opole - LKS Commercecon Lodz | Round 1",
     "start": "2025-10-11T19:35:00+07:00",
     "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/arEZisF3/live.isml/.m3u8",
     "poster": "https://cdn.jwplayer.com/v2/media/arEZisF3/poster.jpg?width=720"
+  },
+  {
+    "title": "Savino Del Bene Scandicci -  Bartoccini-Mc Restauri Perugia | Round 2",
+    "start": "2025-10-12T01:20:00+07:00",
+    "src": "https://livecdn.euw1-0005.jwplive.com/live/sites/fM9Rkn/media/5hdWz2XB/live.isml/.m3u8",
+    "poster": "https://cdn.jwplayer.com/v2/media/5hdWz2XB/poster.jpg?width=720"
   }
 ]
